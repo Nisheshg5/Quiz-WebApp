@@ -1,7 +1,32 @@
 {% extends "quiz_app/layout.html" %}
 {% block title %}
-Home
+Home page
 {% endblock %}
 {% block content %}
-<p>Home page for the Visual Studio Code Django tutorial.</p>
+<div class="home_div">
+	<div class="home_div_content">
+		<h2>Welcome</h2>
+		<br>
+		<h5>Please Enter the Quiz Code:</h5>
+		<form class="quiz_form" action="quiz/" method="POST" id="codeForm">
+			{% comment %} {{ quizIdForm.hidden_tag() }}
+			{{ quizIdForm.quiz_id(class="form-control form-control-lg") }}
+			{{ quizIdForm.submitBtn(class="btn") }} {% endcomment %}
+		</form>
+	</div>
+
+</div>
+<!-- <script>
+	let myForm = document.getElementById("codeForm")
+	myForm.addEventListener("submit", function (e) {
+		e.preventDefault();
+		let quiz_id = document.getElementById("quiz_id").value;
+		if (isNaN(parseInt(quiz_id))) {
+			alert("Invalid Quiz Id");
+			return false;
+		}
+		myForm.setAttribute("action", "/quiz/" + quiz_id);
+		myForm.submit();
+	});
+</script> -->
 {% endblock %}
