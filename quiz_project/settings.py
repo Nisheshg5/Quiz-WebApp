@@ -69,6 +69,8 @@ TEMPLATES = [
     },
 ]
 
+AUTH_USER_MODEL = "quiz_app.Account"
+
 WSGI_APPLICATION = "quiz_project.wsgi.application"
 
 
