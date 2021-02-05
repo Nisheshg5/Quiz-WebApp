@@ -3,26 +3,185 @@
 
 <head>
 	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<title>{% block title %}{% endblock %}</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@3/dark.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
 	{% load static %}
-	<link rel="stylesheet" type="text/css" href="{% static 'hello/site.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'quiz_app/css/site.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'quiz_app/css/form.css' %}" />
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/js/all.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.js"></script>
 </head>
 
 <body>
-	<div class="navbar">
-		<a href="{% url 'home' %}" class="navbar-brand">Home</a>
-		<a href="{% url 'about' %}" class="navbar-item">About</a>
-		<a href="{% url 'contact' %}" class="navbar-item">Contact</a>
+	<nav class="navbar navbar-expand-lg navbar-dark " style="color:white">
+		<a class="navbar-brand" href="{{ 'home' }}">Quiz App</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarToggler">
+			<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+				<li class="nav-item">
+					<a class="nav-link" href="{{ 'about' }}">About</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="{{ 'contact' }}">Contact</a>
+				</li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				{% comment %} {% if current_user.is_authenticated %} {% endcomment %}
+				<li class="nav-item">
+					<a class="nav-link" href="{{ 'logout' }}">
+						<i class="fas fa-sign-out-alt"></i> Logout
+					</a>
+				</li>
+				{% comment %} {% else %} {% endcomment %}
+				<li class="nav-item">
+					<a class="nav-link" href="#signupModal" data-dismiss="modal" data-toggle="modal">
+						<i class="fas fa-user-plus"></i> Sign Up
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#loginModal" data-toggle="modal">
+						<i class="fas fa-sign-in-alt"></i> Login
+					</a>
+				</li>
+				{% comment %} {% endif %} {% endcomment %}
+			</ul>
+		</div>
+	</nav>
+
+	<div class="modal fade" id="loginModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<h2 class="modal-title text-center">Login</h2><br>
+					<form action="/login" method="POST">
+						{% comment %} {{ loginForm.hidden_tag() }}
+						<div class="form-group">
+							{{ loginForm.email.label(class="control-label") }}
+							{{ loginForm.email(class="form-control") }}
+						</div>
+						<div class="form-group">
+							{{ loginForm.password.label(class="control-label") }}
+							{{ loginForm.password(class="form-control") }}
+						</div>
+						<div class="form-group">
+							<div class="checkbox">
+								<label class="">
+									{{ loginForm.remember }}
+									{{ loginForm.remember.label }}
+								</label>
+							</div>
+						</div>
+						<div class="form-group">
+							{{ loginForm.loginSubmit(class="btn btn-block btn-purple") }}
+						</div>
+						<div class="form-group">
+							<label class="control-label">Don't have an account? <a href="#signupModal"
+									data-dismiss="modal" data-toggle="modal" class="form-link">Register</a></label>
+						</div> {% endcomment %}
+					</form>
+					<!-- <button type="button" class="btn" data-dismiss="modal">Close</button> -->
+				</div>
+			</div>
+		</div>
 	</div>
 
-	<div class="body-content">
-		{% block content %}
-		{% endblock %}
-		<hr />
-		<footer>
-			<p>© 2018</p>
-		</footer>
+	<div class="modal fade" id="signupModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<h2 class="modal-title text-center">Sign Up</h2><br>
+					<form action="/register" method="POST">
+						{% comment %} {{ registrationForm.hidden_tag() }}
+						<div class="form-group">
+							{{ registrationForm.email.label(class="control-label") }}
+							{{ registrationForm.email(class="form-control") }}
+						</div>
+						<div class="form-group">
+							{{ registrationForm.password.label(class="control-label") }}
+							{{ registrationForm.password(class="form-control") }}
+						</div>
+						<div class="form-group">
+							{{ registrationForm.confirm_password.label(class="control-label") }}
+							{{ registrationForm.confirm_password(class="form-control") }}
+						</div>
+						<div class="form-group">
+							{{ registrationForm.registrationSubmit(class="btn btn-block btn-purple") }}
+						</div>
+						<div class="form-group">
+							<label class="control-label">Already have an account? <a href="#loginModal"
+									data-dismiss="modal" data-toggle="modal" class="form-link">Log In</a></label>
+						</div> {% endcomment %}
+					</form>
+					<!-- <button type="button" class="btn" data-dismiss="modal">Close</button> -->
+				</div>
+			</div>
+		</div>
 	</div>
+
+	{% block content %}
+	Text in layout
+	{% endblock %}
+
+
+	<footer class="footer">
+		<p>© 2018</p>
+	</footer>
+
+	{% comment %} {% with messages = get_flashed_messages(with_categories=true) %}
+	{% if messages %}
+	{% for category, error in messages %}
+	{% if category == 'validation' %}
+	{% for field, errors in error %}
+	<script>
+		Swal.fire({
+			icon: 'error',
+			title: 'Error',
+			html: '{{ field }}: {{ ", ".join(errors) }}',
+			position: 'top',
+			timerProgressBar: true,
+			showConfirmButton: false,
+			timer: 1500
+		});
+	</script>
+	{% endfor %}
+	{% elif category == 'success' %}
+	<script>
+		Swal.fire({
+			icon: 'success',
+			html: '{{ "<br>".join(error) | safe}}',
+			position: 'top',
+			timerProgressBar: true,
+			showConfirmButton: false,
+			timer: 1500
+		});
+	</script>
+	{% else %}
+	<script>
+		Swal.fire({
+			icon: '{{ category }}',
+			title: 'Error',
+			html: '{{ ", ".join(error) }}',
+			position: 'top',
+			timerProgressBar: true,
+			showConfirmButton: false,
+			timer: 1500
+		});
+	</script>
+	{% endif %}
+	{% endfor %}
+	{% endif %}
+	{% endwith %} {% endcomment %}
 </body>
 
 </html>

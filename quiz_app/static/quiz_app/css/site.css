@@ -1,0 +1,196 @@
+* {
+    margin: 0;
+    padding: 0;
+    color: #fff;
+}
+
+body {
+    background-image: url("../images/quiz-2137664.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center top;
+    width: 100vw;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    display: block;
+    z-index: -1;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.9));
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.btn-purple {
+    background: #8337d2;
+    border-color: #8337d2;
+    color: #fff;
+}
+
+.purple {
+    color: #8337d2;
+}
+
+.btn-purple:hover,
+.btn-purple:active,
+.btn-purple:focus {
+    background: #863dd4;
+    border-color: #863dd4;
+    box-shadow: rgb(131 55 210 / 25%);
+}
+
+.home_div {
+    margin: 0 auto;
+    width: 30%;
+    min-height: 60vh;
+    padding: 100px;
+    position: relative;
+    margin-top: 50px;
+    /* left: 50%; */
+    /* -ms-transform: translate(-50%, -50%); */
+    /* transform: translate(-50%, -50%); */
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50px;
+    text-align: center;
+    color: white;
+}
+
+.home_div_content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.quiz_form input[type='text'] {
+    margin-top: 50px;
+    margin-bottom: 30px;
+    padding: 10px 20px 10px 20px;
+    min-width: 300px;
+    border-radius: 1em;
+    background-color: rgba(0, 0, 0, 0.2);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    border-color: #9c51e9;
+    color: #fff;
+    box-shadow: 0 0 10px 0 #9c51e9 inset, 0 0 10px 4px #9c51e9;
+}
+
+.quiz_form input[type='submit'] {
+    text-align: center;
+    padding: 1em 3em;
+    border-radius: 2em;
+    min-width: 100px;
+    max-width: 200px;
+    background-color: transparent;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    border-color: #9c51e9;
+    color: #fff;
+    box-shadow: 0 0 40px 40px #9c51e9 inset, 0 0 0 0 #9c51e9;
+    -webkit-transition: all 150ms ease-in-out;
+    transition: all 150ms ease-in-out;
+}
+
+.quiz_form input[type='submit']:hover {
+    box-shadow: 0 0 10px 0 #9c51e9 inset, 0 0 10px 4px #9c51e9;
+    color: #fff;
+    outline: 0;
+}
+
+@media only screen and (max-width: 1366px) {
+    .home_div {
+        width: 60%;
+    }
+
+    .quiz_form input[type='text'] {
+        min-width: 200px;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .home_div {
+        width: 80%;
+    }
+
+    .quiz_form input[type='text'] {
+        min-width: 150px;
+    }
+}
+
+.message {
+    font-weight: 600;
+    color: dodgerblue;
+}
+
+.navbar {
+    background-color: rgba(0, 0, 0, 0.3);
+    font-size: 1em;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: white;
+    padding: 20px 100px 10px 100px;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: #fff;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.navbar-brand {
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+.navbar-item {
+    font-variant: small-caps;
+    margin-left: 30px;
+}
+
+.body-content {
+    padding: 5px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#quiz {
+    width: 100%;
+    min-height: 80vh;
+    overflow-x: hidden;
+}
+
+#quiz .left {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#quiz .right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#quiz_pwd_form {
+    background: rgba(0, 0, 0, .39);
+    position: relative;
+    color: #fff;
+    margin: 0 auto;
+    -webkit-backdrop-filter: blur(15px);
+    -moz-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    padding: 40px 30px;
+    width: 60%;
+    /* border-radius: 8px; */
+}
