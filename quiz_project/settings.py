@@ -70,6 +70,10 @@ TEMPLATES = [
 ]
 
 AUTH_USER_MODEL = "quiz_app.Account"
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.AllowAllUsersModelBackend",
+    "quiz_app.backends.CaseInsensitiveModelBackend",
+)
 
 WSGI_APPLICATION = "quiz_project.wsgi.application"
 
