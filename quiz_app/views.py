@@ -1,12 +1,11 @@
-import re
 from uuid import UUID
 
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
-from django.urls import reverse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import datetime
 
 from .forms import QuizForm
+from .models import Quiz
 
 
 def home(request):
@@ -26,6 +25,7 @@ def home(request):
 
 
 def quiz(request, quiz_id):
+    quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
     return render(request, "quiz_app/quiz.html")
 
 
