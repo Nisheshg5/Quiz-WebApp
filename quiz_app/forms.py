@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import fields
 
-from .models import Quiz
+from .models import Quiz, Account
 
 
 class QuizForm(forms.Form):
@@ -14,3 +14,11 @@ class QuizForm(forms.Form):
     #     fields = [
     #         'quiz_id'
     #     ]
+
+# Class LoginForm(forms.Form):
+#     email = forms.EmailField(
+#         widget=forms.EmailInput(attrs={"class": "form-control form-control-lg", "placeholder": "Enter Email"})
+#     )
+#     password = forms.CharField(
+#         widget=forms.PasswordInput(attrs={"class": "form-control form-control-lg", "placeholder": "Enter password"})
+#     )
