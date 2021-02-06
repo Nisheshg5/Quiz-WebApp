@@ -33,7 +33,8 @@ def home(request):
 
 def quiz(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
-    return render(request, "quiz_app/quiz.html")
+    context = {"quiz": quiz}
+    return render(request, "quiz_app/quiz.html", context)
 
 
 def about(request):
