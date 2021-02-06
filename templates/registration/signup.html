@@ -5,7 +5,8 @@
 
 
 {% block formBlock %}
-<h2>Sign Up</h2>
+<div class="formBlock">
+  <h2 class="text-center">Sign Up</h2>
 
 <form method="post" novalidate>
     {% csrf_token %}
@@ -15,15 +16,19 @@
     {% for hidden_field in form.hidden_fields %}
       {{ hidden_field.errors }}
       {{ hidden_field }}
+      <script>console.log("HELLO")</script>
     {% endfor %}
   
     <table border="1">
       {% for field in form.visible_fields %}
+		<div class="form-group">
+			<!-- {{ field.label_tag }} -->
+			<label for="{{field.label_tag }}"></label>
+			<input type="text" name="username" maxlength="150" autocapitalize="none" autocomplete="username" autofocus="" required="" id="id_username">
+		</div>
         <tr>
-          <th>{{ field.label_tag }}</th>
           <td>
             {{ field.errors }}
-            {{ field }}
             <p>{{ field.help_text }}</p>
           </td>
         </tr>
@@ -32,6 +37,8 @@
   
     <button type="submit">Submit</button>
   </form>
+
+</div>
 
 
 <!-- <div class="modal fade" id="signupModal">
