@@ -4,3 +4,41 @@
   {{ form.as_p }}
   <button type="submit">Log In</button>
 </form>
+
+
+<div class="modal fade" id="loginModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h2 class="modal-title text-center">Login</h2><br>
+        <form action="/login" method="POST">
+          {% comment %} {{ loginForm.hidden_tag() }}
+          <div class="form-group">
+            {{ loginForm.email.label(class="control-label") }}
+            {{ loginForm.email(class="form-control") }}
+          </div>
+          <div class="form-group">
+            {{ loginForm.password.label(class="control-label") }}
+            {{ loginForm.password(class="form-control") }}
+          </div>
+          <div class="form-group">
+            <div class="checkbox">
+              <label class="">
+                {{ loginForm.remember }}
+                {{ loginForm.remember.label }}
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            {{ loginForm.loginSubmit(class="btn btn-block btn-purple") }}
+          </div>
+          <div class="form-group">
+            <label class="control-label">Don't have an account? <a href="#signupModal"
+                data-dismiss="modal" data-toggle="modal" class="form-link">Register</a></label>
+          </div> {% endcomment %}
+        </form>
+        <!-- <button type="button" class="btn" data-dismiss="modal">Close</button> -->
+      </div>
+    </div>
+  </div>
+</div>
