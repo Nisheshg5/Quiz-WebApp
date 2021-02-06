@@ -130,3 +130,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static_collected")
 
 # redirect on successful login
 LOGIN_REDIRECT_URL = '/'
+
