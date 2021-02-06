@@ -1,7 +1,8 @@
+from uuid import uuid4
+
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 
-# Create your models here.
 
 class AccountManager(BaseUserManager):
     def create_user(self, email, username, password=None):
@@ -55,3 +56,18 @@ class Account(AbstractBaseUser):
     class Meta:
         db_table = "account"
 
+
+class Quiz(models.Model):
+    quiz_id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    title = models.CharField(max_length=30, blank=False, null=False)
+    instructions = models.TextField()
+    password = models.CharField(max_length=120)
+    start_date = models.DateTimeField(verbose_name="start time")
+    end_date = models.DateTimeField(verbose_name="end time")
+    duration = models.IntegerField()
+
+    def __str__(self):
+        return f"id: {self.quiz_id}, title: {self.title}"
+
+    class Meta:
+        db_table = "quiz"

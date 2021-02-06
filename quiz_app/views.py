@@ -4,9 +4,13 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils.timezone import datetime
 
+from .forms import quizForm
+
 
 def home(request):
-    return render(request, "quiz_app/home.html")
+    
+    context = {"quiz-form": quizForm}
+    return render(request, "quiz_app/home.html", context)
 
 
 def about(request):
