@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from uuid import uuid4
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
@@ -58,16 +59,27 @@ class Account(AbstractBaseUser):
 
 
 class Quiz(models.Model):
+    def default_start_datetime():
+        return datetime.utcnow() + timedelta(hours=3)
+
+    def default_end_datetime():
+        return datetime.utcnow() + timedelta(hours=6)
+
     quiz_id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     title = models.CharField(max_length=30, blank=False, null=False)
-    instructions = models.TextField()
+    instructions = models.TextField(default="Instructions here")
     password = models.CharField(max_length=120)
-    start_date = models.DateTimeField(verbose_name="start time")
-    end_date = models.DateTimeField(verbose_name="end time")
-    duration = models.IntegerField()
+    start_date = models.DateTimeField(
+        verbose_name="start time", default=default_start_datetime
+    )
+    end_date = models.DateTimeField(
+        verbose_name="end time", default=default_end_datetime
+    )
+    duration = models.IntegerField(default=90)
 
     def __str__(self):
         return f"id: {self.quiz_id}, title: {self.title}"
 
     class Meta:
         db_table = "quiz"
+        app_label = "quiz_app"

@@ -1,16 +1,32 @@
 import re
+from uuid import UUID
 
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils.timezone import datetime
 
-from .forms import quizForm
+from .forms import QuizForm
 
 
 def home(request):
-    
-    context = {"quiz-form": quizForm}
+    id = request.GET.get("quiz_id")
+    if id:
+        try:
+            val = UUID(id).version
+            if val != 4:
+                raise ValueError(0)
+            return redirect("quiz", quiz_id=id)
+        except ValueError:
+            print("Invalid Id")
+
+    quizForm = QuizForm()
+    context = {"quizForm": quizForm}
     return render(request, "quiz_app/home.html", context)
+
+
+def quiz(request, quiz_id):
+    return render(request, "quiz_app/quiz.html")
 
 
 def about(request):
