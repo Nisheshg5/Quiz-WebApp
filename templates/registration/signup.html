@@ -1,3 +1,11 @@
+{% extends "quiz_app/layout.html" %}
+
+{% block title %}
+  	Login
+{% endblock %}
+
+
+{% block content %}
 <h2>Sign Up</h2>
 <form method="post">
   {% csrf_token %}
@@ -7,6 +15,7 @@
 
 
 <!-- <div class="modal fade" id="signupModal">
+
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
@@ -37,3 +46,6 @@
         </div>
     </div>
 </div> -->
+
+
+{% endblock %}
