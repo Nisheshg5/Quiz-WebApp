@@ -18,6 +18,7 @@ Quiz
 		<h3>
 			{% if quiz.has_started is False %}
 			Starts in: <span id="timer"></span>
+
 			<script>
 				function time_format(seconds) {
 					var days = Math.floor(seconds / (24 * 60 * 60));
@@ -45,6 +46,7 @@ Quiz
 					}
 				}, 1000);
 			</script>
+
 			{% elif quiz.has_ended is False %}
 			Has Started
 			{% else %}
@@ -52,16 +54,18 @@ Quiz
 			{% endif%}
 		</h3>
 	</div>
-
+	{% if quiz.has_started is True and quiz.has_ended is False %}
 	<div class="right">
-		{% comment %} <form class="quiz_pwd_form" action="/quiz/{{ quiz.quiz_id }}/instructions" method="POST"
-			id="quiz_pwd_form">
-			{{ quizPwdForm.hidden_tag() }}
-			{{ quizPwdForm.quiz_pwd(class="form-control form-control-lg") }}
-			{{ quizPwdForm.submitPwd(class="btn btn-primary mt-2") }}
-		</form> {% endcomment %}
+		<form class="quiz_pwd_form" action="/quiz/{{ quiz.quiz_id }}/instructions" method="POST" id="quiz_pwd_form"
+			style="min-width:250px; width:fit-content">
+			{% csrf_token %}
+			<h3>Enter {{form.password.label}}</h3>
+			{{ form.password }}<br>
+			<input type="submit" class="btn" value="Submit">
+		</form>
 	</div>
-	<!-- </div> -->
+	{% endif %}
+
 </div>
 
 
