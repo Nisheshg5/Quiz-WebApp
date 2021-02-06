@@ -1,5 +1,6 @@
 from uuid import UUID
 
+from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import datetime
@@ -15,9 +16,15 @@ def home(request):
             val = UUID(id).version
             if val != 4:
                 raise ValueError(0)
-            return redirect("quiz", quiz_id=id)
+            if Quiz.objects.filter(pk=id).exists():
+                return redirect("quiz", quiz_id=id)
+            else:
+                messages.error(request, "No Quiz Found For Given ID")
+                return redirect("home")
+
         except ValueError:
-            print("Invalid Id")
+            messages.error(request, "Invalid Id")
+            return redirect("home")
 
     quizForm = QuizForm()
     context = {"quizForm": quizForm}

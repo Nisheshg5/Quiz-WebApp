@@ -138,6 +138,24 @@
 		<p>© 2018</p>
 	</footer>
 
+	{% if messages %}
+	{% for message in messages %}
+	{% if 'error' in message.tags%}
+	<script>
+		Swal.fire({
+			icon: 'error',
+			title: 'Error',
+			html: '{{ message }}',
+			position: 'top',
+			timerProgressBar: true,
+			showConfirmButton: false,
+			timer: 1500
+		});
+	</script>
+	{% endif %}
+	{% endfor %}
+	{% endif %}
+
 	{% comment %} {% with messages = get_flashed_messages(with_categories=true) %}
 	{% if messages %}
 	{% for category, error in messages %}
