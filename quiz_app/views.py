@@ -1,16 +1,15 @@
 from uuid import UUID
 
 from django.contrib import messages
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
-from django.utils.timezone import datetime
-
 # For the signup form
 from django.contrib.auth.forms import UserCreationForm
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
+from django.utils.timezone import datetime
 from django.views import generic
 
-from .forms import QuizForm
+from .forms import QuizForm, QuizPasswordForm
 from .models import Quiz
 
 
@@ -36,11 +35,17 @@ def home(request):
     return render(request, "quiz_app/home.html", context)
 
 
-
 def quiz(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
-    context = {"quiz": quiz}
+    form = QuizPasswordForm(request.POST or None)
+    context = {"quiz": quiz, "form": form}
     return render(request, "quiz_app/quiz.html", context)
+
+
+def quiz_instructions(request, quiz_id):
+    quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
+    context = {"quiz": quiz}
+    return render(request, "quiz_app/quiz_instructions.html", context)
 
 
 def about(request):
@@ -56,10 +61,11 @@ def hello_there(request, name):
         request, "quiz_app/hello_there.html", {"name": name, "date": datetime.now()}
     )
 
+
 class SignUpView(generic.CreateView):
     form_class = UserCreationForm
-    success_url = reverse_lazy('login')
-    template_name = 'registration/signup.html'
+    success_url = reverse_lazy("login")
+    template_name = "registration/signup.html"
 
 
 # def hello_there(request, name):

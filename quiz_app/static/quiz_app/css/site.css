@@ -68,7 +68,8 @@ body::before {
     transform: translate(-50%, -50%);
 }
 
-.quiz_form input[type='text'] {
+.quiz_form input[type='text'],
+.quiz_pwd_form input[type='password'] {
     margin-top: 50px;
     margin-bottom: 30px;
     padding: 10px 20px 10px 20px;
@@ -82,7 +83,8 @@ body::before {
     box-shadow: 0 0 10px 0 #9c51e9 inset, 0 0 10px 4px #9c51e9;
 }
 
-.quiz_form input[type='submit'] {
+.quiz_form input[type='submit'],
+.quiz_pwd_form input[type='submit'] {
     text-align: center;
     padding: 1em 3em;
     border-radius: 2em;
