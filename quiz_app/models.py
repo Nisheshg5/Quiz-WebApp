@@ -58,6 +58,7 @@ class Account(AbstractBaseUser):
         db_table = "account"
 
 
+
 class Quiz(models.Model):
     def default_start_datetime():
         return datetime.utcnow() + timedelta(hours=3)

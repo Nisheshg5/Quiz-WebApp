@@ -26,7 +26,7 @@ SECRET_KEY = "mh1qn!^u5o3vh2jbocy3647gce*k*f!9j*wcod7b%lh&$6a50*"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["quiz-web-app0.herokuapp.com", "127.0.0.1", "192.168.1.3"]
+ALLOWED_HOSTS = ["quiz-web-app0.herokuapp.com", "127.0.0.1", "192.168.1.3", "localhost"]
 
 
 # Application definition
@@ -56,7 +56,7 @@ ROOT_URLCONF = "quiz_project.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [str(BASE_DIR.joinpath('templates'))],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -127,3 +127,6 @@ USE_TZ = True
 STATIC_URL = "/static/"
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static_collected")
+
+# redirect on successful login
+LOGIN_REDIRECT_URL = '/'
