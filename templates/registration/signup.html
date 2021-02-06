@@ -1,3 +1,11 @@
+{% extends "quiz_app/layout.html" %}
+
+{% block title %}
+  	Login
+{% endblock %}
+
+
+{% block content %}
 <h2>Sign Up</h2>
 <form method="post">
   {% csrf_token %}
@@ -5,35 +13,39 @@
   <button type="submit">Sign Up</button>
 </form>
 
-<div class="modal fade" id="signupModal">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-body">
-					<h2 class="modal-title text-center">Sign Up</h2><br>
-					<form action="/register" method="POST">
-						{% comment %} {{ registrationForm.hidden_tag() }}
-						<div class="form-group">
-							{{ registrationForm.email.label(class="control-label") }}
-							{{ registrationForm.email(class="form-control") }}
-						</div>
-						<div class="form-group">
-							{{ registrationForm.password.label(class="control-label") }}
-							{{ registrationForm.password(class="form-control") }}
-						</div>
-						<div class="form-group">
-							{{ registrationForm.confirm_password.label(class="control-label") }}
-							{{ registrationForm.confirm_password(class="form-control") }}
-						</div>
-						<div class="form-group">
-							{{ registrationForm.registrationSubmit(class="btn btn-block btn-purple") }}
-						</div>
-						<div class="form-group">
-							<label class="control-label">Already have an account? <a href="#loginModal"
-									data-dismiss="modal" data-toggle="modal" class="form-link">Log In</a></label>
-						</div> {% endcomment %}
-					</form>
-					<!-- <button type="button" class="btn" data-dismiss="modal">Close</button> -->
-				</div>
-			</div>
-		</div>
-	</div>
+
+<!-- <div class="modal fade" id="signupModal">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h2 class="modal-title text-center">Sign Up</h2><br>
+                <form action="/register" method="POST">
+                    {% comment %} {{ registrationForm.hidden_tag() }}
+                    <div class="form-group">
+                        {{ registrationForm.email.label(class="control-label") }}
+                        {{ registrationForm.email(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        {{ registrationForm.password.label(class="control-label") }}
+                        {{ registrationForm.password(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        {{ registrationForm.confirm_password.label(class="control-label") }}
+                        {{ registrationForm.confirm_password(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        {{ registrationForm.registrationSubmit(class="btn btn-block btn-purple") }}
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Already have an account? <a href="#loginModal"
+                                data-dismiss="modal" data-toggle="modal" class="form-link">Log In</a></label>
+                    </div> {% endcomment %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+{% endblock %}

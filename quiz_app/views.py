@@ -5,6 +5,11 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import datetime
 
+# For the signup form
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+from django.views import generic
+
 from .forms import QuizForm
 from .models import Quiz
 
@@ -31,6 +36,7 @@ def home(request):
     return render(request, "quiz_app/home.html", context)
 
 
+
 def quiz(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
     context = {"quiz": quiz}
@@ -49,6 +55,11 @@ def hello_there(request, name):
     return render(
         request, "quiz_app/hello_there.html", {"name": name, "date": datetime.now()}
     )
+
+class SignUpView(generic.CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('login')
+    template_name = 'registration/signup.html'
 
 
 # def hello_there(request, name):
