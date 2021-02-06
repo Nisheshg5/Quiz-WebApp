@@ -3,6 +3,7 @@ from uuid import uuid4
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
+from django.utils import timezone
 
 
 class AccountManager(BaseUserManager):
@@ -58,7 +59,6 @@ class Account(AbstractBaseUser):
         db_table = "account"
 
 
-
 class Quiz(models.Model):
     def default_start_datetime():
         return datetime.utcnow() + timedelta(hours=3)
@@ -80,6 +80,18 @@ class Quiz(models.Model):
 
     def __str__(self):
         return f"id: {self.quiz_id}, title: {self.title}"
+
+    @property
+    def has_started(self):
+        return self.start_date < timezone.now()
+
+    @property
+    def has_ended(self):
+        return self.end_date < timezone.now()
+
+    @property
+    def time_till_starts(self):
+        return (self.start_date - timezone.now()).total_seconds()
 
     class Meta:
         db_table = "quiz"
