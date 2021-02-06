@@ -9,7 +9,8 @@ Home page
 		<br>
 		<h5>Please Enter the Quiz Code:</h5>
 		<form class="quiz_form" action="" method="GET" id="codeForm">
-			{{ quizForm.as_p }}
+			{{ quizForm.quiz_id.label }}
+			{{ quizForm.quiz_id }}
 			{% comment %} {{ quizIdForm.hidden_tag() }}
 			{{ quizIdForm.quiz_id(class="form-control form-control-lg") }}
 			{{ quizIdForm.submitBtn(class="btn") }} {% endcomment %}
