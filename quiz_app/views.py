@@ -43,6 +43,11 @@ def home(request):
 
 def quiz_upcoming(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
+    if quiz.has_ended:
+        return redirect("quiz_ended", quiz_id=id)
+    if quiz.has_started:
+        return redirect("quiz_started", quiz_id=id)
+
     form = QuizPasswordForm(request.POST or None)
     context = {"quiz": quiz, "form": form}
     return render(request, "quiz_app/quiz_upcoming.html", context)
@@ -50,6 +55,11 @@ def quiz_upcoming(request, quiz_id):
 
 def quiz_started(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
+    if not quiz.has_started:
+        return redirect("quiz_upcoming", quiz_id=id)
+    if quiz.has_ended:
+        return redirect("quiz_ended", quiz_id=id)
+
     form = QuizPasswordForm(request.POST or None)
     context = {"quiz": quiz, "form": form}
     return render(request, "quiz_app/quiz_started.html", context)
@@ -57,6 +67,11 @@ def quiz_started(request, quiz_id):
 
 def quiz_ended(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
+    if not quiz.has_started:
+        return redirect("quiz_upcoming", quiz_id=id)
+    if not quiz.has_ended:
+        return redirect("quiz_started", quiz_id=id)
+
     form = QuizPasswordForm(request.POST or None)
     context = {"quiz": quiz, "form": form}
     return render(request, "quiz_app/quiz_ended.html", context)

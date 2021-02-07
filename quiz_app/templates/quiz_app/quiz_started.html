@@ -56,7 +56,7 @@ Quiz
 	</div>
 	{% if quiz.has_started is True and quiz.has_ended is False %}
 	<div class="right">
-		<form class="quiz_pwd_form" action="/quiz/{{ quiz.quiz_id }}/instructions" method="POST" id="quiz_pwd_form"
+		<form class="quiz_pwd_form" action="/quiz/instructions/{{ quiz.quiz_id }}" method="POST" id="quiz_pwd_form"
 			style="min-width:250px; width:fit-content">
 			{% csrf_token %}
 			<h3>Enter {{form.password.label}}</h3>
