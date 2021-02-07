@@ -4,14 +4,28 @@
 	Login
 {% endblock %}
 
-{% block heading %}
-Log in
-{% endblock %}
-
-{% block extra %}
-<a href="{% url 'password_reset' %}">Forgot Password</a><br>
-{% endblock %}
-
-{% block button_text %}
-Log In
+{% block formBlock %}
+<div class="formBlock">
+    <h2 class="text-center">Log In</h2>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                <label for={{ field.auto_id }}>
+                    {% if field.label == "Username" %} Email {% else %}{{ field.label }}{% endif %}
+                </label>
+                <input class="form-control" id="{{ field.id_for_label }}" maxlength="30" name="{{ field.html_name }}" 
+                    type={% if field.html_name is "username" %}email{% else %}password{% endif %} 
+                    autocapitalize="none" required=""/> 
+                <!-- {{ field.errors }} -->				
+            </div>
+        {% endfor %}  
+        <div class="form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input" value="">Remember Me
+            </label>
+          </div>
+        <button type="submit" class="btn btn-block btn-purple mt-4">Submit</button>
+    </form>
+</div>
 {% endblock %}
