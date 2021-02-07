@@ -1,7 +1,6 @@
 from uuid import UUID
 
 from django.contrib import messages
-# For the signup form
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -20,8 +19,15 @@ def home(request):
             val = UUID(id).version
             if val != 4:
                 raise ValueError(0)
-            if Quiz.objects.filter(pk=id).exists():
-                return redirect("quiz", quiz_id=id)
+            quiz = Quiz.objects.filter(pk=id).first()
+            if quiz:
+                if not quiz.has_started:
+                    return redirect("quiz_upcoming", quiz_id=id)
+                elif not quiz.has_ended:
+                    return redirect("quiz_started", quiz_id=id)
+                else:
+                    return redirect("quiz_ended", quiz_id=id)
+
             else:
                 messages.error(request, "No Quiz Found For Given ID")
                 return redirect("home")
@@ -35,11 +41,25 @@ def home(request):
     return render(request, "quiz_app/home.html", context)
 
 
-def quiz(request, quiz_id):
+def quiz_upcoming(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
     form = QuizPasswordForm(request.POST or None)
     context = {"quiz": quiz, "form": form}
-    return render(request, "quiz_app/quiz.html", context)
+    return render(request, "quiz_app/quiz_upcoming.html", context)
+
+
+def quiz_started(request, quiz_id):
+    quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
+    form = QuizPasswordForm(request.POST or None)
+    context = {"quiz": quiz, "form": form}
+    return render(request, "quiz_app/quiz_started.html", context)
+
+
+def quiz_ended(request, quiz_id):
+    quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
+    form = QuizPasswordForm(request.POST or None)
+    context = {"quiz": quiz, "form": form}
+    return render(request, "quiz_app/quiz_ended.html", context)
 
 
 def quiz_instructions(request, quiz_id):
