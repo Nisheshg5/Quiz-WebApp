@@ -145,6 +145,12 @@ LOGOUT_REDIRECT_URL = "home"
 
 # reset password
 # For development purposes Django lets us store emails either in the console or as a file.
-EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-EMAIL_FILE_PATH = str(BASE_DIR.joinpath("sent_emails"))
-
+# EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+# EMAIL_FILE_PATH = str(BASE_DIR.joinpath("sent_emails"))
+# DataFlair
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.mailtrap.io"
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "5468349e54d342"
+EMAIL_HOST_PASSWORD = "1bc46cdd566aca"
+EMAIL_PORT = "2525"
