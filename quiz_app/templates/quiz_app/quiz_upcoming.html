@@ -1,59 +1,53 @@
 {% extends "quiz_app/layout.html" %}
+
 {% block title %}
 Quiz
 {% endblock %}
+
 {% block content %}
-<div class="container">
-	<div class="row justify-content-center">
-		<div class="col-4" style="text-align: center">
-			One of two columns
+
+<div class="quiz-upcoming">
+	<div class="outer">
+		<div class="middle">
+			<div class="inner" style="text-align: center;">
+				<div>
+					<h1>
+						{{ quiz.title }}
+					</h1>
+				</div>
+
+				<div class="mt-5">
+					<h3>
+						Starts in: <span id="timer"></span>
+
+						<script>
+							function time_format(seconds) {
+								var days = Math.floor(seconds / (24 * 60 * 60));
+								seconds -= days * (24 * 60 * 60);
+								days = (days > 0) ? ((days > 1) ? (days + " days ") : (days + " day ")) : "";
+								var hours = Math.floor(seconds / (60 * 60));
+								seconds -= hours * (60 * 60);
+								hours = (hours > 0) ? ((hours > 1) ? (hours + " hours ") : (hours + " hour ")) : "";
+								var minutes = Math.floor(seconds / (60));
+								seconds -= minutes * (60);
+								minutes = (minutes > 1) ? (minutes + " minutes and ") : (minutes + " minute and ");
+								seconds = (seconds > 1) ? (seconds + " seconds ") : (seconds + " second ");
+								return days + hours + minutes + seconds;
+							}
+							var time = "{{quiz.time_till_starts}}";
+							var interval = setInterval(function () {
+								if (time <= 0) {
+									clearInterval(interval);
+									window.location.replace("{% url 'quiz_started' quiz.quiz_id %}");
+								}
+								var interval = $("#timer").text(time_format(time-- | 0));
+							}, 1000);
+						</script>
+					</h3>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
-<div class="container-fluid d-flex align-items-center" id="quiz">
-	<!-- <div class="row"> -->
-	<div class="left px-md-3">
-		<h1>
-			Quiz
-		</h1>
 
-		<h3>
-			ID: {{ quiz.quiz_id }} <br>
-			Title: {{ quiz.title | title }} <br>
-		</h3>
-
-		<h3>
-			Starts in: <span id="timer"></span>
-
-			<script>
-				function time_format(seconds) {
-					var days = Math.floor(seconds / (24 * 60 * 60));
-					seconds -= days * (24 * 60 * 60);
-					days = (days > 0) ? ((days > 1) ? (days + " days ") : (days + " day ")) : "";
-
-					var hours = Math.floor(seconds / (60 * 60));
-					seconds -= hours * (60 * 60);
-					hours = (hours > 0) ? ((hours > 1) ? (hours + " hours ") : (hours + " hour ")) : "";
-
-					var minutes = Math.floor(seconds / (60));
-					seconds -= minutes * (60);
-					minutes = (minutes > 1) ? (minutes + " minutes and ") : (minutes + " minute and ");
-
-					seconds = (seconds > 1) ? (seconds + " seconds ") : (seconds + " second ");
-
-					return days + hours + minutes + seconds;
-				}
-
-				var time = "{{quiz.time_till_starts}}";
-				var interval = setInterval(function () {
-					var interval = $("#timer").text(time_format(--time | 0));
-					if (time <= 0) {
-						clearInterval(interval);
-					}
-				}, 1000);
-			</script>
-
-		</h3>
-	</div>
-</div>
 {% endblock %}

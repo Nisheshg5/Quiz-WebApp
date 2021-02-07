@@ -136,6 +136,42 @@ body::before {
     }
 }
 
+
+.quiz-upcoming .outer {
+    display: table;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.quiz-upcoming .middle {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.quiz-upcoming .inner {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 50px;
+    width: 40vw;
+    border-radius: 50px;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+@media only screen and (max-width: 1366px) {
+    .quiz-upcoming .inner {
+        width: 60vw;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .quiz-upcoming .inner {
+        width: 90vw;
+    }
+}
+
 .message {
     font-weight: 600;
     color: dodgerblue;

@@ -13,20 +13,20 @@ from .models import Quiz
 
 
 def home(request):
-    id = request.GET.get("quiz_id")
-    if id:
+    quiz_id = request.GET.get("quiz_id")
+    if quiz_id:
         try:
-            val = UUID(id).version
+            val = UUID(quiz_id).version
             if val != 4:
                 raise ValueError(0)
-            quiz = Quiz.objects.filter(pk=id).first()
+            quiz = Quiz.objects.filter(pk=quiz_id).first()
             if quiz:
                 if not quiz.has_started:
-                    return redirect("quiz_upcoming", quiz_id=id)
+                    return redirect("quiz_upcoming", quiz_id=quiz_id)
                 elif not quiz.has_ended:
-                    return redirect("quiz_started", quiz_id=id)
+                    return redirect("quiz_started", quiz_id=quiz_id)
                 else:
-                    return redirect("quiz_ended", quiz_id=id)
+                    return redirect("quiz_ended", quiz_id=quiz_id)
 
             else:
                 messages.error(request, "No Quiz Found For Given ID")
@@ -44,9 +44,9 @@ def home(request):
 def quiz_upcoming(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
     if quiz.has_ended:
-        return redirect("quiz_ended", quiz_id=id)
+        return redirect("quiz_ended", quiz_id=quiz_id)
     if quiz.has_started:
-        return redirect("quiz_started", quiz_id=id)
+        return redirect("quiz_started", quiz_id=quiz_id)
 
     form = QuizPasswordForm(request.POST or None)
     context = {"quiz": quiz, "form": form}
@@ -56,9 +56,9 @@ def quiz_upcoming(request, quiz_id):
 def quiz_started(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
     if not quiz.has_started:
-        return redirect("quiz_upcoming", quiz_id=id)
+        return redirect("quiz_upcoming", quiz_id=quiz_id)
     if quiz.has_ended:
-        return redirect("quiz_ended", quiz_id=id)
+        return redirect("quiz_ended", quiz_id=quiz_id)
 
     form = QuizPasswordForm(request.POST or None)
     context = {"quiz": quiz, "form": form}
@@ -68,9 +68,9 @@ def quiz_started(request, quiz_id):
 def quiz_ended(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
     if not quiz.has_started:
-        return redirect("quiz_upcoming", quiz_id=id)
+        return redirect("quiz_upcoming", quiz_id=quiz_id)
     if not quiz.has_ended:
-        return redirect("quiz_started", quiz_id=id)
+        return redirect("quiz_started", quiz_id=quiz_id)
 
     form = QuizPasswordForm(request.POST or None)
     context = {"quiz": quiz, "form": form}
