@@ -3,6 +3,13 @@
 Quiz
 {% endblock %}
 {% block content %}
+<div class="container">
+	<div class="row justify-content-center">
+		<div class="col-4" style="text-align: center">
+			One of two columns
+		</div>
+	</div>
+</div>
 <div class="container-fluid d-flex align-items-center" id="quiz">
 	<!-- <div class="row"> -->
 	<div class="left px-md-3">
@@ -16,7 +23,6 @@ Quiz
 		</h3>
 
 		<h3>
-			{% if quiz.has_started is False %}
 			Starts in: <span id="timer"></span>
 
 			<script>
@@ -47,31 +53,7 @@ Quiz
 				}, 1000);
 			</script>
 
-			{% elif quiz.has_ended is False %}
-			Has Started
-			{% else %}
-			Has Ended
-			{% endif%}
 		</h3>
 	</div>
-	{% if quiz.has_started is True and quiz.has_ended is False %}
-	<div class="right">
-		<form class="quiz_pwd_form" action="/quiz/{{ quiz.quiz_id }}/instructions" method="POST" id="quiz_pwd_form"
-			style="min-width:250px; width:fit-content">
-			{% csrf_token %}
-			<h3>Enter {{form.password.label}}</h3>
-			{{ form.password }}<br>
-			<input type="submit" class="btn" value="Submit">
-		</form>
-	</div>
-	{% endif %}
-
 </div>
-
-
-<!-- <h6>
-	{% for question in quiz.questions %}
-	Question : {{ question }} <br>
-	{% endfor %}
-</h6> -->
 {% endblock %}
