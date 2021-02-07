@@ -22,9 +22,8 @@
     <table border="1">
       {% for field in form.visible_fields %}
 		<div class="form-group">
-			<!-- {{ field.label_tag }} -->
-			<label for="{{field.label_tag }}"></label>
-			<input type="text" name="username" maxlength="150" autocapitalize="none" autocomplete="username" autofocus="" required="" id="id_username">
+			{{ field.label_tag }}
+      {{ field }}
 		</div>
         <tr>
           <td>
