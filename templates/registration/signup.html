@@ -16,7 +16,7 @@
 					{% if field.label == "Username" %} Email {% else %}{{ field.label }}{% endif %}
 				</label>
 				<input class="form-control" id="{{ field.id_for_label }}" maxlength="30" name="{{ field.html_name }}" 
-					type={% if field.html_name is "username" %}email{% else %}password{% endif %} 
+					type={% if field.html_name == "username" %}email{% else %}password{% endif %} 
 					autocapitalize="none" required=""/> 
 				<!-- {{ field.errors }} -->				
 			</div>
