@@ -1,62 +1,28 @@
 {% extends "registration/base_form.html" %}
 
 {% block title %}
+	SignUp
 {% endblock %}
 
 
 {% block formBlock %}
 <div class="formBlock">
   	<h2 class="text-center">Sign Up</h2>
-
 	<form method="post">
+		{% csrf_token %}
 		{% for field in form %}
 			<div class="form-group">
-				<label for={{ field.auto_id}}>{{ field.label }}</label>
+				<label for={{ field.auto_id }}>
+					{% if field.label == "Username" %} Email {% else %}{{ field.label }}{% endif %}
+				</label>
 				<input class="form-control" id="{{ field.id_for_label }}" maxlength="30" name="{{ field.html_name }}" 
-					type={% if(field.html_name=="username") %}text{% else %}password{% endif %} 
+					type={% if field.html_name is "username" %}email{% else %}password{% endif %} 
 					autocapitalize="none" required=""/> 
-				<div class="input-group">
-					<input type="text" name="username" maxlength="150" autocapitalize="none" autocomplete="username" autofocus="" required="" id="id_username">
-					{{ field.errors }}
-				</div>
+				<!-- {{ field.errors }} -->				
 			</div>
-		{% endfor %}
-	</form>
-
-<form method="post" novalidate>
-    {% csrf_token %}
-  
-    {{ form.non_field_errors }}
-  
-    {% for hidden_field in form.hidden_fields %}
-      {{ hidden_field.errors }}
-      {{ hidden_field }}
-      <script>console.log("HELLO")</script>
-    {% endfor %}
-  
-    <table border="1">
-      {% for field in form.visible_fields %}
-		<div class="form-group">
-			{{ field.label_tag }}
-			{{ field.id_for_label }}
-			{{ field.html_name }}
-			{{ field.value }}
-			{{ field.label }}
-			{{ field.auto_id }}
-      		{{ field }}
-		</div>
-        <tr>
-          <td>
-            {{ field.errors }}
-            <p>{{ field.help_text }}</p>
-          </td>
-        </tr>
-      {% endfor %}
-    </table>
-  
-    <button type="submit">Submit</button>
+		{% endfor %}  
+    <button type="submit" class="btn btn-block btn-purple mt-3">Submit</button>
   </form>
-
 </div>
 
 
