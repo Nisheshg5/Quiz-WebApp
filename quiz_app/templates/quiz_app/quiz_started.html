@@ -17,8 +17,7 @@
 						</h1>
 					</div>
 					<div class="col my-5">
-						<form class="quiz_pwd_form" action="/quiz/instructions/{{ quiz.quiz_id }}" method="POST"
-							style="min-width:250px; width:fit-content">
+						<form class="quiz_pwd_form" method="POST" style="min-width:250px; width:fit-content">
 							{% if user.is_authenticated %}
 							{% csrf_token %}
 							<h3>Enter {{form.password.label}}</h3>

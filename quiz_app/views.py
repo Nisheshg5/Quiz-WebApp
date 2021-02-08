@@ -61,6 +61,14 @@ def quiz_started(request, quiz_id):
         return redirect("quiz_ended", quiz_id=quiz_id)
 
     form = QuizPasswordForm(request.POST or None)
+
+    if request.method == "POST":
+        if form.is_valid():
+            if Quiz.objects.filter(pk=quiz_id, password=(request.POST.get("password"))):
+                print("Correct password")
+            else:
+                print("Wrong Password")
+
     context = {"quiz": quiz, "form": form}
     return render(request, "quiz_app/quiz_started.html", context)
 
