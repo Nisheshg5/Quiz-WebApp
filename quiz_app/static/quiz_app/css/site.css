@@ -182,6 +182,7 @@ body::before {
     font-size: 1em;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     color: white;
+    z-index: 1;
     padding: 20px 100px 10px 100px;
 }
 
