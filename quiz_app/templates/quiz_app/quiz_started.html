@@ -1,77 +1,38 @@
 {% extends "quiz_app/layout.html" %}
+
 {% block title %}
-Quiz
+{{ quiz.title | title }}
 {% endblock %}
+
 {% block content %}
-<div class="container-fluid d-flex align-items-center" id="quiz">
-	<!-- <div class="row"> -->
-	<div class="left px-md-3">
-		<h1>
-			Quiz
-		</h1>
 
-		<h3>
-			ID: {{ quiz.quiz_id }} <br>
-			Title: {{ quiz.title | title }} <br>
-		</h3>
-
-		<h3>
-			{% if quiz.has_started is False %}
-			Starts in: <span id="timer"></span>
-
-			<script>
-				function time_format(seconds) {
-					var days = Math.floor(seconds / (24 * 60 * 60));
-					seconds -= days * (24 * 60 * 60);
-					days = (days > 0) ? ((days > 1) ? (days + " days ") : (days + " day ")) : "";
-
-					var hours = Math.floor(seconds / (60 * 60));
-					seconds -= hours * (60 * 60);
-					hours = (hours > 0) ? ((hours > 1) ? (hours + " hours ") : (hours + " hour ")) : "";
-
-					var minutes = Math.floor(seconds / (60));
-					seconds -= minutes * (60);
-					minutes = (minutes > 1) ? (minutes + " minutes and ") : (minutes + " minute and ");
-
-					seconds = (seconds > 1) ? (seconds + " seconds ") : (seconds + " second ");
-
-					return days + hours + minutes + seconds;
-				}
-
-				var time = "{{quiz.time_till_starts}}";
-				var interval = setInterval(function () {
-					var interval = $("#timer").text(time_format(--time | 0));
-					if (time <= 0) {
-						clearInterval(interval);
-					}
-				}, 1000);
-			</script>
-
-			{% elif quiz.has_ended is False %}
-			Has Started
-			{% else %}
-			Has Ended
-			{% endif%}
-		</h3>
+<div class="quiz-started">
+	<div class="outer">
+		<div class="middle">
+			<div class="inner" style="text-align: center;">
+				<div class="row">
+					<div class="col m-auto">
+						<h1>
+							Quiz Has Started
+						</h1>
+					</div>
+					<div class="col my-5">
+						<form class="quiz_pwd_form" action="/quiz/instructions/{{ quiz.quiz_id }}" method="POST"
+							style="min-width:250px; width:fit-content">
+							{% if user.is_authenticated %}
+							{% csrf_token %}
+							<h3>Enter {{form.password.label}}</h3>
+							<input class="form-control text-password" name="password" type="text" required>
+							<input type="submit" class="btn" value="Submit">
+							{% else %}
+							<h1><a href="{% url 'login' %}">Please Login to continue</a></h1>
+							{% endif %}
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
-	{% if quiz.has_started is True and quiz.has_ended is False %}
-	<div class="right">
-		<form class="quiz_pwd_form" action="/quiz/instructions/{{ quiz.quiz_id }}" method="POST" id="quiz_pwd_form"
-			style="min-width:250px; width:fit-content">
-			{% csrf_token %}
-			<h3>Enter {{form.password.label}}</h3>
-			{{ form.password }}<br>
-			<input type="submit" class="btn" value="Submit">
-		</form>
-	</div>
-	{% endif %}
-
 </div>
 
-
-<!-- <h6>
-	{% for question in quiz.questions %}
-	Question : {{ question }} <br>
-	{% endfor %}
-</h6> -->
 {% endblock %}
