@@ -1,0 +1,14 @@
+# Django Tutorial
+https://www.youtube.com/watch?v=F5mRW0jo-U4
+
+
+
+### Quiz-id 
+24cf6d26-655d-4fe3-a377-3c8b55a3ba00
+
+### Quiz-password
+password
+
+
+## Signup Form Error
+https://stackoverflow.com/questions/54901493/manager-isnt-available-auth-user-has-been-swapped-for-members-customuser
