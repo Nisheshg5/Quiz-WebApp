@@ -9,14 +9,22 @@ class AccountAdmin(UserAdmin):
     add_form = SignUpForm
 
     list_display = (
+        "full_name",
         "email",
-        "username",
         "date_joined",
         "last_login",
         "is_admin",
         "is_staff",
     )
-    search_fields = ("email", "username")
+    search_fields = (
+        "full_name",
+        "email",
+    )
+    ordering = (
+        "full_name",
+        "email",
+    )
+
     readonly_fields = ("id", "date_joined", "last_login")
 
     filter_horizontal = ()

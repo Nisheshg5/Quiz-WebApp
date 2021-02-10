@@ -1,7 +1,7 @@
 {% extends "registration/base_form.html" %}
 
 {% block title %}
-	Login
+Login
 {% endblock %}
 
 {% block formBlock %}
@@ -10,35 +10,35 @@
     <form method="post">
         {% csrf_token %}
         {% for field in form %}
-            <div class="form-group">
-                <label for={{ field.auto_id }}>
-                    {% if field.label == "Username" %} Email {% else %}{{ field.label }}{% endif %}
-                </label>
-                <input class="form-control" id="{{ field.id_for_label }}" maxlength="30" name="{{ field.html_name }}" 
-                    type={% if field.html_name == "username" %}email{% else %}password{% endif %} 
-                    autocapitalize="none" required=""/> 
-                <!-- {{ field.errors }} -->		
-            </div>
-        {% endfor %}  
+        <div class="form-group">
+            <label for={{ field.auto_id }}>
+                {% if field.label == "Username" %} Email {% else %}{{ field.label }}{% endif %}
+            </label>
+            <input class="form-control" id="{{ field.id_for_label }}" maxlength="30" name="{{ field.html_name }}"
+                type={% if field.html_name == "username" %}email{% else %}password{% endif %} autocapitalize="none"
+                required="" />
+            <!-- {{ field.errors }} -->
+        </div>
+        {% endfor %}
         <div class="form-check">
             <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" value="">Remember Me
+                <input type="checkbox" class="form-check-input" value="">Remember Me
             </label>
-          </div>
+        </div>
         <div class="form-group">
             <button type="submit" class="btn btn-block btn-purple mt-4" id="login">Log In</button>
         </div>
         <div class="form-group">
-			<label class="control-label">Don't have an account? <a href="{% url 'signup' %}" class="form-link">Sign Up</a></label>
-		</div>
+            <label class="control-label">Don't have an account? <a href="{% url 'signup' %}" class="form-link">Sign
+                    Up</a></label>
+        </div>
     </form>
 </div>
+{% for field, errors in form.errors.items %}
+{% for error in errors %}
 <script>
-    let login = document.getElementById("login");
-    login.addEventListener("click", function(e){
-        // e.preventDefault();
-        console.log("Login Clicked");
-        console.log("Login Clicked");
-    })
+    console.log("{{error}}")
 </script>
+{%endfor %}
+{%endfor %}
 {% endblock %}

@@ -40,4 +40,7 @@ class QuizPasswordForm(forms.ModelForm):
 class SignUpForm(UserCreationForm):
     class Meta:
         model = Account
-        fields = ("email",)
+        fields = (
+            "full_name",
+            "email",
+        )
