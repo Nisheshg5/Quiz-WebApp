@@ -10,7 +10,7 @@ SignUp
     <h2 class="text-center">Sign Up</h2>
     <form method="post">
         {% csrf_token %}
-        {% for field in form %}
+        {% for field in form.visible_fields %}
         <div class="form-group">
             <label for={{ field.auto_id }}>
                 {% if field.label == "Username" %} Email {% else %}{{ field.label }}{% endif %}
@@ -18,7 +18,6 @@ SignUp
             <input class="form-control" id="{{ field.id_for_label }}" maxlength="30" name="{{ field.html_name }}"
                 type={% if field.html_name == "email" %}email{% else %}password{% endif %} autocapitalize="none"
                 required="" />
-            <!-- {{ field.errors }} -->
         </div>
         {% endfor %}
         <div class="form-group">
@@ -29,7 +28,20 @@ SignUp
                     In</a></label>
         </div>
 
-
+        {% for field, errors in form.errors.items %}
+        {% for error in errors %}
+        <script>
+            Swal.fire({
+                icon: 'warning',
+                html: '{{ error }}',
+                position: 'top',
+                timerProgressBar: true,
+                showConfirmButton: false,
+                timer: 3000
+            });
+        </script>
+        {%endfor %}
+        {%endfor %}
     </form>
 
 </div>

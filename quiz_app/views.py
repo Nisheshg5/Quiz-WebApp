@@ -63,7 +63,9 @@ def quiz_started(request, quiz_id):
     form = QuizPasswordForm(request.POST or None)
 
     if request.method == "POST":
-        if form.is_valid() and Quiz.objects.filter(pk=quiz_id, password=request.POST.get("password")):
+        if form.is_valid() and Quiz.objects.filter(
+            pk=quiz_id, password=request.POST.get("password")
+        ):
             return redirect("quiz_instructions", quiz_id=quiz_id)
         else:
             messages.error(request, "Wrong Password")
