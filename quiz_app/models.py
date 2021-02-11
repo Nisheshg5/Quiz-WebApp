@@ -77,6 +77,7 @@ class Quiz(models.Model):
         verbose_name="end time", default=default_end_datetime
     )
     duration = models.IntegerField(default=90)
+    created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"id: {self.quiz_id}, title: {self.title}"
@@ -96,3 +97,55 @@ class Quiz(models.Model):
     class Meta:
         db_table = "quiz"
         app_label = "quiz_app"
+        verbose_name_plural = "Quizzes"
+        ordering = [
+            "created",
+        ]
+
+
+class Question_bank(models.Model):
+
+    C = "C"
+    CPLUSPLUS = "C++"
+    JAVA = "java"
+    PYTHON = "python"
+    OS = "os"
+    CSA = "csa"
+    DS = "ds"
+    TAGS = [
+        (C, "C"),
+        (CPLUSPLUS, "C++"),
+        (JAVA, "Java"),
+        (PYTHON, "Python"),
+        (OS, "OS"),
+        (CSA, "CSA"),
+        (DS, "DS"),
+    ]
+
+    BEGINNER = "beginner"
+    INTERMEDIATE = "intermediate"
+    ADVANCED = "advanced"
+    LEVELS = [
+        (BEGINNER, "Beginner"),
+        (INTERMEDIATE, "Intermediate"),
+        (ADVANCED, "Advanced"),
+    ]
+
+    question = models.TextField()
+    choice_1 = models.TextField()
+    choice_2 = models.TextField()
+    choice_3 = models.TextField(blank=True, null=True)
+    choice_4 = models.TextField(blank=True, null=True)
+    choice_5 = models.TextField(blank=True, null=True)
+    correct = models.TextField()
+    isShuffle = models.BooleanField(default=True)
+    tag = models.CharField(max_length=10, choices=TAGS)
+    level = models.CharField(max_length=15, choices=LEVELS, default=BEGINNER)
+
+    class Meta:
+        db_table = "question_bank"
+        app_label = "quiz_app"
+        ordering = [
+            "tag",
+            "level",
+        ]

@@ -18,5 +18,19 @@ https://stackoverflow.com/questions/54901493/manager-isnt-available-auth-user-ha
 nishesh1359.cse18@chitkara.edu.in
 76xday6955 
 
+INSERT INTO quiz(quiz_id,title,instructions,password,start_date,end_date,duration) VALUES('24cf6d26655d4fe3a3773c8b55a3ba00','Quiz Title',X'5175697a20496e737472756374696f6e735175697a20496e737472756374696f6e735175697a20496e737472756374696f6e735175697a20496e737472756374696f6e735175697a20496e737472756374696f6e735175697a20496e737472756374696f6e735175697a20496e737472756374696f6e735175697a20496e737472756374696f6e735175697a20496e737472756374696f6e735175697a20496e737472756374696f6e735175697a20496e737472756374696f6e73c2a0','password','2021-02-08 16:18:42.704363','2021-02-10 18:18:42.704363',90);
 
-python manage.py superuser
+
+
+django-admin startproject project_name .
+python manage.py startapp app_name
+
+python manage.py collectstatic
+
+python manage.py createsuperuser
+python manage.py createuser
+
+python manage.py makemigrations
+python manage.py migrate
+
+python manage.py shell
