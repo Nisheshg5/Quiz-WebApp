@@ -52,6 +52,10 @@ class Question_bank_resource(resources.ModelResource):
         model = Question_bank
 
 
+class QuizAdmin(admin.ModelAdmin):
+    change_list_template = "quiz_app/quizadmin_changelist.html"
+
+
 class Question_bank_admin(ImportExportModelAdmin):
     list_display = (
         "question",
@@ -75,5 +79,5 @@ class Question_bank_admin(ImportExportModelAdmin):
 
 
 admin.site.register(Account, AccountAdmin)
-admin.site.register(Quiz)
+admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Question_bank, Question_bank_admin)
