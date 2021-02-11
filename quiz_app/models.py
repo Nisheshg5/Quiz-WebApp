@@ -122,7 +122,7 @@ class Question_bank(models.Model):
         (DS, "DS"),
     ]
 
-    BEGINNER = "beginner"
+    BEGINNER = "easy"
     INTERMEDIATE = "intermediate"
     ADVANCED = "advanced"
     LEVELS = [
@@ -138,8 +138,8 @@ class Question_bank(models.Model):
     choice_4 = models.TextField(blank=True, null=True)
     choice_5 = models.TextField(blank=True, null=True)
     correct = models.TextField()
-    isShuffle = models.BooleanField(default=True)
     tag = models.CharField(max_length=10, choices=TAGS)
+    isShuffle = models.BooleanField(default=True)
     level = models.CharField(max_length=15, choices=LEVELS, default=BEGINNER)
 
     class Meta:
