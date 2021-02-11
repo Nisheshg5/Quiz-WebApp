@@ -17,3 +17,6 @@ https://stackoverflow.com/questions/54901493/manager-isnt-available-auth-user-ha
 
 nishesh1359.cse18@chitkara.edu.in
 76xday6955 
+
+
+python manage.py superuser

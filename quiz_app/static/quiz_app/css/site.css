@@ -12,6 +12,7 @@ body {
     background-position: center top;
     overflow-x: hidden;
     width: 100vw;
+    position:relative;
 }
 
 body::before {
@@ -28,7 +29,7 @@ body::before {
 }
 
 .footer {
-    position: absolute;
+    /* position: absolute; */
     left: 0;
     bottom: 0;
     margin-top: 100px;
