@@ -10,6 +10,7 @@ body {
     background-size: cover;
     background-attachment: fixed;
     background-position: center top;
+    overflow-x: hidden;
     width: 100vw;
 }
 
@@ -217,6 +218,13 @@ body::before {
     color: white;
     z-index: 1;
     padding: 20px 100px 10px 100px;
+}
+
+
+@media only screen and (max-width: 768px) {
+    .navbar {
+        padding: 20px 40px;
+    }
 }
 
 .navbar-dark .navbar-nav .nav-link {
