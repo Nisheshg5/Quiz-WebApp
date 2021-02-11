@@ -34,4 +34,19 @@
 	</div>
 </div>
 
+{% for field, errors in form.errors.items %}
+{% for error in errors %}
+<script>
+	Swal.fire({
+		icon: 'warning',
+		html: '{{ error }}',
+		position: 'top',
+		timerProgressBar: true,
+		showConfirmButton: false,
+		timer: 3000
+	});
+</script>
+{%endfor %}
+{%endfor %}
+
 {% endblock %}

@@ -12,7 +12,7 @@ body {
     background-position: center top;
     overflow-x: hidden;
     width: 100vw;
-    position:relative;
+    position: relative;
 }
 
 body::before {
@@ -96,7 +96,8 @@ body::before {
 }
 
 .quiz_form input[type='submit'],
-.quiz_pwd_form input[type='submit'] {
+.quiz_pwd_form input[type='submit'],
+.start_test {
     text-align: center;
     padding: 1em 3em;
     border-radius: 2em;

@@ -41,6 +41,20 @@ def home(request):
     return render(request, "quiz_app/home.html", context)
 
 
+def quiz(request, quiz_id):
+    quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
+    if not quiz.has_started:
+        return redirect("quiz_upcoming", quiz_id=quiz_id)
+    if quiz.has_ended:
+        return redirect("quiz_ended", quiz_id=quiz_id)
+
+    if not request.user.is_authenticated:
+        return redirect("login")
+
+    context = {"quiz": quiz}
+    return render(request, "quiz_app/quiz.html", context)
+
+
 def quiz_upcoming(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
     if quiz.has_ended:
@@ -88,6 +102,14 @@ def quiz_ended(request, quiz_id):
 
 def quiz_instructions(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
+    if not quiz.has_started:
+        return redirect("quiz_upcoming", quiz_id=quiz_id)
+    if quiz.has_ended:
+        return redirect("quiz_ended", quiz_id=quiz_id)
+
+    if not request.user.is_authenticated:
+        return redirect("login")
+
     context = {"quiz": quiz}
     return render(request, "quiz_app/quiz_instructions.html", context)
 
