@@ -7,29 +7,21 @@
 {% block content %}
 
 <div class="quiz-started">
-	<div class="outer">
-		<div class="middle">
-			<div class="inner" style="text-align: center;">
-				<div class="row">
-					<div class="col m-auto">
-						<h1>
-							Quiz Has Started
-						</h1>
-					</div>
-					<div class="col my-5">
-						<form class="quiz_pwd_form" method="POST" style="min-width:250px; width:fit-content">
-							{% if user.is_authenticated %}
-							{% csrf_token %}
-							<h3>Enter {{form.password.label}}</h3>
-							<input class="form-control text-password" name="password" type="text" required>
-							<input type="submit" class="btn" value="Submit">
-							{% else %}
-							<h1><a href="{% url 'login' %}">Please Login to continue</a></h1>
-							{% endif %}
-						</form>
-					</div>
-				</div>
-			</div>
+	<div class="row inner">
+		<div class="col-12 col-md-6 d-flex">
+			<h1 class="mx-auto">Quiz Has Started</h1>
+		</div>
+		<div class="col-12 col-md-6">
+			<form class="quiz_pwd_form" method="POST" style="min-width:250px; width:fit-content">
+				{% if user.is_authenticated %}
+				{% csrf_token %}
+				<h3>Enter {{form.password.label}}</h3>
+				<input class="form-control text-password" name="password" type="text" required>
+				<input type="submit" class="btn btn-sm" value="Submit">
+				{% else %}
+				<h1><a href="{% url 'login' %}">Please Login to continue</a></h1>
+				{% endif %}
+			</form>
 		</div>
 	</div>
 </div>

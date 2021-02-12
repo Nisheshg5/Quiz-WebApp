@@ -140,25 +140,15 @@ body::before {
 }
 .quiz-started
 {
-    margin-top: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height:80vh;
 }
 
-.quiz-upcoming .outer,
-.quiz-started .outer {
-    
-}
-
-.quiz-upcoming .middle,
-.quiz-started .middle {
-
-}
-
 .quiz-upcoming .inner,
 .quiz-started .inner {
+    margin: 40px auto 0 auto;
     padding: 50px;
     width: 40vw;
     border-radius: 50px;
