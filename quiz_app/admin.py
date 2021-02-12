@@ -81,7 +81,7 @@ class QuizAdmin(admin.ModelAdmin):
 
     ordering = ("created",)
 
-    change_form_template = "quiz_app/quiz_admin_change_form.html"
+    change_form_template = "quiz_app/admin_quiz_change_form.html"
 
 
 class Question_bank_admin(ImportExportModelAdmin):
