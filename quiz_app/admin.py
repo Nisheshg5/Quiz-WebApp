@@ -1,10 +1,15 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.admin import SimpleListFilter
 from django.contrib.auth.admin import UserAdmin
+from django.core.exceptions import ValidationError
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect, render
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 from import_export.fields import Field
+from import_export.formats import base_formats
 
 from .forms import SignUpForm
 from .models import Account, Question_bank, Quiz
@@ -85,8 +90,40 @@ class QuizAdmin(admin.ModelAdmin):
 
 
 class Question_bank_admin(ImportExportModelAdmin):
-    def add_questions_to_quiz(modeladmin, request, queryset):
-        print(modeladmin, request, queryset)
+    def add_questions_to_quiz(self, request, queryset):
+
+        quiz_id = request.GET.get("quizid", "")
+
+        if not quiz_id:
+            messages.error(
+                request, mark_safe("No Quiz Entered<br>Please Select A Quiz First")
+            )
+            return redirect(request.get_full_path())
+
+        try:
+            quiz = Quiz.objects.filter(pk=quiz_id).first()
+        except ValidationError:
+            messages.error(request, mark_safe("Invalid Quiz Id Found"))
+            return redirect(request.get_full_path())
+
+        if not quiz:
+            messages.error(request, mark_safe("No Quiz Found For Given ID"))
+            return redirect(request.get_full_path())
+
+        if "apply" in request.POST:
+            if request.POST.get("apply", "") == "Cancel":
+                return redirect(request.get_full_path())
+
+            print(self, request, quiz, *queryset, sep="\n")
+            return redirect(request.get_full_path())
+
+        context = {
+            "question_bank": queryset,
+            "quiz": quiz,
+        }
+        return render(
+            request, "quiz_app/admin_question_bank_confirmation.html", context=context
+        )
 
     add_questions_to_quiz.short_description = "Add Questions To Quiz"
 
@@ -114,7 +151,14 @@ class Question_bank_admin(ImportExportModelAdmin):
     ]
     fieldsets = ()
 
-    actions = [add_questions_to_quiz]
+    def get_import_formats(self):
+        formats = (
+            base_formats.XLS,
+            base_formats.XLSX,
+        )
+        return [f for f in formats if f().can_import()]
+
+    actions = ["add_questions_to_quiz"]
     resource_class = Question_bank_resource
 
 

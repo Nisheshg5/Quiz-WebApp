@@ -1,0 +1,24 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<form action="" method="post">
+	{% csrf_token %}
+	<p>
+		Are you sure you want to add the followings question to the quiz: {{ quiz.title }}?
+		<input style="float: right; background-color: rgba(227, 64, 74, 1)" type="submit" name="apply" value="Cancel" />
+		<input style="float: right; margin-right: 20px;" type="submit" name="apply" value="Import" />
+		<input type="hidden" name="action" value="add_questions_to_quiz" />
+	</p>
+	<table id="result_list" style="margin-top:50px;">
+		<tbody>
+			{% for question in question_bank %}
+			<tr>
+				<td>Q{{ forloop.counter | rjust:"2"}})</td>
+				<td>{{ question.question }}</td>
+				<input type="hidden" name="_selected_action" value="{{ question.pk }}" />
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</form>
+{% endblock %}
