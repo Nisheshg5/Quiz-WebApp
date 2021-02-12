@@ -7,27 +7,23 @@
 {% block content %}
 
 <div class="quiz-started">
-	<div class="outer">
-		<div class="middle">
-			<div class="inner" style="text-align: center;">
-				<div class="row">
-					<div class="col m-auto">
-						<h1>Instructions</h1>
-						<ul>
-							{% for instruction in quiz.instructions.splitlines %}
-							<li>{{ instruction }}</li>
-							{% endfor %}
-						</ul>
-					</div>
-					<div class="col my-5">
-						<form class="quiz_pwd_form" style="min-width:250px; width:fit-content">
-							<a class="start_test" href="{% url 'quiz' quiz.quiz_id%}">Please Login to continue</a>
-						</form>
-					</div>
-				</div>
-			</div>
+
+	<div class="row inner">
+		<div class="col-12 col-md-7 instructions">
+			<h1 class="text-center">Instructions</h1>
+			<ol class="instruction-list mx-auto my-0">
+				{% for instruction in quiz.instructions.splitlines %}
+					<li>{{ instruction }}</li>
+				{% endfor %}
+			</ol>
+		</div>
+		<div class="col-12 col-md-5 my-5 d-flex justify-content-center align-content-center" style="height: 100%;">
+			<form class="" style="min-width:250px; width:fit-content">
+				<a class="start_test" href="{% url 'quiz' quiz.quiz_id%}">Start Test</a>
+			</form>
 		</div>
 	</div>
+
 </div>
 
 {% endblock %}
