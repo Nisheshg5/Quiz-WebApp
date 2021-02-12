@@ -3,6 +3,8 @@ from uuid import uuid4
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 from django.utils import timezone
 
 
@@ -138,6 +140,7 @@ class Question_bank(models.Model):
     choice_4 = models.TextField(blank=True, null=True)
     choice_5 = models.TextField(blank=True, null=True)
     correct = models.TextField()
+    marks = models.IntegerField(default=1)
     tag = models.CharField(max_length=10, choices=TAGS)
     isShuffle = models.BooleanField(default=True)
     level = models.CharField(max_length=15, choices=LEVELS, default=BEGINNER)
@@ -145,7 +148,74 @@ class Question_bank(models.Model):
     class Meta:
         db_table = "question_bank"
         app_label = "quiz_app"
+        verbose_name_plural = "question_bank"
         ordering = [
             "tag",
             "level",
         ]
+
+
+class Question(models.Model):
+    quiz_id = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    question = models.TextField()
+    choice_1 = models.TextField()
+    choice_2 = models.TextField()
+    choice_3 = models.TextField(blank=True, null=True)
+    choice_4 = models.TextField(blank=True, null=True)
+    choice_5 = models.TextField(blank=True, null=True)
+    correct = models.TextField()
+    marks = models.IntegerField(default=1)
+    isShuffle = models.BooleanField(default=True)
+
+    class Meta:
+        db_table = "question"
+        app_label = "quiz_app"
+        verbose_name_plural = "questions"
+        ordering = [
+            "marks",
+        ]
+
+
+class QuizTakers(models.Model):
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    completed = models.BooleanField(default=False)
+    started = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "QuizTaker"
+        app_label = "quiz_app"
+        verbose_name_plural = "QuizTakers"
+        ordering = [
+            "quiz",
+            "user",
+        ]
+
+
+class Response(models.Model):
+    quiztaker = models.ForeignKey(QuizTakers, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    answer = models.TextField(blank=True, null=True)
+    isCorrect = models.BooleanField(default=False)
+    marks = models.IntegerField(default=0)
+
+    class Meta:
+        db_table = "response"
+        app_label = "quiz_app"
+        verbose_name_plural = "responses"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["quiztaker", "question"], name="Unique Response"
+            ),
+        ]
+        ordering = [
+            "quiztaker",
+            "question",
+        ]
+
+
+@receiver(pre_save, sender=Response)
+def set_default_marks(sender, instance, created, **kwargs):
+    if instance.isCorrect and instance.marks == 0:
+        instance.marks = instance.question.marks
+

@@ -51,6 +51,7 @@ class Question_bank_resource(resources.ModelResource):
     choice_4 = Field(attribute="choice_4", column_name="Option 4")
     choice_5 = Field(attribute="choice_5", column_name="Option 5")
     correct = Field(attribute="correct", column_name="Correct Answer-1")
+    marks = Field(attribute="marks", column_name="Marks", default=1)
     tag = Field(attribute="tag", column_name="Tag")
     isShuffle = Field(attribute="isShuffle", column_name="isShuffle")
     level = Field(attribute="level", column_name="Level", default="easy")
