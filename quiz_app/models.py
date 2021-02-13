@@ -176,7 +176,7 @@ class Question(models.Model):
         ]
 
     def __str__(self):
-        return f"id: {self.pk}, quiz: {self.quiz}, question: {self.question}"
+        return f"Question id: {self.pk}"
 
 
 class QuizTakers(models.Model):

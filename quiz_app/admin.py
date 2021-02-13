@@ -48,6 +48,28 @@ class AccountAdmin(UserAdmin):
 class QuizAdmin(admin.ModelAdmin):
     class QuestionAdmin(admin.TabularInline):
         model = Question
+        question_numbering = 0
+        fields = (
+            "question_number",
+            "quiz",
+            "question",
+            "choice_1",
+            "choice_2",
+            "choice_3",
+            "choice_4",
+            "choice_5",
+            "correct",
+            "marks",
+            "isShuffle",
+        )
+        readonly_fields = ("question_number",)
+
+        def question_number(self, obj):
+            self.question_numbering += 1
+            return f"Q{self.question_numbering:2}"
+
+        question_number.short_description = "#"
+
         formfield_overrides = {
             models.TextField: {"widget": Textarea(attrs={"rows": 4, "cols": 20})},
         }
@@ -141,7 +163,7 @@ class Question_bank_admin(ImportExportModelAdmin):
             for questionDict in queryset:
                 question = Question(
                     quiz=quiz,
-                    **model_to_dict(questionDict, exclude=["id", "tag", "level"])
+                    **model_to_dict(questionDict, exclude=["id", "tag", "level"]),
                 )
                 questions.append(question)
             Question.objects.bulk_create(questions)
@@ -222,3 +244,6 @@ admin.site.register(Account, AccountAdmin)
 admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Question_bank, Question_bank_admin)
 admin.site.register(QuizTakers, QuizTakersAdmin)
+admin.site.site_header = "Quiz Admin"
+admin.site.site_title = "Quiz Admin Portal"
+admin.site.index_title = "Welcome to Quiz Admin Portal"
