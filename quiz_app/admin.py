@@ -205,6 +205,7 @@ class Question_bank_admin(ImportExportModelAdmin):
     fieldsets = ()
     actions = ["add_questions_to_quiz"]
     resource_class = Question_bank_resource
+    change_list_template = "quiz_app/admin_question_bank_list.html"
 
 
 class QuizTakersAdmin(admin.ModelAdmin):

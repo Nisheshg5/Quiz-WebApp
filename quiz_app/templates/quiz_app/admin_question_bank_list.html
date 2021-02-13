@@ -1,0 +1,24 @@
+{% extends "admin/change_list.html" %}
+{% load i18n admin_urls admin_list %}
+
+{% block filters %}
+{% if cl.has_filters %}
+<div id="changelist-filter">
+	<h2>{% translate 'Filter' %}</h2>
+	{% if cl.has_active_filters %}
+	<h3 id="changelist-filter-clear">
+		{% if "quizid" in request.GET %}
+		<a href="{{ cl.clear_all_filters_qs }}quizid={{request.GET.quizid}}">
+			&#10006; {% translate "Clear all filters" %}
+		</a>
+		{% else %}
+		<a href="{{ cl.clear_all_filters_qs }}">
+			&#10006; {% translate "Clear all filters" %}
+		</a>
+		{% endif %}
+	</h3>
+	{% endif %}
+	{% for spec in cl.filter_specs %}{% admin_list_filter cl spec %}{% endfor %}
+</div>
+{% endif %}
+{% endblock %}
