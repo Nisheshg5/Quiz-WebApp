@@ -7,9 +7,11 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.timezone import datetime
 from django.views import generic
+from django.core import serializers
+from django.forms.models import model_to_dict
 
 from .forms import QuizForm, QuizPasswordForm, SignUpForm
-from .models import Quiz
+from .models import Quiz, Question
 
 
 def home(request):
@@ -51,8 +53,14 @@ def quiz(request, quiz_id):
     if not request.user.is_authenticated:
         return redirect("login")
 
-    context = {"quiz": quiz}
+    queryset =  quiz.question_set.all()
+    questions = []
+    for question in queryset:
+        questions.append(model_to_dict(question))
+
+    context = {"quiz": quiz, "questions": questions}
     return render(request, "quiz_app/quiz.html", context)
+
 
 
 def quiz_upcoming(request, quiz_id):
