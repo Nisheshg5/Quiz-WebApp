@@ -10,34 +10,43 @@
 		<div class="wrapper mt-5">
 			<div class="main">
 				<div class="question">
+					{{ questions }}
 					<h1>1. What is the full form of CSS ?</h2>
 				</div>
 				<form id="myForm">
-				<div class="options" id="options">
-					<div class="option">
-						<input type="radio" name="que" value="1" id="opt1"> 
-						<label for="opt1">a. <span id="o1">JavaScript</span></label>
+					<div class="options" id="options">
+						<div class="option">
+							<input type="radio" name="que" value="1" id="opt1"> 
+							<label for="opt1">a. <span id="o1">JavaScript</span></label>
+						</div>
+						<div class="option">
+							<input type="radio" name="que" value="2" id="opt2"> 
+							<label for="opt2">b. HTML</label>
+						</div>
+						<div class="option">
+							<input type="radio" name="que" value="3" id="opt3"> 
+							<label for="opt3">c. Java</label>
+						</div>
+						<div class="option">
+							<input type="radio" name="que" value="4" id="opt4"> 
+							<label for="opt4">d. Cascading Style Sheet Cascading Style Sheet</label>
+						</div>
 					</div>
-					<div class="option">
-						<input type="radio" name="que" value="2" id="opt2"> 
-						<label for="opt2">b. HTML</label>
-					</div>
-					<div class="option">
-						<input type="radio" name="que" value="3" id="opt3"> 
-						<label for="opt3">c. Java</label>
-					</div>
-					<div class="option">
-						<input type="radio" name="que" value="4" id="opt4"> 
-						<label for="opt4">d. Cascading Style Sheet Cascading Style Sheet</label>
-					</div>
-				</div>
-				<div>
 					<button class="btn btn-primary mt-3" id="btn-next" type="submit">Next</button>
 				</div>
 			</form>
-			</div>
 		</div>
 	</div>
 </div>
+
+
+	<!-- {{ questions|json_script: "myquestions" }} -->
+	{{ questions|json_script:"hello-data" }}
+	<script id="hello-data" type="application/json">{"hello": "world"}</script>
+
+<script>
+	const questions = JSON.parse(document.getElementById('hello-data').textContent);
+	console.log(questions);
+</script>
 
 {% endblock %}

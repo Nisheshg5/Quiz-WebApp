@@ -9,6 +9,7 @@ from django.utils.timezone import datetime
 from django.views import generic
 from django.core import serializers
 from django.forms.models import model_to_dict
+import json
 
 from .forms import QuizForm, QuizPasswordForm, SignUpForm
 from .models import Quiz, Question
@@ -54,6 +55,7 @@ def quiz(request, quiz_id):
         return redirect("login")
 
     queryset =  quiz.question_set.all()
+
     questions = []
     for question in queryset:
         questions.append(model_to_dict(question))
