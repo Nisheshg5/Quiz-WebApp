@@ -90,6 +90,7 @@ class QuizAdmin(admin.ModelAdmin):
         "start_date",
         "end_date",
         "duration",
+        "isShuffle",
         "created_at",
     )
 
