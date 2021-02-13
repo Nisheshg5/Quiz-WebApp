@@ -175,6 +175,9 @@ class Question(models.Model):
             "marks",
         ]
 
+    def __str__(self):
+        return f"id: {self.pk}, quiz: {self.quiz}, question: {self.question}"
+
 
 class QuizTakers(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)

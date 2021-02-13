@@ -137,6 +137,14 @@ class Question_bank_admin(ImportExportModelAdmin):
             if request.POST.get("apply", "") == "Cancel":
                 return redirect(request.get_full_path())
 
+            questions = []
+            for questionDict in queryset:
+                question = Question(
+                    quiz=quiz,
+                    **model_to_dict(questionDict, exclude=["id", "tag", "level"])
+                )
+                questions.append(question)
+            Question.objects.bulk_create(questions)
             return redirect(request.get_full_path())
 
         context = {
