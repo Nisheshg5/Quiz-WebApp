@@ -79,7 +79,7 @@ class Quiz(models.Model):
         verbose_name="end time", default=default_end_datetime
     )
     duration = models.IntegerField(default=90)
-    created = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"id: {self.quiz_id}, title: {self.title}"
@@ -101,7 +101,7 @@ class Quiz(models.Model):
         app_label = "quiz_app"
         verbose_name_plural = "Quizzes"
         ordering = [
-            "created",
+            "created_at",
         ]
 
 
@@ -133,7 +133,7 @@ class Question_bank(models.Model):
         (ADVANCED, "Advanced"),
     ]
 
-    question = models.TextField()
+    title = models.TextField()
     choice_1 = models.TextField()
     choice_2 = models.TextField()
     choice_3 = models.TextField(blank=True, null=True)
@@ -144,12 +144,14 @@ class Question_bank(models.Model):
     tag = models.CharField(max_length=10, choices=TAGS)
     isShuffle = models.BooleanField(default=True)
     level = models.CharField(max_length=15, choices=LEVELS, default=BEGINNER)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = "question_bank"
         app_label = "quiz_app"
         verbose_name_plural = "question_bank"
         ordering = [
+            "created_at",
             "tag",
             "level",
         ]
@@ -157,7 +159,7 @@ class Question_bank(models.Model):
 
 class Question(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
-    question = models.TextField()
+    title = models.TextField()
     choice_1 = models.TextField()
     choice_2 = models.TextField()
     choice_3 = models.TextField(blank=True, null=True)
@@ -166,6 +168,7 @@ class Question(models.Model):
     correct = models.TextField()
     marks = models.IntegerField(default=1)
     isShuffle = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = "question"
@@ -173,6 +176,7 @@ class Question(models.Model):
         verbose_name_plural = "questions"
         ordering = [
             "marks",
+            "created_at",
         ]
 
     def __str__(self):

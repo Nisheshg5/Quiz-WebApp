@@ -15,7 +15,7 @@
 			<tr>
 				<td></td>
 				<td>Q{{ forloop.counter | rjust:"2"}})</td>
-				<td>{{ question.question }}</td>
+				<td>{{ question.title }}</td>
 			</tr>
 			{% endfor %}
 			{% with curCount=quiz.question_set.count %}
@@ -23,7 +23,7 @@
 			<tr style="background-color: rgba(45, 235, 95,0.5)">
 				<td> NEW </td>
 				<td>Q{{ forloop.counter| add:curCount | rjust:"2"}})</td>
-				<td>{{ question.question }}</td>
+				<td>{{ question.title }}</td>
 				<input type="hidden" name="_selected_action" value="{{ question.pk }}" />
 			</tr>
 			{% endfor %}

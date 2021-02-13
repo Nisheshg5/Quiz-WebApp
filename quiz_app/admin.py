@@ -52,7 +52,7 @@ class QuizAdmin(admin.ModelAdmin):
         fields = (
             "question_number",
             "quiz",
-            "question",
+            "title",
             "choice_1",
             "choice_2",
             "choice_3",
@@ -78,7 +78,7 @@ class QuizAdmin(admin.ModelAdmin):
             field = super(QuizAdmin.QuestionAdmin, self).formfield_for_dbfield(
                 db_field, **kwargs
             )
-            if db_field.name == "question":
+            if db_field.name == "title":
                 field.widget.attrs["cols"] = 40
             return field
 
@@ -90,15 +90,15 @@ class QuizAdmin(admin.ModelAdmin):
         "start_date",
         "end_date",
         "duration",
-        "created",
+        "created_at",
     )
 
     readonly_fields = (
         "quiz_id",
-        "created",
+        "created_at",
     )
 
-    ordering = ("created",)
+    ordering = ("created_at",)
     inlines = [
         QuestionAdmin,
     ]
@@ -108,7 +108,7 @@ class QuizAdmin(admin.ModelAdmin):
 class Question_bank_admin(ImportExportModelAdmin):
     class Question_bank_resource(resources.ModelResource):
         id = Field(attribute="id")
-        question = Field(attribute="question", column_name="Question Statement")
+        title = Field(attribute="title", column_name="Question Statement")
         choice_1 = Field(attribute="choice_1", column_name="Option 1")
         choice_2 = Field(attribute="choice_2", column_name="Option 2")
         choice_3 = Field(attribute="choice_3", column_name="Option 3")
@@ -180,7 +180,7 @@ class Question_bank_admin(ImportExportModelAdmin):
     add_questions_to_quiz.short_description = "Add Questions To Quiz"
 
     list_display = (
-        "question",
+        "title",
         "choice_1",
         "choice_2",
         "choice_3",
@@ -191,14 +191,16 @@ class Question_bank_admin(ImportExportModelAdmin):
         "isShuffle",
         "tag",
         "level",
+        "created_at",
     )
 
-    search_fields = ("question",)
+    search_fields = ("title",)
     list_filter = (
         "tag",
         "level",
         EmptyQuizIDFilter,
     )
+    readonly_fields = ("created_at",)
     lookup_fields = [
         "quiz_id",
     ]
