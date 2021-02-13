@@ -80,6 +80,7 @@ class Quiz(models.Model):
     )
     duration = models.IntegerField(default=90)
     created_at = models.DateTimeField(auto_now_add=True)
+    isShuffle = models.BooleanField(default=True)
 
     def __str__(self):
         return f"id: {self.quiz_id}, title: {self.title}"
