@@ -11,13 +11,23 @@
 	</p>
 	<table id="result_list" style="margin-top:50px;">
 		<tbody>
-			{% for question in question_bank %}
+			{% for question in quiz.question_set.all %}
 			<tr>
+				<td></td>
 				<td>Q{{ forloop.counter | rjust:"2"}})</td>
+				<td>{{ question.question }}</td>
+			</tr>
+			{% endfor %}
+			{% with curCount=quiz.question_set.count %}
+			{% for question in question_bank %}
+			<tr style="background-color: rgba(45, 235, 95,0.5)">
+				<td> NEW </td>
+				<td>Q{{ forloop.counter| add:curCount | rjust:"2"}})</td>
 				<td>{{ question.question }}</td>
 				<input type="hidden" name="_selected_action" value="{{ question.pk }}" />
 			</tr>
 			{% endfor %}
+			{% endwith %}
 		</tbody>
 	</table>
 </form>
