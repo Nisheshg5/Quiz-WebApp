@@ -178,6 +178,14 @@ class Question_bank_admin(ImportExportModelAdmin):
 
 class QuizTakersAdmin(admin.ModelAdmin):
     class ResponseAdmin(admin.TabularInline):
+        def formfield_for_dbfield(self, db_field, **kwargs):
+            field = super(QuizTakersAdmin.ResponseAdmin, self).formfield_for_dbfield(
+                db_field, **kwargs
+            )
+            if db_field.name == "answer":
+                field.widget.attrs["rows"] = 5
+            return field
+
         model = Response
 
     list_display = (
@@ -195,6 +203,9 @@ class QuizTakersAdmin(admin.ModelAdmin):
         "quiz",
         "user",
     )
+    inlines = [
+        ResponseAdmin,
+    ]
     fieldsets = ()
 
 
