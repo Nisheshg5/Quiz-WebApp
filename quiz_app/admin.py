@@ -3,7 +3,8 @@ from django.contrib.admin import SimpleListFilter
 from django.contrib.auth.admin import UserAdmin
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.forms import Textarea, TextInput
+from django.forms import Textarea
+from django.forms.models import model_to_dict
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.utils.safestring import mark_safe
@@ -136,7 +137,6 @@ class Question_bank_admin(ImportExportModelAdmin):
             if request.POST.get("apply", "") == "Cancel":
                 return redirect(request.get_full_path())
 
-            print(self, request, quiz, *queryset, sep="\n")
             return redirect(request.get_full_path())
 
         context = {
@@ -157,6 +157,7 @@ class Question_bank_admin(ImportExportModelAdmin):
         "choice_4",
         "choice_5",
         "correct",
+        "marks",
         "isShuffle",
         "tag",
         "level",

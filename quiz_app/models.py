@@ -156,7 +156,7 @@ class Question_bank(models.Model):
 
 
 class Question(models.Model):
-    quiz_id = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     question = models.TextField()
     choice_1 = models.TextField()
     choice_2 = models.TextField()
