@@ -9,29 +9,27 @@
 	<div class="container">
 		<div class="wrapper mt-5">
 			<div class="main">
-				
-	{{ res }}
 				<div class="question">
-					{{ questions|safe }}
-					<h1>1. What is the full form of CSS ?</h2>
+					<!-- {{ questions|safe }} -->
+					<p id="q-title">1. What is the full form of CSS ?</p>
 				</div>
-				<form id="myForm">
-					<div class="options" id="options">
+				<form id="opForm">
+					<div class="options" id="q-options">
 						<div class="option">
 							<input type="radio" name="que" value="1" id="opt1"> 
-							<label for="opt1">a. <span id="o1">JavaScript</span></label>
+							<label for="opt1"><span>A. </span> <span id="o1">JavaScript</span></label>
 						</div>
 						<div class="option">
 							<input type="radio" name="que" value="2" id="opt2"> 
-							<label for="opt2">b. HTML</label>
+							<label for="opt2"><span>B. </span> <span>HTML</span></label>
 						</div>
 						<div class="option">
 							<input type="radio" name="que" value="3" id="opt3"> 
-							<label for="opt3">c. Java</label>
+							<label for="opt3"><span>C. </span> <span>Java</span></label>
 						</div>
 						<div class="option">
 							<input type="radio" name="que" value="4" id="opt4"> 
-							<label for="opt4">d. Cascading Style Sheet Cascading Style Sheet</label>
+							<label for="opt4"><span>D. </span> <span>Cascading Style Sheet Cascading Style SheetCascading Style Sheet Cascading Style SheetCascading Style Sheet Cascading Style Sheet</span></label>
 						</div>
 					</div>
 					<button class="btn btn-primary mt-3" id="btn-next" type="submit">Next</button>
@@ -45,39 +43,94 @@
 
 
 <script>
-	let questions = {{ questions|safe }};
-	let shuffle = true;
+	var questions = {{ questions|safe }};	// Only for the development
 
+	var shuffle;
 	var storage = sessionStorage;
-	console.log(questions);
+	var queNo = 0;
+	var totalQues;
+	var qTitle = document.getElementById("q-title");
+	var options = document.getElementById("q-options");
+	
+	function loadQuestion(questions, no){
+		let question = questions[no];
+		qTitle.innerText = `${no+1}. ${question.title}`;
+		loadOptions(question);
+	}
 
-	if(shuffle){
-		function shuffle(array) {
-			var m = array.length, t, i;
+	function loadOptions(question){
+		console.log(question);
+		options.innerHTML = "";
 
-			// While there remain elements to shuffle…
-			while (m) {
-
-				// Pick a remaining element…
-				i = Math.floor(Math.random() * m--);
-
-				// And swap it with the current element.
-				t = array[m];
-				array[m] = array[i];
-				array[i] = t;
-			}
-
-			return array;
+		if(question.choice_1){
+			options.innerHTML += createOption(question.choice_1, "A")
+		}
+		if(question.choice_2){
+			options.innerHTML += createOption(question.choice_2, "B")
+		}
+		if(question.choice_3){
+			options.innerHTML += createOption(question.choice_3, "C")
+		}
+		if(question.choice_4){
+			options.innerHTML += createOption(question.choice_4, "D")
+		}
+		if(question.choice_5){
+			options.innerHTML += createOption(question.choice_5, "E")
+		}
+	}
+	function check(s){
+		if(s){
+			console.log("Present");
+		}
+		else{
+			console.log("NOt present")
 		}
 	}
 
-	function addToStorage(){
-		storage.setItem("questions", JSON.stringify(questions));
+	function createOption(choice, choiceNo){
+		let res = `<div class="option">
+						<input type="radio" name="que" value="${choice}" id="opt${choiceNo}"> 
+						<label for="opt${choiceNo}"><span>${choiceNo}. </span> <span id="">${choice}</span></label>
+					</div>`;
+		return res;
 	}
 
-	addToStorage(questions);
+	function addToStorage(questions){
+		storage.setItem("questions", JSON.stringify(questions));
+	}	
 	
+	function shuffleQuestions(questions)
+	{
+		let len = questions.length-1, temp, i;
+
+		while(len > 0){
+			
+			// pick a remaining element
+			i = Math.floor(Math.random()*len--);
+
+			// swap
+			temp = questions[len];
+			questions[len] = questions[i];
+			questions[i] = temp;
+		}
+		return questions;
+	}
 	
+	function init()
+	{
+		var questions = {{ questions|safe }};
+		shuffle = `{{ shuffle }}`== "true" ? true: false;
+		if(shuffle){
+			questions = shuffleQuestions(questions);
+			console.log("Questions Shuffled!");
+		}
+		addToStorage(questions);		
+		console.log(questions);
+		totalQues = questions.length;
+		queNo = 0;
+		loadQuestion(questions, queNo);
+	}
+	init();
 
 </script>
 

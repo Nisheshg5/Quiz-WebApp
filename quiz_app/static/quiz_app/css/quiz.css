@@ -90,10 +90,18 @@ body
     display: flex;
     justify-content: center;
 }
+#testPage p#q-title
+{
+    font-size:2em;
+}
 
 #testPage input[type="radio"]
 {
     -webkit-appearance: none;
+}
+#testPage #opForm .option
+{
+    display: flex;
 }
 #testPage label
 {
@@ -104,8 +112,17 @@ body
     border-radius:10px;
     padding:5px 10px;
     margin:10px 0 5px 0;
+    display: grid;
+    grid-template-columns: 15px auto;
+    grid-gap:5px;
 }
-#testPage input[type="radio"]:checked + label{
+#testPage label span:first-child
+{
+    display: flex;
+    align-items: center;
+}
+#testPage input[type="radio"]:checked + label
+{
     background: #6b1c89 !important;
     color: #fff;
     box-shadow: 0 15px 45px rgba(0,0,0, 0.2);
@@ -133,4 +150,11 @@ body
     width: 100%;
     color: white;
     text-align: center;
+}
+@media(max-width:768px){
+    #testPage label
+    {
+        width:100%;
+        
+    }
 }
