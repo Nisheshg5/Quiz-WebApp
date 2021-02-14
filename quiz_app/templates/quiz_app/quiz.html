@@ -6,38 +6,38 @@
 
 {% block content %}
 <div id="testPage">
-	<div class="container">
-		<div class="wrapper mt-5">
-			<div class="main">
-				<div class="question">
-					<!-- {{ questions|safe }} -->
-					<p id="q-title">1. What is the full form of CSS ?</p>
-					<small class="small">Please select an option</small>
-				</div>
-				<form id="opForm">
-					<div class="options" id="q-options">
-						<div class="option">
-							<input type="radio" name="que" value="1" id="opt1"> 
-							<label for="opt1"><span>A. </span> <span id="o1">JavaScript</span></label>
-						</div>
-						<div class="option">
-							<input type="radio" name="que" value="2" id="opt2"> 
-							<label for="opt2"><span>B. </span> <span>HTML</span></label>
-						</div>
-						<div class="option">
-							<input type="radio" name="que" value="3" id="opt3"> 
-							<label for="opt3"><span>C. </span> <span>Java</span></label>
-						</div>
-						<div class="option">
-							<input type="radio" name="que" value="4" id="opt4"> 
-							<label for="opt4"><span>D. </span> <span>Cascading Style Sheet Cascading Style SheetCascading Style Sheet Cascading Style SheetCascading Style Sheet Cascading Style Sheet</span></label>
-						</div>
-					</div>
-					<button class="btn btn-primary mt-3" id="btn-submit" type="submit">Next</button>
-				</form>
-			</div>
-		</div>
-	</div>
+    <div class="container">
+        <div class="wrapper mt-5">
+            <div class="main">
+                <div class="question">
+                    <!-- {{ questions|safe }} -->
+                    <p id="q-title">1. What is the full form of CSS ?</p>
+                    <small class="small">Please select an option</small>
+                </div>
+                <form id="opForm">
+                    <div class="options" id="q-options">
+                        <div class="option">
+                            <input type="radio" name="que" value="1" id="opt1">
+                            <label for="opt1"><span>A. </span> <span id="o1">JavaScript</span></label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="que" value="2" id="opt2">
+                            <label for="opt2"><span>B. </span> <span>HTML</span></label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="que" value="3" id="opt3">
+                            <label for="opt3"><span>C. </span> <span>Java</span></label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="que" value="4" id="opt4">
+                            <label for="opt4"><span>D. </span> <span>Cascading Style Sheet Cascading Style SheetCascading Style Sheet Cascading Style SheetCascading Style Sheet Cascading Style Sheet</span></label>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary mt-3" id="btn-submit" type="submit">Next</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -68,21 +68,28 @@
 	function loadOptions(question){
 		console.log(question);
 		options.innerHTML = "";
+		options_array = []
 
 		if(question.choice_1){
-			options.innerHTML += createOption(question.choice_1, "A")
+			options_array.push(question.choice_1)
 		}
 		if(question.choice_2){
-			options.innerHTML += createOption(question.choice_2, "B")
+			options_array.push(question.choice_2)
 		}
 		if(question.choice_3){
-			options.innerHTML += createOption(question.choice_3, "C")
+			options_array.push(question.choice_3)
 		}
 		if(question.choice_4){
-			options.innerHTML += createOption(question.choice_4, "D")
+			options_array.push(question.choice_4)
 		}
 		if(question.choice_5){
-			options.innerHTML += createOption(question.choice_5, "E")
+			options_array.push(question.choice_5)
+		}
+		if(question.isShuffle) {
+			shuffleArray(options_array);
+		}
+		for(let i=0; i<options_array.length; i++) {
+			options.innerHTML += createOption(options_array[i], String.fromCharCode(65+i));
 		}
 	}
 
@@ -97,24 +104,14 @@
 	function addToStorage(questions){
 		storage.setItem("questions", JSON.stringify(questions));
 	}	
-	
-	function shuffleQuestions(questions)
-	{
-		let len = questions.length-1, temp, i;
 
-		while(len > 0){
-			
-			// pick a remaining element
-			i = Math.floor(Math.random()*len--);
-
-			// swap
-			temp = questions[len];
-			questions[len] = questions[i];
-			questions[i] = temp;
+	function shuffleArray(array) {
+		for (let i = array.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[array[i], array[j]] = [array[j], array[i]];
 		}
-		return questions;
 	}
-	
+
 	function setupSubmitBtn(){
 		submitQueBtn.addEventListener("click", function(e){
 			e.preventDefault();
@@ -140,10 +137,10 @@
 		var questions = {{ questions|safe }};
 		shuffle = `{{ shuffle }}`== "true" ? true: false;
 		if(shuffle){
-			questions = shuffleQuestions(questions);
+			shuffleArray(questions);
 			console.log("Questions Shuffled!");
 		}
-		addToStorage(questions);		
+		addToStorage(questions);
 		console.log(questions);
 		totalQues = questions.length;
 		queNo = 0;
