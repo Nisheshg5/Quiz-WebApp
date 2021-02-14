@@ -74,7 +74,6 @@ def quiz(request, quiz_id):
     questions = []
     # adding the question object
     for question in queryset:
-
         questions.append(model_to_dict(question, exclude=["correct"]))
  
     shuffle = quiz.isShuffle

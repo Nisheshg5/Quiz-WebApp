@@ -19,11 +19,34 @@
 		</div>
 		<div class="col-12 col-md-5 my-5 d-flex justify-content-center align-content-center" style="height: 100%;">
 			<form class="" style="min-width:250px; width:fit-content">
-				<a class="start_test" href="{% url 'quiz' quiz.quiz_id%}">Start Test</a>
+				<a class="start_test" href="{% url 'quiz' quiz.quiz_id%}" id="test-start-btn">Start Test</a>
 			</form>
 		</div>
 	</div>
 
 </div>
+<script>
+	let quiz_id = `{{ quiz.quiz_id}}`;
+	console.log(quiz_id);
+	let testStartBtn = document.getElementById("test-start-btn");
+	testStartBtn.addEventListener("click", function(e){
+		e.preventDefault();
+		console.log("button clicked");
+		openFullScreen();
+		window.location.pathname=`/quiz/${quiz_id}`;
+	});
+
+	function openFullScreen(){
+		document.documentElement.requestFullscreen();
+		let elem = document.documentElement;
+		if (elem.requestFullscreen) {
+			elem.requestFullscreen();
+		} else if (elem.webkitRequestFullscreen) { /* Safari */
+			elem.webkitRequestFullscreen();
+		} else if (elem.msRequestFullscreen) { /* IE11 */
+			elem.msRequestFullscreen();
+		}
+	}
+</script>
 
 {% endblock %}

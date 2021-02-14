@@ -66,7 +66,6 @@
 	console.log(questions);
 
 	function loadOptions(question){
-		console.log(question);
 		options.innerHTML = "";
 		options_array = []
 
@@ -120,7 +119,6 @@
 			if(selectAns){
 				console.log(selectAns);
 			}else{
-				alert("Please select a answer");
 				Swal.fire({
 					icon: 'error',
 					title: 'Error',
@@ -128,11 +126,13 @@
 					position: 'top',
 					timerProgressBar: false,
 					showConfirmButton: true,
-					timer: 1500
+					// timer: 1500
 				});
 			}
 		})
 	}
+
+	
 	function init()	{
 		var questions = {{ questions|safe }};
 		shuffle = `{{ shuffle }}`== "true" ? true: false;
