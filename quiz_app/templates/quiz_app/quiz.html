@@ -9,8 +9,10 @@
 	<div class="container">
 		<div class="wrapper mt-5">
 			<div class="main">
+				
+	{{ res }}
 				<div class="question">
-					{{ questions }}
+					{{ questions|safe }}
 					<h1>1. What is the full form of CSS ?</h2>
 				</div>
 				<form id="myForm">
@@ -40,13 +42,43 @@
 </div>
 
 
-	<!-- {{ questions|json_script: "myquestions" }} -->
-	{{ questions|json_script:"hello-data" }}
-	<script id="hello-data" type="application/json">{"hello": "world"}</script>
+
 
 <script>
-	const questions = JSON.parse(document.getElementById('hello-data').textContent);
+	let questions = {{ questions|safe }};
+	let shuffle = true;
+
+	var storage = sessionStorage;
 	console.log(questions);
+
+	if(shuffle){
+		function shuffle(array) {
+			var m = array.length, t, i;
+
+			// While there remain elements to shuffle…
+			while (m) {
+
+				// Pick a remaining element…
+				i = Math.floor(Math.random() * m--);
+
+				// And swap it with the current element.
+				t = array[m];
+				array[m] = array[i];
+				array[i] = t;
+			}
+
+			return array;
+		}
+	}
+
+	function addToStorage(){
+		storage.setItem("questions", JSON.stringify(questions));
+	}
+
+	addToStorage(questions);
+	
+	
+
 </script>
 
 {% endblock %}

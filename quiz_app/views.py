@@ -9,11 +9,24 @@ from django.utils.timezone import datetime
 from django.views import generic
 from django.core import serializers
 from django.forms.models import model_to_dict
+from json import JSONEncoder
+from uuid import UUID
 import json
+
+
+
 
 from .forms import QuizForm, QuizPasswordForm, SignUpForm
 from .models import Quiz, Question
 
+old_default = JSONEncoder.default
+
+def new_default(self, obj):
+    if isinstance(obj, UUID):
+        return str(obj)
+    return old_default(self, obj)
+
+JSONEncoder.default = new_default
 
 def home(request):
     quiz_id = request.GET.get("quiz_id")
@@ -59,8 +72,8 @@ def quiz(request, quiz_id):
     questions = []
     for question in queryset:
         questions.append(model_to_dict(question))
-
-    context = {"quiz": quiz, "questions": questions}
+ 
+    context = {"quiz": quiz, "questions": json.dumps(questions)}
     return render(request, "quiz_app/quiz.html", context)
 
 
