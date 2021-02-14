@@ -72,7 +72,9 @@ def quiz(request, quiz_id):
     questions = []
     for question in queryset:
         questions.append(model_to_dict(question))
-    random.shuffle(questions)
+
+    if quiz.isShuffle:
+        random.shuffle(questions)
 
     context = {"quiz": quiz, "questions": json.dumps(questions)}
     return render(request, "quiz_app/quiz.html", context)
