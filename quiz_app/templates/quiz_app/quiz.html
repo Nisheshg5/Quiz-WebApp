@@ -9,8 +9,8 @@
 	<div class="container">
 		<div class="wrapper mt-5">
 			<div class="main">
-				
-	{{ res }}
+
+				{{ res }}
 				<div class="question">
 					{{ questions|safe }}
 					<h1>1. What is the full form of CSS ?</h2>
@@ -18,24 +18,24 @@
 				<form id="myForm">
 					<div class="options" id="options">
 						<div class="option">
-							<input type="radio" name="que" value="1" id="opt1"> 
+							<input type="radio" name="que" value="1" id="opt1">
 							<label for="opt1">a. <span id="o1">JavaScript</span></label>
 						</div>
 						<div class="option">
-							<input type="radio" name="que" value="2" id="opt2"> 
+							<input type="radio" name="que" value="2" id="opt2">
 							<label for="opt2">b. HTML</label>
 						</div>
 						<div class="option">
-							<input type="radio" name="que" value="3" id="opt3"> 
+							<input type="radio" name="que" value="3" id="opt3">
 							<label for="opt3">c. Java</label>
 						</div>
 						<div class="option">
-							<input type="radio" name="que" value="4" id="opt4"> 
+							<input type="radio" name="que" value="4" id="opt4">
 							<label for="opt4">d. Cascading Style Sheet Cascading Style Sheet</label>
 						</div>
 					</div>
 					<button class="btn btn-primary mt-3" id="btn-next" type="submit">Next</button>
-				</div>
+			</div>
 			</form>
 		</div>
 	</div>
@@ -45,15 +45,20 @@
 
 
 <script>
-	let questions = {{ questions|safe }};
+	let questions = {
+		{
+			questions | safe
+		}
+	};
 	let shuffle = true;
 
 	var storage = sessionStorage;
 	console.log(questions);
 
-	if(shuffle){
+	if (shuffle) {
 		function shuffle(array) {
-			var m = array.length, t, i;
+			var m = array.length,
+				t, i;
 
 			// While there remain elements to shuffle…
 			while (m) {
@@ -71,14 +76,11 @@
 		}
 	}
 
-	function addToStorage(){
+	function addToStorage() {
 		storage.setItem("questions", JSON.stringify(questions));
 	}
 
 	addToStorage(questions);
-	
-	
-
 </script>
 
 {% endblock %}

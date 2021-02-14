@@ -1,32 +1,32 @@
+import json
+import random
+from json import JSONEncoder
 from uuid import UUID
 
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
+from django.core import serializers
+from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.timezone import datetime
 from django.views import generic
-from django.core import serializers
-from django.forms.models import model_to_dict
-from json import JSONEncoder
-from uuid import UUID
-import json
-
-
-
 
 from .forms import QuizForm, QuizPasswordForm, SignUpForm
-from .models import Quiz, Question
+from .models import Question, Quiz
 
 old_default = JSONEncoder.default
+
 
 def new_default(self, obj):
     if isinstance(obj, UUID):
         return str(obj)
     return old_default(self, obj)
 
+
 JSONEncoder.default = new_default
+
 
 def home(request):
     quiz_id = request.GET.get("quiz_id")
@@ -67,15 +67,15 @@ def quiz(request, quiz_id):
     if not request.user.is_authenticated:
         return redirect("login")
 
-    queryset =  quiz.question_set.all()
+    queryset = quiz.question_set.all()
 
     questions = []
     for question in queryset:
         questions.append(model_to_dict(question))
- 
+    random.shuffle(questions)
+
     context = {"quiz": quiz, "questions": json.dumps(questions)}
     return render(request, "quiz_app/quiz.html", context)
-
 
 
 def quiz_upcoming(request, quiz_id):
