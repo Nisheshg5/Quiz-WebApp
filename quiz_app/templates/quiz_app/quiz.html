@@ -54,6 +54,7 @@
 	var queNo = 0;
 	var totalQues;
 	var qTitle = document.getElementById("q-title");
+	var qMarks = document.getElementById("q-marks");
 	var options = document.getElementById("q-options");
 	var submitQueBtn = document.getElementById("btn-submit");
 	var opForm = document.getElementById("opForm");
@@ -64,6 +65,7 @@
 			submitQueBtn.innerText = "Submit";
 
 		qTitle.innerText = `${no+1}. ${question.title}`;
+		qMarks.innerText = `${(question.marks) > 1 ? 'Marks: ': 'Mark: '} ${question.marks}`;
 		loadOptions(question);
 	}
 
