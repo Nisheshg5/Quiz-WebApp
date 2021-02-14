@@ -45,7 +45,8 @@
 
 <script>
 
-	var questions = {{ questions|safe }};	// Only for the development
+	var questions = {{ questions|safe }};
+	var quiz_id;
 
 	var shuffle;
 	var storage = sessionStorage;
@@ -59,6 +60,9 @@
 	
 	function loadQuestion(questions, no){
 		let question = questions[no];
+		if(no >= totalQues-1)
+			submitQueBtn.innerText = "Submit";
+
 		qTitle.innerText = `${no+1}. ${question.title}`;
 		loadOptions(question);
 	}
@@ -94,7 +98,7 @@
 
 	function createOption(choice, choiceNo){
 		let res = `<div class="option">
-						<input type="radio" name="que" value="${choice}" id="opt${choiceNo}" required> 
+						<input type="radio" name="que" value="${choice}" id="opt${choiceNo}" required checked> 
 						<label for="opt${choiceNo}"><span>${choiceNo}. </span> <span id="">${choice}</span></label>
 					</div>`;
 		return res;
@@ -116,25 +120,36 @@
 			e.preventDefault();
 			console.log("Clicked");
 			let selectAns = opForm.que.value;
-			if(selectAns){
-				console.log(selectAns);
-			}else{
+
+			// option not selected - show alert on click
+			if(!selectAns){
 				Swal.fire({
 					icon: 'error',
 					title: 'Error',
 					html: 'Please select an answer',
 					position: 'top',
 					timerProgressBar: false,
-					showConfirmButton: true,
-					// timer: 1500
+					showConfirmButton: true
 				});
+				return false;
+			}
+
+			// valid select
+			if(queNo < totalQues)
+				loadQuestion(questions, queNo++);
+			else{
+				// Show the results
+				showResults();
 			}
 		})
 	}
 
-	
+	function showResults(){
+		window.location.pathname = `/quiz/${quiz_id}/results`;
+	}
+
 	function init()	{
-		var questions = {{ questions|safe }};
+		questions = {{ questions|safe }};
 		shuffle = `{{ shuffle }}`== "true" ? true: false;
 		if(shuffle){
 			shuffleArray(questions);
@@ -144,7 +159,8 @@
 		console.log(questions);
 		totalQues = questions.length;
 		queNo = 0;
-		loadQuestion(questions, queNo);
+		if(totalQues > 0) loadQuestion(questions, queNo++);
+		quiz_id = questions[0].quiz;
 		setupSubmitBtn();
 	}
 	init();
