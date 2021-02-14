@@ -9,6 +9,11 @@
 	<div class="container">
 		<div class="wrapper mt-5">
 			<div class="main">
+<<<<<<< HEAD
+=======
+
+				{{ res }}
+>>>>>>> fbdae4297044599bf71394de097e8929332d455d
 				<div class="question">
 					<!-- {{ questions|safe }} -->
 					<p id="q-title">1. What is the full form of CSS ?</p>
@@ -16,6 +21,7 @@
 				<form id="opForm">
 					<div class="options" id="q-options">
 						<div class="option">
+<<<<<<< HEAD
 							<input type="radio" name="que" value="1" id="opt1"> 
 							<label for="opt1"><span>A. </span> <span id="o1">JavaScript</span></label>
 						</div>
@@ -30,10 +36,26 @@
 						<div class="option">
 							<input type="radio" name="que" value="4" id="opt4"> 
 							<label for="opt4"><span>D. </span> <span>Cascading Style Sheet Cascading Style SheetCascading Style Sheet Cascading Style SheetCascading Style Sheet Cascading Style Sheet</span></label>
+=======
+							<input type="radio" name="que" value="1" id="opt1">
+							<label for="opt1">a. <span id="o1">JavaScript</span></label>
+						</div>
+						<div class="option">
+							<input type="radio" name="que" value="2" id="opt2">
+							<label for="opt2">b. HTML</label>
+						</div>
+						<div class="option">
+							<input type="radio" name="que" value="3" id="opt3">
+							<label for="opt3">c. Java</label>
+						</div>
+						<div class="option">
+							<input type="radio" name="que" value="4" id="opt4">
+							<label for="opt4">d. Cascading Style Sheet Cascading Style Sheet</label>
+>>>>>>> fbdae4297044599bf71394de097e8929332d455d
 						</div>
 					</div>
 					<button class="btn btn-primary mt-3" id="btn-next" type="submit">Next</button>
-				</div>
+			</div>
 			</form>
 		</div>
 	</div>
@@ -43,10 +65,15 @@
 
 
 <script>
+
 	var questions = {{ questions|safe }};	// Only for the development
+
+	let shuffle = true;
+
 
 	var shuffle;
 	var storage = sessionStorage;
+
 	var queNo = 0;
 	var totalQues;
 	var qTitle = document.getElementById("q-title");
@@ -57,6 +84,19 @@
 		qTitle.innerText = `${no+1}. ${question.title}`;
 		loadOptions(question);
 	}
+
+	console.log(questions);
+
+	if (shuffle) {
+		function shuffle(array) {
+			var m = array.length,
+				t, i;
+
+			// While there remain elements to shuffle…
+			while (m) {
+
+				// Pick a remaining element…
+				i = Math.floor(Math.random() * m--);
 
 	function loadOptions(question){
 		console.log(question);
