@@ -77,7 +77,7 @@ def quiz(request, quiz_id):
 
         questions.append(model_to_dict(question, exclude=["correct"]))
  
-    shuffle = False
+    shuffle = quiz.isShuffle
     context = {"quiz": quiz, "questions": json.dumps(questions), "shuffle": json.dumps(shuffle)}
 
     return render(request, "quiz_app/quiz.html", context)
