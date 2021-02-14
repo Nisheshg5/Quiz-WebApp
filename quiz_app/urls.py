@@ -7,6 +7,7 @@ from .views import SignUpView
 urlpatterns = [
     path("", views.home, name="home"),
     path("quiz/<quiz_id>", views.quiz, name="quiz"),
+    path("quiz/<quiz_id>/result", views.quiz_result, name="quiz_result"),
     path("quiz/upcoming/<quiz_id>", views.quiz_upcoming, name="quiz_upcoming"),
     path("quiz/started/<quiz_id>", views.quiz_started, name="quiz_started"),
     path("quiz/ended/<quiz_id>", views.quiz_ended, name="quiz_ended"),
