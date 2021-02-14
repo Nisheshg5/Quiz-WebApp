@@ -67,29 +67,19 @@ def quiz(request, quiz_id):
     if not request.user.is_authenticated:
         return redirect("login")
 
-<<<<<<< HEAD
+
     # retrieving all the question for the quiz 
     queryset =  quiz.question_set.all()
-=======
-    queryset = quiz.question_set.all()
 
->>>>>>> fbdae4297044599bf71394de097e8929332d455d
     questions = []
     # adding the question object
     for question in queryset:
-<<<<<<< HEAD
+
         questions.append(model_to_dict(question, exclude=["correct"]))
  
     shuffle = False
     context = {"quiz": quiz, "questions": json.dumps(questions), "shuffle": json.dumps(shuffle)}
-=======
-        questions.append(model_to_dict(question))
-
-    if quiz.isShuffle:
-        random.shuffle(questions)
-
-    context = {"quiz": quiz, "questions": json.dumps(questions)}
->>>>>>> fbdae4297044599bf71394de097e8929332d455d
+    
     return render(request, "quiz_app/quiz.html", context)
 
 
