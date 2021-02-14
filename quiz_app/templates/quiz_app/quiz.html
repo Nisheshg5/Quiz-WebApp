@@ -12,6 +12,7 @@
 				<div class="question">
 					<!-- {{ questions|safe }} -->
 					<p id="q-title">1. What is the full form of CSS ?</p>
+					<small class="small">Please select an option</small>
 				</div>
 				<form id="opForm">
 					<div class="options" id="q-options">
@@ -32,9 +33,9 @@
 							<label for="opt4"><span>D. </span> <span>Cascading Style Sheet Cascading Style SheetCascading Style Sheet Cascading Style SheetCascading Style Sheet Cascading Style Sheet</span></label>
 						</div>
 					</div>
-					<button class="btn btn-primary mt-3" id="btn-next" type="submit">Next</button>
+					<button class="btn btn-primary mt-3" id="btn-submit" type="submit">Next</button>
+				</form>
 			</div>
-			</form>
 		</div>
 	</div>
 </div>
@@ -53,6 +54,8 @@
 	var totalQues;
 	var qTitle = document.getElementById("q-title");
 	var options = document.getElementById("q-options");
+	var submitQueBtn = document.getElementById("btn-submit");
+	var opForm = document.getElementById("opForm");
 	
 	function loadQuestion(questions, no){
 		let question = questions[no];
@@ -85,7 +88,7 @@
 
 	function createOption(choice, choiceNo){
 		let res = `<div class="option">
-						<input type="radio" name="que" value="${choice}" id="opt${choiceNo}"> 
+						<input type="radio" name="que" value="${choice}" id="opt${choiceNo}" required> 
 						<label for="opt${choiceNo}"><span>${choiceNo}. </span> <span id="">${choice}</span></label>
 					</div>`;
 		return res;
@@ -112,6 +115,27 @@
 		return questions;
 	}
 	
+	function setupSubmitBtn(){
+		submitQueBtn.addEventListener("click", function(e){
+			e.preventDefault();
+			console.log("Clicked");
+			let selectAns = opForm.que.value;
+			if(selectAns){
+				console.log(selectAns);
+			}else{
+				alert("Please select a answer");
+				Swal.fire({
+					icon: 'error',
+					title: 'Error',
+					html: 'Please select an answer',
+					position: 'top',
+					timerProgressBar: false,
+					showConfirmButton: true,
+					timer: 1500
+				});
+			}
+		})
+	}
 	function init()	{
 		var questions = {{ questions|safe }};
 		shuffle = `{{ shuffle }}`== "true" ? true: false;
@@ -124,6 +148,7 @@
 		totalQues = questions.length;
 		queNo = 0;
 		loadQuestion(questions, queNo);
+		setupSubmitBtn();
 	}
 	init();
 

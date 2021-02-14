@@ -128,14 +128,14 @@ body
     box-shadow: 0 15px 45px rgba(0,0,0, 0.2);
     border:2px solid #6b1c89;
 }
-#testPage #btn-next
+#testPage #btn-submit
 {
     background: inherit;
     border: 2px solid #6b1c89;
     color:#6b1c89;
     font-weight: bold;
 }
-#testPage #btn-next:hover
+#testPage #btn-submit:hover
 {
     background: #6b1c89;
     border: 2px solid #6b1c89;
