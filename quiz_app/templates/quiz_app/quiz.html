@@ -46,9 +46,6 @@
 
 	var questions = {{ questions|safe }};	// Only for the development
 
-	let shuffle = true;
-
-
 	var shuffle;
 	var storage = sessionStorage;
 
@@ -64,17 +61,6 @@
 	}
 
 	console.log(questions);
-
-	if (shuffle) {
-		function shuffle(array) {
-			var m = array.length,
-				t, i;
-
-			// While there remain elements to shuffle…
-			while (m) {
-
-				// Pick a remaining element…
-				i = Math.floor(Math.random() * m--);
 
 	function loadOptions(question){
 		console.log(question);
@@ -94,14 +80,6 @@
 		}
 		if(question.choice_5){
 			options.innerHTML += createOption(question.choice_5, "E")
-		}
-	}
-	function check(s){
-		if(s){
-			console.log("Present");
-		}
-		else{
-			console.log("NOt present")
 		}
 	}
 
@@ -134,8 +112,7 @@
 		return questions;
 	}
 	
-	function init()
-	{
+	function init()	{
 		var questions = {{ questions|safe }};
 		shuffle = `{{ shuffle }}`== "true" ? true: false;
 		if(shuffle){
