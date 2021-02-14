@@ -90,6 +90,13 @@ body
     display: flex;
     justify-content: center;
 }
+#testPage .question
+{
+    display: grid;
+    grid-template-columns: 90% minmax(80px, 20%);
+    width:100%;
+}
+
 #testPage p#q-title
 {
     font-size:2em;

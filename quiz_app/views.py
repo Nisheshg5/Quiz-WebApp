@@ -81,8 +81,19 @@ def quiz(request, quiz_id):
 
     return render(request, "quiz_app/quiz.html", context)
 
+# quiz results route
+# @/quiz/<quiz_id>/result
 def quiz_result(request, quiz_id):
-    return(request, "quiz_app/quiz_result.html")
+    quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
+
+    if not request.user.is_authenticated:
+        return redirect("login")
+
+    # fetch from the database
+    # quiz questions, user answers, correct answers
+
+    context = {}
+    return render(request, "quiz_app/quiz_result.html", context)
 
 def quiz_upcoming(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
@@ -94,7 +105,6 @@ def quiz_upcoming(request, quiz_id):
     form = QuizPasswordForm(request.POST or None)
     context = {"quiz": quiz, "form": form}
     return render(request, "quiz_app/quiz_upcoming.html", context)
-
 
 def quiz_started(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
