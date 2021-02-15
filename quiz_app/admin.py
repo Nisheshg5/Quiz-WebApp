@@ -42,7 +42,9 @@ class AccountAdmin(UserAdmin):
 
     filter_horizontal = ()
     list_filter = ()
-    fieldsets = ()
+    add_fieldsets = (
+        (None, {"classes": ("wide",), "fields": ("email", "password1", "password2")}),
+    )
 
 
 class QuizAdmin(admin.ModelAdmin):
