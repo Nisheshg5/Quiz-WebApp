@@ -84,7 +84,7 @@ def quiz(request, quiz_id):
         random.shuffle(shuffledQuestions)
 
         for question in shuffledQuestions:
-            response = Response(quiztaker=quizTaker, question=question)
+            response = Response(quiztaker=quizTaker, question=question, answer="")
             response.save()
             questions.append(model_to_dict(question, exclude=["correct"]))
             responses.append(model_to_dict(response, exclude=["isCorrect", "marks"]))
