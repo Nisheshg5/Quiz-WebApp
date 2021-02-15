@@ -69,6 +69,7 @@ def quiz(request, quiz_id):
 
     quizTaker = QuizTakers.objects.filter(quiz=quiz, user=request.user)
     questions = []
+    responses = []
 
     if quizTaker.exists():
         quizTaker = quizTaker.first()
@@ -76,6 +77,7 @@ def quiz(request, quiz_id):
 
         for response in queryset:
             questions.append(model_to_dict(response.question, exclude=["correct"]))
+            responses.append(model_to_dict(response, exclude=["isCorrect", "marks"]))
     else:
         quizTaker = QuizTakers.objects.create(quiz=quiz, user=request.user)
         shuffledQuestions = quiz.question_set.all()[::1]
@@ -85,11 +87,13 @@ def quiz(request, quiz_id):
             response = Response(quiztaker=quizTaker, question=question)
             response.save()
             questions.append(model_to_dict(question, exclude=["correct"]))
+            responses.append(model_to_dict(response, exclude=["isCorrect", "marks"]))
 
     shuffle = quiz.isShuffle
     context = {
         "quiz": quiz,
         "questions": json.dumps(questions),
+        "responses": responses,
         "shuffle": json.dumps(shuffle),
         "quizTaker": quizTaker,
     }

@@ -10,8 +10,8 @@
         <div class="wrapper mt-5">
             <div class="main">
                 <div class="question">
-                    <p id="q-title">1. What is the full form of CSS ?</p>
-                    <p id="q-marks" class="p-2">Marks: 5</p>
+                    <p id="q-title"></p>
+                    <p id="q-marks" class="p-2">Marks: 1</p>
                 </div>
                 <small class="small">Please select an option</small>
                 <form id="opForm">
@@ -19,19 +19,19 @@
                     <div class="options" id="q-options">
                         <div class="option">
                             <input type="radio" name="que" value="1" id="opt1">
-                            <label for="opt1"><span>A. </span> <span id="o1">JavaScript</span></label>
+                            <label for="opt1"><span>A. </span> <span id="o1"></span></label>
                         </div>
                         <div class="option">
                             <input type="radio" name="que" value="2" id="opt2">
-                            <label for="opt2"><span>B. </span> <span>HTML</span></label>
+                            <label for="opt2"><span>B. </span> <span></span></label>
                         </div>
                         <div class="option">
                             <input type="radio" name="que" value="3" id="opt3">
-                            <label for="opt3"><span>C. </span> <span>Java</span></label>
+                            <label for="opt3"><span>C. </span> <span></span></label>
                         </div>
                         <div class="option">
                             <input type="radio" name="que" value="4" id="opt4">
-                            <label for="opt4"><span>D. </span> <span>Cascading Style Sheet Cascading Style SheetCascading Style Sheet Cascading Style SheetCascading Style Sheet Cascading Style Sheet</span></label>
+                            <label for="opt4"><span>D. </span> <span></span></label>
                         </div>
                     </div>
                     <button class="btn btn-primary mt-3" id="btn-submit" type="submit">Next</button>
@@ -46,11 +46,11 @@
 
 <script>
 
-	var questions = {{ questions|safe }};
+	var questions;
+	var responses;
 	var quiz_id;
 
 	var shuffle;
-	var storage = sessionStorage;
 
 	var queNo = 0;
 	var totalQues;
@@ -61,6 +61,16 @@
 	var opForm = document.getElementById("opForm");
 	
 	function loadQuestion(questions, no){
+		if(no >= totalQues-1) {
+			showResults();
+			return false;
+		}
+		let response = responses[no]["answer"]
+		if(response) {
+			queNo++;
+			loadQuestion(questions, no+1);
+			return false;
+		}
 		let question = questions[no];
 		if(no >= totalQues-1)
 			submitQueBtn.innerText = "Submit";
@@ -104,10 +114,6 @@
 					</div>`;
 		return res;
 	}
-
-	function addToStorage(questions){
-		storage.setItem("questions", JSON.stringify(questions));
-	}	
 
 	function shuffleArray(array) {
 		for (let i = array.length - 1; i > 0; i--) {
@@ -158,6 +164,8 @@
 				}
 			})
 
+			responses[queNo-1]["answer"] = selectAns;
+
 			// valid select
 			if(queNo < totalQues)
 				loadQuestion(questions, queNo++);
@@ -169,13 +177,14 @@
 	}
 
 	function showResults(){
-		window.location.pathname = `/quiz/${quiz_id}/result`;
+		window.location.pathname = `/quiz/{{ quiz.pk }}/result`;
 	}
 
 	function init()	{
 		questions = {{ questions|safe }};
-		addToStorage(questions);
+		responses = {{ responses|safe }};
 		console.log(questions);
+		console.log(responses);
 		totalQues = questions.length;
 		queNo = 0;
 		if(totalQues > 0) loadQuestion(questions, queNo++);
