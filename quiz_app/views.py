@@ -62,13 +62,15 @@ def quiz(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
     if not quiz.has_started:
         return redirect("quiz_upcoming", quiz_id=quiz_id)
+    quizTaker = QuizTakers.objects.filter(quiz=quiz, user=request.user)
+    if quizTaker.exists() and quizTaker.first().completed:
+        return redirect("quiz_result", quiz_id=quiz_id)
     if quiz.has_ended:
         return redirect("quiz_ended", quiz_id=quiz_id)
 
     if not request.user.is_authenticated:
         return redirect("login")
 
-    quizTaker = QuizTakers.objects.filter(quiz=quiz, user=request.user)
     questions = []
     responses = []
 
