@@ -193,7 +193,16 @@
 	}
 
 	function showResults(){
-		window.location.pathname = `/quiz/{{ quiz.pk }}/result`;
+		$.ajax({
+			type: "POST",
+			url: 'completed/',
+			data: {
+				quizTaker: {{quizTaker.pk}},
+				csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
+			},
+		}).done(function() {
+			window.location.pathname = `/quiz/{{ quiz.pk }}/result`;
+		})
 	}
 
 	function init()	{

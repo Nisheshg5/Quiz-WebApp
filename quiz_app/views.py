@@ -10,6 +10,7 @@ from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.utils.timezone import datetime
 from django.views import generic
 
@@ -112,6 +113,15 @@ def saveResponse(request):
             response.update(answer=answer, isCorrect=True, marks=question.marks)
         else:
             response.update(answer=answer, isCorrect=False, marks=0)
+
+    return HttpResponse("{}", content_type="application/json")
+
+
+def completed(request):
+    if request.method == "POST":
+        quizTaker = request.POST.get("quizTaker")
+        quizTaker = QuizTakers.objects.filter(pk=quizTaker)
+        quizTaker.update(completed=timezone.now())
 
     return HttpResponse("{}", content_type="application/json")
 

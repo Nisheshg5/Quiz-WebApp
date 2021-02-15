@@ -187,7 +187,7 @@ class Question(models.Model):
 class QuizTakers(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
-    completed = models.BooleanField(default=False)
+    completed = models.DateTimeField(blank=True, null=True)
     started = models.DateTimeField(auto_now_add=True)
 
     class Meta:
