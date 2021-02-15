@@ -79,8 +79,11 @@ class Quiz(models.Model):
         verbose_name="end time", default=default_end_datetime
     )
     duration = models.IntegerField(default=90)
-    created_at = models.DateTimeField(auto_now_add=True)
     isShuffle = models.BooleanField(default=True)
+    allow_backtracking = models.BooleanField(default=True)
+    isProctered = models.BooleanField(default=True)
+    max_suspicion_count = models.IntegerField(default=999)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"id: {self.quiz_id}, title: {self.title}"
@@ -187,8 +190,9 @@ class Question(models.Model):
 class QuizTakers(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
-    completed = models.DateTimeField(blank=True, null=True)
     started = models.DateTimeField(auto_now_add=True)
+    completed = models.DateTimeField(blank=True, null=True)
+    suspicion_count = models.IntegerField(default=0)
 
     class Meta:
         db_table = "QuizTaker"

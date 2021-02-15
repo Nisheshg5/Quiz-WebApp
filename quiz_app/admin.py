@@ -93,6 +93,9 @@ class QuizAdmin(admin.ModelAdmin):
         "end_date",
         "duration",
         "isShuffle",
+        "allow_backtracking",
+        "isProctered",
+        "max_suspicion_count",
         "created_at",
     )
 
@@ -228,8 +231,9 @@ class QuizTakersAdmin(admin.ModelAdmin):
     list_display = (
         "quiz",
         "user",
-        "completed",
         "started",
+        "completed",
+        "suspicion_count",
     )
 
     search_fields = (
