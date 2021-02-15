@@ -15,6 +15,7 @@
                 </div>
                 <small class="small">Please select an option</small>
                 <form id="opForm">
+                    {% csrf_token %}
                     <div class="options" id="q-options">
                         <div class="option">
                             <input type="radio" name="que" value="1" id="opt1">
@@ -98,7 +99,7 @@
 
 	function createOption(choice, choiceNo){
 		let res = `<div class="option">
-						<input type="radio" name="que" value="${choice}" id="opt${choiceNo}" required checked> 
+						<input type="radio" name="que" value="${choice}" id="opt${choiceNo}" required> 
 						<label for="opt${choiceNo}"><span>${choiceNo}. </span> <span id="">${choice}</span></label>
 					</div>`;
 		return res;
@@ -133,6 +134,28 @@
 				});
 				return false;
 			}
+
+			$.ajax({
+				type: "POST",
+				url: 'response/save/',
+				data: {
+					quizTaker: {{quizTaker.pk}},
+					answer: selectAns,
+					csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
+				},
+				success:function() {
+					Swal.fire({
+						toast: true,
+						position: 'top-end',
+						icon: 'success',
+						html: 'Response Saved',
+						animation: true,
+						timer: 1000,
+						timerProgressBar: true,
+						showConfirmButton: false,
+					});
+				}
+			})
 
 			// valid select
 			if(queNo < totalQues)

@@ -12,6 +12,7 @@ urlpatterns = [
     path("quiz/started/<quiz_id>", views.quiz_started, name="quiz_started"),
     path("quiz/ended/<quiz_id>", views.quiz_ended, name="quiz_ended"),
     path("quiz/instructions/<quiz_id>", views.quiz_instructions, name="quiz_instructions"),
+    path("quiz/response/save/", views.saveResponse, name="save_response"),
     path("hello/<name>", views.hello_there, name="hello_there"),
     path("about/", views.about, name="about"),
     path("contact/", views.contact, name="contact"),

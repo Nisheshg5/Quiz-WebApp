@@ -96,6 +96,17 @@ def quiz(request, quiz_id):
     return render(request, "quiz_app/quiz.html", context)
 
 
+def saveResponse(request):
+    if request.method == "POST":
+        quizTaker = request.POST.get("quizTaker")
+        answer = request.POST.get("answer")
+        print(request.POST)
+        print(quizTaker)
+        print(answer)
+
+    return HttpResponse("{}", content_type="application/json")
+
+
 # quiz results route
 # @/quiz/<quiz_id>/result
 def quiz_result(request, quiz_id):
