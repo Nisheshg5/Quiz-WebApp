@@ -14,7 +14,7 @@ from django.utils.timezone import datetime
 from django.views import generic
 
 from .forms import QuizForm, QuizPasswordForm, SignUpForm
-from .models import Question, Quiz
+from .models import Question, Quiz, QuizTakers, Response
 
 old_default = JSONEncoder.default
 
@@ -67,19 +67,34 @@ def quiz(request, quiz_id):
     if not request.user.is_authenticated:
         return redirect("login")
 
-
-    # retrieving all the question for the quiz 
-    queryset =  quiz.question_set.all()
-
+    quizTaker = QuizTakers.objects.filter(quiz=quiz, user=request.user)
     questions = []
-    # adding the question object
-    for question in queryset:
-        questions.append(model_to_dict(question, exclude=["correct"]))
- 
-    shuffle = quiz.isShuffle
-    context = {"quiz": quiz, "questions": json.dumps(questions), "shuffle": json.dumps(shuffle)}
 
+    if quizTaker.exists():
+        quizTaker = quizTaker.first()
+        queryset = quizTaker.response_set.all()
+
+        for response in queryset:
+            questions.append(model_to_dict(response.question, exclude=["correct"]))
+    else:
+        quizTaker = QuizTakers.objects.create(quiz=quiz, user=request.user)
+        shuffledQuestions = quiz.question_set.all()[::1]
+        random.shuffle(shuffledQuestions)
+
+        for question in shuffledQuestions:
+            response = Response(quiztaker=quizTaker, question=question)
+            response.save()
+            questions.append(model_to_dict(question, exclude=["correct"]))
+
+    shuffle = quiz.isShuffle
+    context = {
+        "quiz": quiz,
+        "questions": json.dumps(questions),
+        "shuffle": json.dumps(shuffle),
+        "quizTaker": quizTaker,
+    }
     return render(request, "quiz_app/quiz.html", context)
+
 
 # quiz results route
 # @/quiz/<quiz_id>/result
@@ -95,6 +110,7 @@ def quiz_result(request, quiz_id):
     context = {}
     return render(request, "quiz_app/quiz_result.html", context)
 
+
 def quiz_upcoming(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
     if quiz.has_ended:
@@ -105,6 +121,7 @@ def quiz_upcoming(request, quiz_id):
     form = QuizPasswordForm(request.POST or None)
     context = {"quiz": quiz, "form": form}
     return render(request, "quiz_app/quiz_upcoming.html", context)
+
 
 def quiz_started(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)

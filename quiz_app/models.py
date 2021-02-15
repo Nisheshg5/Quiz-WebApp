@@ -223,7 +223,7 @@ class Response(models.Model):
 
 
 @receiver(pre_save, sender=Response)
-def set_default_marks(sender, instance, created, **kwargs):
+def set_default_marks(sender, instance, *args, **kwargs):
     if instance.isCorrect and instance.marks == 0:
         instance.marks = instance.question.marks
 

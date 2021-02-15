@@ -10,10 +10,10 @@
         <div class="wrapper mt-5">
             <div class="main">
                 <div class="question">
-					<p id="q-title">1. What is the full form of CSS ?</p>
-					<p id="q-marks" class="p-2">Marks: 5</p>
+                    <p id="q-title">1. What is the full form of CSS ?</p>
+                    <p id="q-marks" class="p-2">Marks: 5</p>
                 </div>
-				<small class="small">Please select an option</small>                  
+                <small class="small">Please select an option</small>
                 <form id="opForm">
                     <div class="options" id="q-options">
                         <div class="option">
@@ -68,8 +68,6 @@
 		qMarks.innerText = `${(question.marks) > 1 ? 'Marks: ': 'Mark: '} ${question.marks}`;
 		loadOptions(question);
 	}
-
-	console.log(questions);
 
 	function loadOptions(question){
 		options.innerHTML = "";
@@ -152,11 +150,6 @@
 
 	function init()	{
 		questions = {{ questions|safe }};
-		shuffle = `{{ shuffle }}`== "true" ? true: false;
-		if(shuffle){
-			shuffleArray(questions);
-			console.log("Questions Shuffled!");
-		}
 		addToStorage(questions);
 		console.log(questions);
 		totalQues = questions.length;
