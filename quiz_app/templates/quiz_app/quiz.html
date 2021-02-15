@@ -161,18 +161,34 @@
 						timerProgressBar: true,
 						showConfirmButton: false,
 					});
+				},
+				error:function() {
+					Swal.fire({
+						toast: true,
+						position: 'top-end',
+						icon: 'error',
+						html: `Response Couldn't be Saved<br>Please Try Again`,
+						animation: true,
+						timer: 1000,
+						timerProgressBar: true,
+						showConfirmButton: false,
+					});
 				}
-			})
+			}).done(function() {
+				$("input[name=que]").val([]);
+				responses[queNo-1]["answer"] = selectAns;
 
-			responses[queNo-1]["answer"] = selectAns;
+				// valid select
+				if(queNo < totalQues)
+					loadQuestion(questions, queNo++);
+				else{
+					// Show the results
+					showResults();
+				}
+			}).fail(function() {
+				//$("input[name=que]").val([]);
+			});
 
-			// valid select
-			if(queNo < totalQues)
-				loadQuestion(questions, queNo++);
-			else{
-				// Show the results
-				showResults();
-			}
 		})
 	}
 
