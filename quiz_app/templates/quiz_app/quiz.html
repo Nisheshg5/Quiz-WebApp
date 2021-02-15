@@ -140,6 +140,7 @@
 				url: 'response/save/',
 				data: {
 					quizTaker: {{quizTaker.pk}},
+					question: questions[queNo-1].id,
 					answer: selectAns,
 					csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
 				},

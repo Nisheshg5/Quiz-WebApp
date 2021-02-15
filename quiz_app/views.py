@@ -99,10 +99,15 @@ def quiz(request, quiz_id):
 def saveResponse(request):
     if request.method == "POST":
         quizTaker = request.POST.get("quizTaker")
+        question = request.POST.get("question")
         answer = request.POST.get("answer")
-        print(request.POST)
-        print(quizTaker)
-        print(answer)
+        question = Question.objects.filter(pk=question).first()
+        response = Response.objects.filter(quiztaker_id=quizTaker, question=question)
+        isCorrect = answer == question.correct
+        if isCorrect:
+            response.update(answer=answer, isCorrect=True, marks=question.marks)
+        else:
+            response.update(answer=answer, isCorrect=False, marks=0)
 
     return HttpResponse("{}", content_type="application/json")
 
