@@ -19,6 +19,11 @@ from .models import Account, Question, Question_bank, Quiz, QuizTakers, Response
 
 
 class AccountAdmin(UserAdmin):
+    def get_action_choices(self, request):
+        choices = super(AccountAdmin, self).get_action_choices(request)
+        choices.pop(0)
+        return choices
+
     add_form = SignUpForm
 
     list_display = (
@@ -84,6 +89,11 @@ class QuizAdmin(admin.ModelAdmin):
                 field.widget.attrs["cols"] = 40
             return field
 
+    def get_action_choices(self, request):
+        choices = super(QuizAdmin, self).get_action_choices(request)
+        choices.pop(0)
+        return choices
+
     list_display = (
         "quiz_id",
         "title",
@@ -142,6 +152,12 @@ class Question_bank_admin(ImportExportModelAdmin):
             base_formats.XLSX,
         )
         return [f for f in formats if f().can_import()]
+
+    def get_action_choices(self, request):
+        choices = super(Question_bank_admin, self).get_action_choices(request)
+        choices.pop(0)
+        choices.reverse()
+        return choices
 
     def add_questions_to_quiz(self, request, queryset):
         quiz_id = request.GET.get("quizid", "")
@@ -228,6 +244,11 @@ class QuizTakersAdmin(admin.ModelAdmin):
 
         model = Response
         ordering = ("question_id",)
+
+    def get_action_choices(self, request):
+        choices = super(QuizTakersAdmin, self).get_action_choices(request)
+        choices.pop(0)
+        return choices
 
     list_display = (
         "quiz",
