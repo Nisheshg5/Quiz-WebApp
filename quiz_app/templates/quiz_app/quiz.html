@@ -229,16 +229,37 @@
 
 
 	function showResults(){
-		$.ajax({
-			type: "POST",
-			url: 'completed/',
-			data: {
-				quizTaker: {{quizTaker.pk}},
-				csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
-			},
-		}).done(function() {
-			window.location.pathname = `/quiz/{{ quiz.pk }}/result`;
-		})
+		Swal.fire({
+			icon: 'warning',
+			title: 'Are you sure you want to submit the test?',
+			text: "You won't be able to attempt it again!",
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			focusCancel: true,
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$.ajax({
+					type: "POST",
+					url: 'completed/',
+					data: {
+						quizTaker: {{quizTaker.pk}},
+						csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
+					},
+				}).done(function() {
+					window.location.pathname = `/quiz/{{ quiz.pk }}/result`;
+				})
+				Swal.fire({
+					icon: 'success',
+					title: 'Submitting',
+					html: 'Please Wait!!!',
+					position: 'center',
+					showConfirmButton: false,
+					allowOutsideClick: false,
+					allowEscapeKey: false
+				});
+			}
+		});
 	}
 
 	function setup_timer(){
@@ -272,7 +293,8 @@
 					html: 'Test Is Auto Submitting',
 					position: 'center',
 					showConfirmButton: false,
-					allowOutsideClick: false
+					allowOutsideClick: false,
+					allowEscapeKey: false,
 				});
 				return;
 			}
