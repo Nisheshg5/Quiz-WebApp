@@ -34,7 +34,11 @@
                             <label for="opt4"><span>D. </span> <span></span></label>
                         </div>
                     </div>
-                    <button class="btn btn-primary mt-3" id="btn-submit" type="submit">Next</button>
+                    {% if quiz.allow_backtracking %}
+                    <button class="btn btn-primary mt-3" id="btn-prev" type="submit">Prev</button>
+                    {% endif %}
+                    <button class="btn btn-primary mt-3" id="btn-submit" type="submit">Submit</button>
+                    <button class="btn btn-primary mt-3" id="btn-next" type="submit">Next</button>
                 </form>
             </div>
         </div>
@@ -59,10 +63,23 @@
 	var qTitle = document.getElementById("q-title");
 	var qMarks = document.getElementById("q-marks");
 	var options = document.getElementById("q-options");
+	{% if quiz.allow_backtracking %}
+	var prevQueBtn = document.getElementById("btn-prev");
+	{% endif %}
 	var submitQueBtn = document.getElementById("btn-submit");
+	var nextQueBtn = document.getElementById("btn-next");
 	var opForm = document.getElementById("opForm");
 	
 	function loadQuestion(questions, no){
+		{% if quiz.allow_backtracking %}
+		if(no == 0) {
+			prevQueBtn.disabled = true;
+		}
+		else {
+			prevQueBtn.disabled = false;
+		}
+		{% endif %}
+
 		if(no >= totalQues-1) {
 			showResults();
 			return false;
@@ -122,6 +139,13 @@
 			const j = Math.floor(Math.random() * (i + 1));
 			[array[i], array[j]] = [array[j], array[i]];
 		}
+	}
+
+	function setupPrevBtn() {
+		prevQueBtn.addEventListener("click", function(e){
+			e.preventDefault();
+			console.log("prev");
+		});
 	}
 
 	function setupSubmitBtn(){
@@ -191,8 +215,17 @@
 				//$("input[name=que]").val([]);
 			});
 
-		})
+		});
 	}
+
+
+	function setupNextBtn() {
+		nextQueBtn.addEventListener("click", function(e){
+			e.preventDefault();
+			console.log("next");
+		});
+	}
+
 
 	function showResults(){
 		$.ajax({
@@ -257,7 +290,11 @@
 		if(totalQues > 0) loadQuestion(questions, queNo++);
 		quiz_id = questions[0].quiz;
 		setup_timer();
+		{% if quiz.allow_backtracking %}
+		setupPrevBtn();
+		{% endif %}
 		setupSubmitBtn();
+		setupNextBtn();
 	}
 	init();
 
