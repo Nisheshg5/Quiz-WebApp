@@ -78,8 +78,7 @@
 		else {
 			prevQueBtn.disabled = false;
 		}
-		{% endif %}
-
+		{% else %}
 		if(no >= totalQues-1) {
 			showResults();
 			return false;
@@ -87,16 +86,19 @@
 		let response = responses[no]["answer"]
 		if(response) {
 			queNo++;
-			loadQuestion(questions, no+1);
+			loadQuestion(questions, queNo);
 			return false;
 		}
+		{% endif %}
+
 		let question = questions[no];
 		if(no >= totalQues-1)
-			submitQueBtn.innerText = "Submit";
+			submitQueBtn.innerText = "Finish Test";
 
 		qTitle.innerText = `${no+1}. ${question.title}`;
 		qMarks.innerText = `${(question.marks) > 1 ? 'Marks: ': 'Mark: '} ${question.marks}`;
 		loadOptions(question);
+		$("input[name=que]").val([responses[queNo]["answer"]]);
 	}
 
 	function loadOptions(question){
@@ -144,7 +146,8 @@
 	function setupPrevBtn() {
 		prevQueBtn.addEventListener("click", function(e){
 			e.preventDefault();
-			console.log("prev");
+			loadQuestion(questions, --queNo);
+			console.log("prev clicked");
 		});
 	}
 
@@ -172,7 +175,7 @@
 				url: 'response/save/',
 				data: {
 					quizTaker: {{quizTaker.pk}},
-					question: questions[queNo-1].id,
+					question: questions[queNo].id,
 					answer: selectAns,
 					csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
 				},
@@ -201,12 +204,11 @@
 					});
 				}
 			}).done(function() {
-				$("input[name=que]").val([]);
-				responses[queNo-1]["answer"] = selectAns;
+				responses[queNo]["answer"] = selectAns;
 
 				// valid select
-				if(queNo < totalQues)
-					loadQuestion(questions, queNo++);
+				if(queNo < totalQues - 1)
+					loadQuestion(questions, ++queNo);
 				else{
 					// Show the results
 					showResults();
@@ -287,8 +289,8 @@
 		console.log(responses);
 		totalQues = questions.length;
 		queNo = 0;
-		if(totalQues > 0) loadQuestion(questions, queNo++);
-		quiz_id = questions[0].quiz;
+		if(totalQues > 0) loadQuestion(questions, queNo);
+		quiz_id = `{{quiz.quiz_id}}`;
 		setup_timer();
 		{% if quiz.allow_backtracking %}
 		setupPrevBtn();
