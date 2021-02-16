@@ -157,6 +157,13 @@ class Question_bank_admin(ImportExportModelAdmin):
         choices = super(Question_bank_admin, self).get_action_choices(request)
         choices.pop(0)
         choices.reverse()
+        try:
+            quiz_id = request.GET.get("quizid", None)
+            if not quiz_id:
+                raise Quiz.DoesNotExist()
+            quiz = Quiz.objects.get(pk=quiz_id)
+        except (Quiz.DoesNotExist, ValidationError):
+            choices.pop(0)
         return choices
 
     def add_questions_to_quiz(self, request, queryset):
