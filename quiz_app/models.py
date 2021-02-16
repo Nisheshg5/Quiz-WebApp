@@ -190,7 +190,7 @@ class Question(models.Model):
 class QuizTakers(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
-    started = models.DateTimeField(auto_now_add=True)
+    started = models.DateTimeField(blank=True, null=True)
     completed = models.DateTimeField(blank=True, null=True)
     suspicion_count = models.IntegerField(default=0)
 

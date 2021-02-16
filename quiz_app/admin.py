@@ -227,6 +227,7 @@ class QuizTakersAdmin(admin.ModelAdmin):
             return field
 
         model = Response
+        ordering = ("question_id",)
 
     list_display = (
         "quiz",

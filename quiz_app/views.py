@@ -6,6 +6,7 @@ from uuid import UUID
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.core import serializers
+from django.db.models.query_utils import Q
 from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -76,22 +77,28 @@ def quiz(request, quiz_id):
 
     if quizTaker.exists():
         quizTaker = quizTaker.first()
-        queryset = quizTaker.response_set.all()
+        if quizTaker.started:
+            queryset = quizTaker.response_set.all().order_by("pk")
+            for response in queryset:
+                questions.append(model_to_dict(response.question, exclude=["correct"]))
+                responses.append(
+                    model_to_dict(response, exclude=["isCorrect", "marks"])
+                )
+        else:
+            quizTaker.started = timezone.now()
+            quizTaker.save()
+            shuffledQuestions = quiz.question_set.all()[::1]
+            random.shuffle(shuffledQuestions)
 
-        for response in queryset:
-            questions.append(model_to_dict(response.question, exclude=["correct"]))
-            responses.append(model_to_dict(response, exclude=["isCorrect", "marks"]))
+            for question in shuffledQuestions:
+                response = Response(quiztaker=quizTaker, question=question, answer="")
+                response.save()
+                questions.append(model_to_dict(question, exclude=["correct"]))
+                responses.append(
+                    model_to_dict(response, exclude=["isCorrect", "marks"])
+                )
     else:
-        quizTaker = QuizTakers.objects.create(quiz=quiz, user=request.user)
-        shuffledQuestions = quiz.question_set.all()[::1]
-        random.shuffle(shuffledQuestions)
-
-        for question in shuffledQuestions:
-            response = Response(quiztaker=quizTaker, question=question, answer="")
-            response.save()
-            questions.append(model_to_dict(question, exclude=["correct"]))
-            responses.append(model_to_dict(response, exclude=["isCorrect", "marks"]))
-
+        return redirect("quiz_started", quiz_id=quiz_id)
     shuffle = quiz.isShuffle
     context = {
         "quiz": quiz,
@@ -168,7 +175,11 @@ def quiz_started(request, quiz_id):
         if form.is_valid() and Quiz.objects.filter(
             pk=quiz_id, password=request.POST.get("password")
         ):
-            return redirect("quiz_instructions", quiz_id=quiz_id)
+            if request.user.is_authenticated:
+                QuizTakers.objects.create(quiz=quiz, user=request.user)
+                return redirect("quiz_instructions", quiz_id=quiz_id)
+            else:
+                return redirect("login")
         else:
             messages.error(request, "Wrong Password")
 
