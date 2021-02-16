@@ -50,6 +50,8 @@
 	var responses;
 	var quiz_id;
 
+	var remaining_time;
+
 	var shuffle;
 
 	var queNo = 0;
@@ -205,6 +207,46 @@
 		})
 	}
 
+	function setup_timer(){
+		remaining_time = {{quizTaker.time_remaining}}|0;
+		let show_timer_warning = true;
+		function update_timer() {
+			remaining_time--;
+			$("#timer").text(`Time Left: ${(remaining_time/60|0).toString().padStart(2, '0')}:${(remaining_time%60).toString().padStart(2, '0')}`);
+
+			if(remaining_time <= 300 && show_timer_warning) {
+				show_timer_warning = false;
+
+				Swal.fire({
+					toast: true,
+					position: 'top-end',
+					icon: 'warning',
+					text: ` ${Math.ceil(remaining_time/60)} Minutes Left`,
+					animation: true,
+					timer: 3000,
+					showConfirmButton: false,
+				});
+				$("#timer").css({"color":"red"}).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+			} 
+
+			if(remaining_time <= 0) {
+				clearInterval(timer_interval);
+				showResults();
+				Swal.fire({
+					icon: 'warning',
+					title: 'Time Is Up',
+					html: 'Test Is Auto Submitting',
+					position: 'center',
+					showConfirmButton: false,
+					allowOutsideClick: false
+				});
+				return;
+			}
+		}
+		update_timer();
+		var timer_interval = setInterval(update_timer, 1000);
+	}
+
 	function init()	{
 		questions = {{ questions|safe }};
 		responses = {{ responses|safe }};
@@ -214,6 +256,7 @@
 		queNo = 0;
 		if(totalQues > 0) loadQuestion(questions, queNo++);
 		quiz_id = questions[0].quiz;
+		setup_timer();
 		setupSubmitBtn();
 	}
 	init();

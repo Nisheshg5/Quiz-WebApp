@@ -194,6 +194,12 @@ class QuizTakers(models.Model):
     completed = models.DateTimeField(blank=True, null=True)
     suspicion_count = models.IntegerField(default=0)
 
+    @property
+    def time_remaining(self):
+        return (
+            self.started + timedelta(minutes=self.quiz.duration) - timezone.now()
+        ).total_seconds()
+
     class Meta:
         db_table = "QuizTaker"
         app_label = "quiz_app"
