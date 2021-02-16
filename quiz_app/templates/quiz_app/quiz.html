@@ -93,7 +93,9 @@
 
 		let question = questions[no];
 		if(no >= totalQues-1)
-			submitQueBtn.innerText = "Finish Test";
+			nextQueBtn.innerText = "Finish Test";
+		else
+			nextQueBtn.innerText = "Next";
 
 		qTitle.innerText = `${no+1}. ${question.title}`;
 		qMarks.innerText = `${(question.marks) > 1 ? 'Marks: ': 'Mark: '} ${question.marks}`;
@@ -147,7 +149,6 @@
 		prevQueBtn.addEventListener("click", function(e){
 			e.preventDefault();
 			loadQuestion(questions, --queNo);
-			console.log("prev clicked");
 		});
 	}
 
@@ -205,14 +206,7 @@
 				}
 			}).done(function() {
 				responses[queNo]["answer"] = selectAns;
-
-				// valid select
-				if(queNo < totalQues - 1)
-					loadQuestion(questions, ++queNo);
-				else{
-					// Show the results
-					showResults();
-				}
+				submitQueBtn.blur();
 			}).fail(function() {
 				//$("input[name=que]").val([]);
 			});
@@ -224,7 +218,12 @@
 	function setupNextBtn() {
 		nextQueBtn.addEventListener("click", function(e){
 			e.preventDefault();
-			console.log("next");
+			if(queNo < totalQues - 1)
+				loadQuestion(questions, ++queNo);
+			else{
+				showResults();
+			}
+			nextQueBtn.blur();
 		});
 	}
 
