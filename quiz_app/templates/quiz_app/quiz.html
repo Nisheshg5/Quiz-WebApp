@@ -105,29 +105,9 @@
 
 	function loadOptions(question){
 		options.innerHTML = "";
-		options_array = []
-
-		if(question.choice_1){
-			options_array.push(question.choice_1)
-		}
-		if(question.choice_2){
-			options_array.push(question.choice_2)
-		}
-		if(question.choice_3){
-			options_array.push(question.choice_3)
-		}
-		if(question.choice_4){
-			options_array.push(question.choice_4)
-		}
-		if(question.choice_5){
-			options_array.push(question.choice_5)
-		}
-		if(question.isShuffle) {
-			shuffleArray(options_array);
-		}
-		for(let i=0; i<options_array.length; i++) {
-			options.innerHTML += createOption(options_array[i], String.fromCharCode(65+i));
-		}
+		question["options_array"].forEach(function(option,i) {
+			options.innerHTML += createOption(option, String.fromCharCode(65+i));
+		});
 	}
 
 	function createOption(choice, choiceNo){
@@ -145,10 +125,30 @@
 		}
 	}
 
+	function shuffleOptions(questions) {
+		questions.forEach(function(question) {
+			options_array = []
+			if(question.choice_1)
+				options_array.push(question.choice_1)
+			if(question.choice_2)
+				options_array.push(question.choice_2)
+			if(question.choice_3)
+				options_array.push(question.choice_3)
+			if(question.choice_4)
+				options_array.push(question.choice_4)
+			if(question.choice_5)
+				options_array.push(question.choice_5)
+			if(question.isShuffle)
+				shuffleArray(options_array);
+			question["options_array"] = options_array;
+		});
+	}
+
 	function setupPrevBtn() {
 		prevQueBtn.addEventListener("click", function(e){
 			e.preventDefault();
 			loadQuestion(questions, --queNo);
+			prevQueBtn.blur();
 		});
 	}
 
@@ -284,6 +284,7 @@
 	function init()	{
 		questions = {{ questions|safe }};
 		responses = {{ responses|safe }};
+		shuffleOptions(questions);
 		console.log(questions);
 		console.log(responses);
 		totalQues = questions.length;
