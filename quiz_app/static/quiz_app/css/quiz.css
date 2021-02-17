@@ -111,7 +111,7 @@ body {
 }
 .circle-wrap .circle.mark
 {
-    background:#ffc107;
+    border:2px solid #6b1c89;
     color: #eee;
 }
 

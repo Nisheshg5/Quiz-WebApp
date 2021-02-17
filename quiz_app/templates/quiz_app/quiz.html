@@ -29,7 +29,7 @@
 				<div class="main">
 					<div class="question">
 						<p id="q-title"></p>
-						<p id="q-marks" class="p-2">Marks: 1</p>
+						<p class="p-2"><span><i class="fa fa-o-bookmark"></i></span><span id="q-marks">Marks: 1</span></p>
 					</div>
 					<small class="small">Please select an option</small>
 					<form id="opForm">
@@ -89,6 +89,7 @@
 	var opForm = document.getElementById("opForm");
 	var circleWrap = document.getElementById("circle-wrap");
 	var circles = [];
+	var bookmarksQuestions = {}
 	
 	function loadQuestion(questions, no){
 		{% if quiz.allow_backtracking %}
@@ -334,6 +335,12 @@
 		circles = document.querySelectorAll(".circle");
 	}
 
+	function setUpBookmarks(){
+		for(let i = 0; i < totalQues; i++){
+			bookmarksQuestions[i] = false;
+		}
+	}
+
 	function init()	{
 		questions = {{ questions|safe }};
 		responses = {{ responses|safe }};
@@ -342,6 +349,7 @@
 		queNo = 0;
 		if(totalQues < 0) return;
 		setupSidebarBtns();
+		setUpBookmarks();
 		loadQuestion(questions, queNo);
 		quiz_id = `{{quiz.quiz_id}}`;
 		setup_timer();
