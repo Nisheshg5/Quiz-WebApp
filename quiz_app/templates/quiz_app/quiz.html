@@ -28,7 +28,7 @@
 				<div class="main">
 					<div class="question">
 						<p id="q-title"></p>
-						<p class="p-2"><span><i class="fa fa-o-bookmark"></i></span><span id="q-marks">Marks: 1</span></p>
+						<p class="p-2"><i class="fa fa-bookmark-o" aria-hidden="true" id="bookmark"></i> <span id="q-marks">Marks: 1</span></p>
 					</div>
 					<small class="small">Please select an option</small>
 					<form id="opForm">
@@ -88,27 +88,28 @@
 	var opForm = document.getElementById("opForm");
 	var circleWrap = document.getElementById("circle-wrap");
 	var circles = [];
-	var bookmarksQuestions = {}
+	var bookmarkIcon = document.getElementById("bookmark");
 	
 	function loadQuestion(questions, no){
 		{% if quiz.allow_backtracking %}
-		if(no == 0) {
-			prevQueBtn.disabled = true;
-		}
-		else {
-			prevQueBtn.disabled = false;
-		}
+			if(no == 0) {
+				prevQueBtn.disabled = true;
+			}
+			else {
+				prevQueBtn.disabled = false;
+			}
 		{% else %}
-		if(no >= totalQues-1) {
-			showResults();
-			return false;
-		}
-		let response = responses[no]["answer"]
-		if(response) {
-			queNo++;
-			loadQuestion(questions, queNo);
-			return false;
-		}
+			// backtracking is not allowed -> fast forward
+			if(no >= totalQues-1) {
+				showResults();
+				return false;
+			}
+			let response = responses[no]["answer"]
+			if(response) {
+				queNo++;
+				loadQuestion(questions, queNo);
+				return false;
+			}
 		{% endif %}
 
 		let question = questions[no];
@@ -117,7 +118,7 @@
 		else
 			nextQueBtn.innerText = "Next";
 
-		qTitle.innerText = `${no+1}. ${question.title}`;
+		qTitle.innerHTML = `<pre>${no+1}. ${question.title}</pre>`;
 		qMarks.innerText = `${(question.marks) > 1 ? 'Marks: ': 'Mark: '} ${question.marks}`;
 		loadOptions(question);
 		$("input[name=que]").val([responses[queNo]["answer"]]);
@@ -133,7 +134,7 @@
 	function createOption(choice, choiceNo){
 		let res = `<div class="option">
 						<input type="radio" name="que" value="${choice}" id="opt${choiceNo}" required> 
-						<label for="opt${choiceNo}"><span>${choiceNo}. </span> <span id="">${choice}</span></label>
+						<label for="opt${choiceNo}"><span>${choiceNo}. </span> <span id=""><pre>${choice}</pre></span></label>
 					</div>`;
 		return res;
 	}
@@ -328,9 +329,9 @@
 
 	function setupSidebarBtns(){
 		circleWrap.innerHTML = "";
-		for(let i = 1; i <= totalQues; i++){
-			let res = responses[i-1]["answer"];
-			circleWrap.innerHTML += `<li class="circle ${(res)? 'attempt' : 'unattempt'}">${i}</li>`;
+		for(let i = 0; i < totalQues; i++){
+			let res = responses[i];
+			circleWrap.innerHTML += `<li class="circle ${(res["answer"])? 'attempt' : 'unattempt'} ${(res["bookmark"])? 'mark': ''} ">${i+1}</li>`;
 		}
 		circles = document.querySelectorAll(".circle");
 	}
@@ -338,7 +339,26 @@
 	function setUpBookmarks(){
 		for(let i = 0; i < totalQues; i++){
 			bookmarksQuestions[i] = false;
+			responses[i]["bookmark"] = false;
 		}
+		setUpBookmarkButton();
+	}
+
+	function setUpBookmarkButton(){
+		bookmarkIcon.addEventListener("click", function(e){
+			let content = e.target.parentNode.parentNode.innerText;
+			let i = content.substring(0, content.indexOf("."))-1;
+			responses[i]["bookmark"] = !responses[i]["bookmark"];
+			let icon = event.target;
+			if(responses[i]["bookmark"]){
+				icon.classList.add("fa-bookmark");
+				icon.classList.remove("fa-bookmark-o");
+			}else{
+				icon.classList.remove("fa-bookmark");
+				icon.classList.add("fa-bookmark-o");
+			}
+			setupSidebarBtns();
+		});
 	}
 
 	function init()	{
