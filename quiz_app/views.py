@@ -10,6 +10,7 @@ from django.core.mail import send_mail
 from django.db.models.query_utils import Q
 from django.forms.models import model_to_dict
 from django.http import HttpResponse
+from django.http.response import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
@@ -76,14 +77,14 @@ def quiz(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
     if not quiz.has_started:
         return redirect("quiz_upcoming", quiz_id=quiz_id)
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to be logged in to access this.")
+        return redirect("login")
     quizTaker = QuizTakers.objects.filter(quiz=quiz, user=request.user)
     if quizTaker.exists() and quizTaker.first().completed:
         return redirect("quiz_result", quiz_id=quiz_id)
     if quiz.has_ended:
         return redirect("quiz_ended", quiz_id=quiz_id)
-
-    if not request.user.is_authenticated:
-        return redirect("login")
 
     questions = []
     responses = []
@@ -124,6 +125,10 @@ def quiz(request, quiz_id):
 
 
 def saveResponse(request):
+    if not request.user.is_authenticated:
+        jsonResponse = JsonResponse({"error": "logged out"})
+        jsonResponse.status_code = 403
+        return jsonResponse
     if request.method == "POST":
         quizTaker = request.POST.get("quizTaker")
         question = request.POST.get("question")
@@ -136,10 +141,14 @@ def saveResponse(request):
         else:
             response.update(answer=answer, isCorrect=False, marks=0)
 
-    return HttpResponse("{}", content_type="application/json")
+    return JsonResponse({"success": "Response successfully saved"})
 
 
 def completed(request):
+    if not request.user.is_authenticated:
+        jsonResponse = JsonResponse({"error": "logged out"})
+        jsonResponse.status_code = 403
+        return jsonResponse
     if request.method == "POST":
         quizTaker = request.POST.get("quizTaker")
         quizTaker = QuizTakers.objects.get(pk=quizTaker)
@@ -160,7 +169,7 @@ def completed(request):
             [request.user.email],
             html_message=msg_html,
         )
-    return HttpResponse("{}", content_type="application/json")
+    return JsonResponse({"success": "Quiz successfully saved"})
 
 
 # quiz results route
