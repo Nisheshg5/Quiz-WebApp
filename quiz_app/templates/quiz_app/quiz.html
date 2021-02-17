@@ -373,23 +373,31 @@
 
 	function setupSidebarBtns(){
 		circleWrap.innerHTML = "";
+
+		// set the styling based on the response of user
+		// if the user attempted the question give it green color
+		// if the user bookmarked the question give it a border
+		// if the user didn't attempt the question give it default class
 		for(let i = 0; i < totalQues; i++){
 			let res = responses[i];
 			circleWrap.innerHTML += `<li class="circle ${(res["answer"])? 'attempt' : 'unattempt'} ${(res["bookmark"])? 'mark': ''} ">${i+1}</li>`;
 		}
 		circles = document.querySelectorAll(".circle");
+
+		// when backtracking questions is allowed
+		// adding listeners to sidepanel question number buttons
 		{% if quiz.allow_backtracking %}
 			for(let i = 0; i < circles.length; i++){
 				circles[i].style.cursor = "pointer";
 				circles[i].addEventListener("click", function(){
-					console.log(this);
-					loadQuestion(questions, parseInt(this.innerText)-1);
 					activeQueNo = parseInt(this.innerText) - 1;
-				})
+					loadQuestion(questions, activeQueNo);
+				});
 			}
 		{% endif %}
 	}
 
+	// initally set all the bookmarks to false 
 	function setUpBookmarks(){
 		for(let i = 0; i < totalQues; i++){
 			responses[i]["bookmark"] = false;
@@ -397,6 +405,9 @@
 		setUpBookmarkButton();
 	}
 
+	// add the listeners to the bookmark button
+	// this button get the question no from the question and
+	// add that question to the bookmarks
 	function setUpBookmarkButton(){
 		bookmarkIcon = document.querySelector("#bookmark .fa");
 		bookmarkIcon.addEventListener("click", function(e){
