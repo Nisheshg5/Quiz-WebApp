@@ -26,9 +26,10 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
 
 urlpatterns = [
-    path("", include("quiz_app.urls")), 
+    path("", include("quiz_app.urls")),
     path("admin/", admin.site.urls),
-    path("accounts/", include('django.contrib.auth.urls'))
+    path("accounts/", include("django.contrib.auth.urls")),
+    path("verification/", include("verify_email.urls")),
 ]
 urlpatterns += staticfiles_urlpatterns()
 

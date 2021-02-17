@@ -31,6 +31,7 @@ class AccountAdmin(UserAdmin):
         "email",
         "date_joined",
         "last_login",
+        "is_active",
         "is_admin",
         "is_staff",
     )
