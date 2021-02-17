@@ -60,7 +60,15 @@ def home(request):
     return render(request, "quiz_app/home.html", context)
 
 
+context = {}
+
+
 def quiz(request, quiz_id):
+    global context
+    if context:
+        print(context)
+        return render(request, "quiz_app/quiz.html", context)
+
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
     if not quiz.has_started:
         return redirect("quiz_upcoming", quiz_id=quiz_id)
@@ -108,15 +116,8 @@ def quiz(request, quiz_id):
         "shuffle": json.dumps(shuffle),
         "quizTaker": quizTaker,
     }
-    print(context)
     return render(request, "quiz_app/quiz.html", context)
 
-# Creating dummy function 
-
-# def quiz(request, quiz_id):
-#     context = {'quiz': <Quiz: id: 24cf6d26-655d-4fe3-a377-3c8b55a3ba00, title: Quiz Title>, 'questions': '[{"id": 17, "quiz": "24cf6d26-655d-4fe3-a377-3c8b55a3ba00", "title": "How array is passed as argument to a Function In C?", "choice_1": "Value of elements in array", "choice_2": "First element of the array", "choice_3": "Base address of the array", "choice_4": "Address of the last element of array", "choice_5": "", "marks": 1, "isShuffle": true}, {"id": 5, "quiz": "24cf6d26-655d-4fe3-a377-3c8b55a3ba00", "title": "What is the size of an float data type?", "choice_1": "4 Bytes", "choice_2": "8 Bytes", "choice_3": "Depends on the system/compiler", "choice_4": "Cannot be determined", "choice_5": "", "marks": 1, "isShuffle": true}, {"id": 13, "quiz": "24cf6d26-655d-4fe3-a377-3c8b55a3ba00", "title": "what is a pointer", "choice_1": "A keyword used to create variables", "choice_2": "A variable that stores address of an instruction", "choice_3": "A variable that stores address of other variable", "choice_4": "All of the above", "choice_5": "", "marks": 1, "isShuffle": true}, {"id": 25, "quiz": "24cf6d26-655d-4fe3-a377-3c8b55a3ba00", "title": "What do the following declaration signify?\\r\\n\\r\\nfloat (*pf)();", "choice_1": "pf is a pointer to function.", "choice_2": "pf\\u00a0is a function pointer.", "choice_3": "pf\\u00a0is a pointer to a function which return\\u00a0float", "choice_4": "pf\\u00a0is a function of pointer variable.", "choice_5": "", "marks": 1, "isShuffle": true}, {"id": 26, "quiz": "24cf6d26-655d-4fe3-a377-3c8b55a3ba00", "title": "What do the following declaration signify?\\r\\n\\r\\ndouble *ptr[5];", "choice_1": "ptr is a pointer to an array of 5 double pointers.", "choice_2": "ptr\\u00a0is a array of 5 pointers to doubles.", "choice_3": "ptr\\u00a0is a array of 5 double pointers.", "choice_4": "ptr is a array 5 pointers.", "choice_5": "", "marks": 1, "isShuffle": true}, {"id": 4, "quiz": "24cf6d26-655d-4fe3-a377-3c8b55a3ba00", "title": "Local variables are stored in which area of memory", "choice_1": "Heap", "choice_2": "Stack", "choice_3": "Queue", "choice_4": "Linklist", "choice_5": "", "marks": 1, "isShuffle": true}, {"id": 24, "quiz": "24cf6d26-655d-4fe3-a377-3c8b55a3ba00", "title": "What do the following declaration signify?\\r\\n\\r\\nchar **p;", "choice_1": "p\\u00a0is a pointer to pointer.", "choice_2": "p\\u00a0is a pointer to a\\u00a0char\\u00a0pointer.", "choice_3": "p\\u00a0is a function pointer.", "choice_4": "p is a member of function pointer.", "choice_5": "", "marks": 1, "isShuffle": true}, {"id": 22, "quiz": "24cf6d26-655d-4fe3-a377-3c8b55a3ba00", "title": "Header file to use log(3) in C program", "choice_1": "#include<conio.h>", "choice_2": "#include<math.h>", "choice_3": "#include<stdlib.h>", "choice_4": "#include<dos.h>", "choice_5": "", "marks": 1, "isShuffle": true}, {"id": 16, "quiz": "24cf6d26-655d-4fe3-a377-3c8b55a3ba00", "title": "How many times the\\u00a0while\\u00a0loop will get executed.#include<stdio.h>\\r\\nint main()\\r\\n{\\r\\n    int j=1;\\r\\n    while(j <= 255)\\r\\n    {\\r\\n       
-#     printf(\\"%c %d\\\\n\\", j, j);\\r\\n        j++;\\r\\n    }\\r\\n    return 0;\\r\\n}", "choice_1": "Infinite times", "choice_2": "255 times", "choice_3": "256 
-#     times", "choice_4": "254 times", "choice_5": "", "marks": 1, "isShuffle": true}, {"id": 1, "quiz": "24cf6d26-655d-4fe3-a377-3c8b55a3ba00", "title": "The preprocessor directive which is used to end the scope of #ifdef.", "choice_1": "#ifdef.", "choice_2": "#elif", "choice_3": "#endif", "choice_4": "#if", "choice_5": "", "marks": 1, "isShuffle": true}]', 'responses': [{'id': 302, 'quiztaker': 48, 'question': 17, 'answer': ''}, {'id': 303, 'quiztaker': 48, 'question': 5, 'answer': ''}, {'id': 304, 'quiztaker': 48, 'question': 13, 'answer': ''}, {'id': 305, 'quiztaker': 48, 'question': 25, 'answer': ''}, {'id': 306, 'quiztaker': 48, 'question': 26, 'answer': ''}, {'id': 307, 'quiztaker': 48, 'question': 4, 'answer': ''}, {'id': 308, 'quiztaker': 48, 'question': 24, 'answer': ''}, {'id': 309, 'quiztaker': 48, 'question': 22, 'answer': '#include<math.h>'}, {'id': 310, 'quiztaker': 48, 'question': 16, 'answer': '255 times'}, {'id': 311, 'quiztaker': 48, 'question': 1, 'answer': ''}], 'shuffle': 'true', 'quizTaker': <QuizTakers: QuizTakers object (48)>}:
 
 def saveResponse(request):
     if request.method == "POST":
