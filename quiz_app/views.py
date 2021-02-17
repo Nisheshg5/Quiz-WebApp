@@ -204,7 +204,7 @@ def quiz_started(request, quiz_id):
             pk=quiz_id, password=request.POST.get("password")
         ):
             if request.user.is_authenticated:
-                QuizTakers.objects.create(quiz=quiz, user=request.user)
+                QuizTakers.objects.get_or_create(quiz=quiz, user=request.user)
                 return redirect("quiz_instructions", quiz_id=quiz_id)
             else:
                 return redirect("login")
