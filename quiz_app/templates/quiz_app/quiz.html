@@ -28,7 +28,9 @@
 				<div class="main">
 					<div class="question">
 						<p id="q-title"></p>
-						<p class="p-2"><i class="fa fa-bookmark-o" aria-hidden="true" id="bookmark"></i> <span id="q-marks">Marks: 1</span></p>
+						<p class="p-2">
+							<span id="bookmark"><i class="fa fa-bookmark-o" aria-hidden="true"></i></span>
+							<span id="q-marks">Marks: 1</span></p>
 					</div>
 					<small class="small">Please select an option</small>
 					<form id="opForm">
@@ -88,7 +90,8 @@
 	var opForm = document.getElementById("opForm");
 	var circleWrap = document.getElementById("circle-wrap");
 	var circles = [];
-	var bookmarkIcon = document.getElementById("bookmark");
+	var bookmarkIcon = document.querySelector("#bookmark .fa");
+	var bookmark = document.getElementById("bookmark");
 	
 	function loadQuestion(questions, no){
 		{% if quiz.allow_backtracking %}
@@ -120,7 +123,9 @@
 
 		qTitle.innerHTML = `<pre>${no+1}. ${question.title}</pre>`;
 		qMarks.innerText = `${(question.marks) > 1 ? 'Marks: ': 'Mark: '} ${question.marks}`;
+		bookmark.innerHTML = `<i class="fa ${(responses[no]["bookmark"])?'fa-bookmark': 'fa-bookmark-o'}" aria-hidden="true"></i>`;
 		loadOptions(question);
+		setUpBookmarkButton();
 		$("input[name=que]").val([responses[queNo]["answer"]]);
 	}
 
@@ -379,15 +384,15 @@
 
 	function setUpBookmarks(){
 		for(let i = 0; i < totalQues; i++){
-			bookmarksQuestions[i] = false;
 			responses[i]["bookmark"] = false;
 		}
 		setUpBookmarkButton();
 	}
 
 	function setUpBookmarkButton(){
+		bookmarkIcon = document.querySelector("#bookmark .fa");
 		bookmarkIcon.addEventListener("click", function(e){
-			let content = e.target.parentNode.parentNode.innerText;
+			let content = e.target.parentNode.parentNode.parentNode.innerText;
 			let i = content.substring(0, content.indexOf("."))-1;
 			responses[i]["bookmark"] = !responses[i]["bookmark"];
 			let icon = event.target;
