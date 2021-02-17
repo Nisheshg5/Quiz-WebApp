@@ -111,8 +111,7 @@ body {
 }
 .circle-wrap .circle.mark
 {
-    border:2px solid #6b1c89;
-    color: #eee;
+    border:3px solid #6b1c89;
 }
 
 #testPage .wrapper {
@@ -133,10 +132,23 @@ body {
     width: 100%;
 }
 
+pre
+{
+    margin-bottom: inherit;
+    font-size: 100%;
+    color:inherit;
+    font-family: inherit;
+}
+
 #testPage p#q-title {
     font-size: 20px;
 }
-
+#testPage .fa.fa-bookmark,
+#testPage .fa.fa-bookmark-o
+{
+    font-size:20px !important;
+    color:#6b1c89 !important;
+}
 #testPage input[type="radio"] {
     -webkit-appearance: none;
 }
