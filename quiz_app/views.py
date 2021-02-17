@@ -188,10 +188,21 @@ def quiz_result(request, quiz_id):
     if not request.user.is_authenticated:
         return redirect("login")
 
-    # fetch from the database
-    # quiz questions, user answers, correct answers
+    quizTaker = get_object_or_404(QuizTakers, quiz_id=quiz_id, user_id=request.user.pk)
+    queryset = quizTaker.response_set.all().order_by("question_id")
+    questions = []
+    responses = []
+    for response in queryset:
+        questions.append(model_to_dict(response.question))
+        responses.append(model_to_dict(response))
 
-    context = {}
+    context = {
+        "quiz": quiz,
+        "questions": json.dumps(questions),
+        "responses": responses,
+        "quizTaker": quizTaker,
+    }
+
     return render(request, "quiz_app/quiz_result.html", context)
 
 
