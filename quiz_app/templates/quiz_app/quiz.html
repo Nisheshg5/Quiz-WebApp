@@ -236,8 +236,6 @@
 	function setupSubmitBtn(){
 		submitQueBtn.addEventListener("click", function(e){
 			e.preventDefault();
-			console.log("Clicked");
-			console.log("This ", this);
 			let selectAns = opForm.que.value;
 
 			// option not selected - show alert on click
@@ -380,6 +378,15 @@
 			circleWrap.innerHTML += `<li class="circle ${(res["answer"])? 'attempt' : 'unattempt'} ${(res["bookmark"])? 'mark': ''} ">${i+1}</li>`;
 		}
 		circles = document.querySelectorAll(".circle");
+		{% if quiz.allow_backtracking %}
+			for(let i = 0; i < circles.length; i++){
+				circles[i].style.cursor = "pointer";
+				circles[i].addEventListener("click", function(){
+					console.log(this);
+					loadQuestion(questions, parseInt(this.innerText)-1);
+				})
+			}
+		{% endif %}
 	}
 
 	function setUpBookmarks(){
