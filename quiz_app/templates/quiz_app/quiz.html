@@ -183,7 +183,7 @@
 				answer: selectAns,
 				csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
 			},
-			success:function() {
+			success:function(success) {
 				Swal.fire({
 					toast: true,
 					position: 'top-end',
@@ -198,17 +198,30 @@
 				setupSidebarBtns();
 				submitQueBtn.blur();
 			},
-			error:function() {
-				Swal.fire({
-					toast: true,
-					position: 'top-end',
-					icon: 'error',
-					html: `Response Couldn't be Saved<br>Please Try Again`,
-					animation: true,
-					timer: 1000,
-					timerProgressBar: true,
-					showConfirmButton: false,
-				});
+			error:function(error) {
+				if(error.status == 403 && error.responseJSON.error == "logged out") {
+					Swal.fire({
+						toast: true,
+						position: 'top-end',
+						icon: 'error',
+						html: `You Have been logged out.<br>Please Login again.`,
+						animation: true,
+						timer: 3000,
+						timerProgressBar: true,
+						showConfirmButton: false,
+					});
+				} else {
+					Swal.fire({
+						toast: true,
+						position: 'top-end',
+						icon: 'error',
+						html: `Response Couldn't be Saved<br>Please Try Again`,
+						animation: true,
+						timer: 2000,
+						timerProgressBar: true,
+						showConfirmButton: false,
+					});
+				}
 				//$("input[name=que]").val([]);
 			}
 		});
@@ -270,9 +283,37 @@
 						quizTaker: {{quizTaker.pk}},
 						csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
 					},
-				}).done(function() {
-					window.location.pathname = `/quiz/{{ quiz.pk }}/result`;
-				})
+					success:function(success) {
+						window.location.pathname = `/quiz/{{ quiz.pk }}/result`;
+					},
+					error:function(error) {
+						Swal.close();
+						if(error.status == 403 && error.responseJSON.error == "logged out") {
+							Swal.fire({
+								toast: true,
+								position: 'top-end',
+								icon: 'error',
+								html: `You Have been logged out.<br>Please Login again.`,
+								animation: true,
+								timer: 3000,
+								timerProgressBar: true,
+								showConfirmButton: false,
+							});
+						} else {
+							Swal.fire({
+								toast: true,
+								position: 'top-end',
+								icon: 'error',
+								html: `Test Couldn't be Submitted<br>Please Try Again`,
+								animation: true,
+								timer: 2000,
+								timerProgressBar: true,
+								showConfirmButton: false,
+							});
+						}
+						//$("input[name=que]").val([]);
+					}
+				});
 				Swal.fire({
 					icon: 'success',
 					title: 'Submitting',
@@ -280,7 +321,7 @@
 					position: 'center',
 					showConfirmButton: false,
 					allowOutsideClick: false,
-					allowEscapeKey: false
+					allowEscapeKey: false,
 				});
 			}
 		});
