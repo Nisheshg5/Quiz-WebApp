@@ -9,19 +9,19 @@
 	<div class="row">
 			
 		<div class="sidebar col-md-3">
-			<ul class="q-wrap">
-				<li class="q-no">1</li>
-				<li class="q-no">1</li>
-				<li class="q-no">1</li>
-				<li class="q-no">1</li>
-				<li class="q-no">1</li>
-				<li class="q-no">1</li>
-				<li class="q-no">1</li>
-				<li class="q-no">1</li>
-				<li class="q-no">1</li>
-				<li class="q-no">1</li>
-				<li class="q-no">1</li>
-				<li class="q-no">1</li>
+			<ul class="circle-wrap" id="circle-wrap">
+				<li class="circle">1</li>
+				<li class="circle">2</li>
+				<li class="circle">3</li>
+				<li class="circle">4</li>
+				<li class="circle">5</li>
+				<li class="circle">1</li>
+				<li class="circle">1</li>
+				<li class="circle">1</li>
+				<li class="circle">1</li>
+				<li class="circle">1</li>
+				<li class="circle">1</li>
+				<li class="circle">1</li>
 			</ul>
 		</div>
 		<div class="col-md-9">
@@ -73,9 +73,7 @@
 	var questions;
 	var responses;
 	var quiz_id;
-
 	var remaining_time;
-
 	var shuffle;
 
 	var queNo = 0;
@@ -89,6 +87,8 @@
 	var submitQueBtn = document.getElementById("btn-submit");
 	var nextQueBtn = document.getElementById("btn-next");
 	var opForm = document.getElementById("opForm");
+	var circleWrap = document.getElementById("circle-wrap");
+	var circles = [];
 	
 	function loadQuestion(questions, no){
 		{% if quiz.allow_backtracking %}
@@ -176,6 +176,7 @@
 		submitQueBtn.addEventListener("click", function(e){
 			e.preventDefault();
 			console.log("Clicked");
+			console.log("This ", this);
 			let selectAns = opForm.que.value;
 
 			// option not selected - show alert on click
@@ -226,6 +227,7 @@
 				}
 			}).done(function() {
 				responses[queNo]["answer"] = selectAns;
+				setupSidebarBtns();
 				submitQueBtn.blur();
 			}).fail(function() {
 				//$("input[name=que]").val([]);
@@ -323,15 +325,24 @@
 		var timer_interval = setInterval(update_timer, 1000);
 	}
 
+	function setupSidebarBtns(){
+		circleWrap.innerHTML = "";
+		for(let i = 1; i <= totalQues; i++){
+			let res = responses[i-1]["answer"];
+			circleWrap.innerHTML += `<li class="circle ${(res)? 'attempt' : 'unattempt'}">${i}</li>`;
+		}
+		circles = document.querySelectorAll(".circle");
+	}
+
 	function init()	{
 		questions = {{ questions|safe }};
 		responses = {{ responses|safe }};
 		shuffleOptions(questions);
-		console.log(questions);
-		console.log(responses);
 		totalQues = questions.length;
 		queNo = 0;
-		if(totalQues > 0) loadQuestion(questions, queNo);
+		if(totalQues < 0) return;
+		setupSidebarBtns();
+		loadQuestion(questions, queNo);
 		quiz_id = `{{quiz.quiz_id}}`;
 		setup_timer();
 		{% if quiz.allow_backtracking %}
