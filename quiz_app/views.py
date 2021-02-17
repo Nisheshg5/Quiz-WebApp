@@ -107,6 +107,7 @@ def quiz(request, quiz_id):
         "shuffle": json.dumps(shuffle),
         "quizTaker": quizTaker,
     }
+
     return render(request, "quiz_app/quiz.html", context)
 
 
