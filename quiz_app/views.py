@@ -6,10 +6,12 @@ from uuid import UUID
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.core import serializers
+from django.core.mail import send_mail
 from django.db.models.query_utils import Q
 from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.timezone import datetime
@@ -140,9 +142,24 @@ def saveResponse(request):
 def completed(request):
     if request.method == "POST":
         quizTaker = request.POST.get("quizTaker")
-        quizTaker = QuizTakers.objects.filter(pk=quizTaker)
-        quizTaker.update(completed=timezone.now())
-
+        quizTaker = QuizTakers.objects.get(pk=quizTaker)
+        quizTaker.completed = timezone.now()
+        quizTaker.save()
+        context = {
+            "name": request.user.full_name,
+            "title": quizTaker.quiz.title,
+            "started": quizTaker.started,
+            "completed": quizTaker.completed,
+        }
+        msg_plain = render_to_string("email/test_confirmation.txt", context)
+        msg_html = render_to_string("email/test_confirmation.html", context)
+        send_mail(
+            "Test submitted successfully",
+            msg_plain,
+            "webmaster@localhost",
+            [request.user.email],
+            html_message=msg_html,
+        )
     return HttpResponse("{}", content_type="application/json")
 
 
