@@ -7,7 +7,6 @@
 {% block content %}
 <div id="testPage" class="container-fluid">
 	<div class="row">
-			
 		<div class="sidebar col-md-3">
 			<ul class="circle-wrap" id="circle-wrap">
 				<li class="circle">1</li>
@@ -61,8 +60,8 @@
 				</div>
 			</div>
 		</div>
-    </div>
-	
+	</div>
+
 </div>
 
 
@@ -173,6 +172,48 @@
 		});
 	}
 
+	function saveResponse(qNo, selectAns) {
+		$.ajax({
+			type: "POST",
+			url: 'response/save/',
+			data: {
+				quizTaker: {{quizTaker.pk}},
+				question: questions[qNo].id,
+				answer: selectAns,
+				csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
+			},
+			success:function() {
+				Swal.fire({
+					toast: true,
+					position: 'top-end',
+					icon: 'success',
+					html: 'Response Saved',
+					animation: true,
+					timer: 1000,
+					timerProgressBar: true,
+					showConfirmButton: false,
+				});
+				responses[qNo]["answer"] = selectAns;
+				setupSidebarBtns();
+				submitQueBtn.blur();
+			},
+			error:function() {
+				Swal.fire({
+					toast: true,
+					position: 'top-end',
+					icon: 'error',
+					html: `Response Couldn't be Saved<br>Please Try Again`,
+					animation: true,
+					timer: 1000,
+					timerProgressBar: true,
+					showConfirmButton: false,
+				});
+				//$("input[name=que]").val([]);
+			}
+		});
+	}
+
+
 	function setupSubmitBtn(){
 		submitQueBtn.addEventListener("click", function(e){
 			e.preventDefault();
@@ -192,48 +233,7 @@
 				});
 				return false;
 			}
-
-			$.ajax({
-				type: "POST",
-				url: 'response/save/',
-				data: {
-					quizTaker: {{quizTaker.pk}},
-					question: questions[queNo].id,
-					answer: selectAns,
-					csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
-				},
-				success:function() {
-					Swal.fire({
-						toast: true,
-						position: 'top-end',
-						icon: 'success',
-						html: 'Response Saved',
-						animation: true,
-						timer: 1000,
-						timerProgressBar: true,
-						showConfirmButton: false,
-					});
-				},
-				error:function() {
-					Swal.fire({
-						toast: true,
-						position: 'top-end',
-						icon: 'error',
-						html: `Response Couldn't be Saved<br>Please Try Again`,
-						animation: true,
-						timer: 1000,
-						timerProgressBar: true,
-						showConfirmButton: false,
-					});
-				}
-			}).done(function() {
-				responses[queNo]["answer"] = selectAns;
-				setupSidebarBtns();
-				submitQueBtn.blur();
-			}).fail(function() {
-				//$("input[name=que]").val([]);
-			});
-
+			saveResponse(queNo, selectAns);
 		});
 	}
 
