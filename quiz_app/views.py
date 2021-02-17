@@ -14,6 +14,7 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.timezone import datetime
 from django.views import generic
+from verify_email.email_handler import send_verification_email
 
 from .forms import QuizForm, QuizPasswordForm, SignUpForm
 from .models import Question, Quiz, QuizTakers, Response
@@ -227,10 +228,18 @@ def hello_there(request, name):
     )
 
 
-class SignUpView(generic.CreateView):
-    form_class = SignUpForm
-    success_url = reverse_lazy("login")
-    template_name = "registration/signup.html"
+def signup(request):
+    if request.method == "POST":
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            send_verification_email(request, form)
+            messages.info(
+                request, "Please Confirm Your Email Address Before Continuing"
+            )
+            return redirect("login")
+    else:
+        form = SignUpForm()
+    return render(request, "registration/signup.html", {"form": form})
 
 
 # def hello_there(request, name):
