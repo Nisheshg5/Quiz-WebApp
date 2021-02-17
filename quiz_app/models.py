@@ -200,6 +200,13 @@ class QuizTakers(models.Model):
             self.started + timedelta(minutes=self.quiz.duration) - timezone.now()
         ).total_seconds()
 
+    @property
+    def has_ended(self):
+        time = self.started + timedelta(minutes=self.quiz.duration) - timezone.now()
+        if time.total_seconds() <= 0 and not self.completed:
+            self.completed = self.started + timedelta(minutes=self.quiz.duration)
+        return time.total_seconds() <= 0
+
     class Meta:
         db_table = "QuizTaker"
         app_label = "quiz_app"
