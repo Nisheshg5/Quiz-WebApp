@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.core import serializers
 from django.core.mail import send_mail
+from django.db.models import F
 from django.db.models.query_utils import Q
 from django.forms.models import model_to_dict
 from django.http import HttpResponse
@@ -69,22 +70,29 @@ context = {}
 def quiz(request, quiz_id):
     global context
     if context:
-        # print(context)
         print("Fast Checkout")
         return render(request, "quiz_app/quiz.html", context)
-
     print("DB load")
+
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
     if not quiz.has_started:
         return redirect("quiz_upcoming", quiz_id=quiz_id)
+    if quiz.has_ended:
+        return redirect("quiz_ended", quiz_id=quiz_id)
+
+    try:
+        quizTaker = QuizTakers.objects.get(quiz=quiz, user=request.user)
+        if quizTaker.started and not quizTaker.completed:
+            quizTaker.suspicion_count = F("suspicion_count") + 1
+    except:
+        pass
+
     if not request.user.is_authenticated:
         messages.error(request, "You need to be logged in to access this.")
         return redirect("login")
     quizTaker = QuizTakers.objects.filter(quiz=quiz, user=request.user)
     if quizTaker.exists() and quizTaker.first().completed:
         return redirect("quiz_result", quiz_id=quiz_id)
-    if quiz.has_ended:
-        return redirect("quiz_ended", quiz_id=quiz_id)
 
     questions = []
     responses = []
