@@ -102,7 +102,9 @@ def quiz(request, quiz_id):
     if quizTaker.exists():
         quizTaker = quizTaker.first()
         if quizTaker.started:
-            queryset = quizTaker.response_set.all().order_by("pk")
+            queryset = (
+                quizTaker.response_set.select_related("question").all().order_by("pk")
+            )
             for response in queryset:
                 questions.append(model_to_dict(response.question, exclude=["correct"]))
                 responses.append(
@@ -191,7 +193,9 @@ def quiz_result(request, quiz_id):
         return redirect("login")
 
     quizTaker = get_object_or_404(QuizTakers, quiz_id=quiz_id, user_id=request.user.pk)
-    queryset = quizTaker.response_set.all().order_by("question_id")
+    queryset = (
+        quizTaker.response_set.select_related("question").all().order_by("question_id")
+    )
     questions = []
     responses = []
     for response in queryset:
