@@ -211,18 +211,61 @@ def quiz_result(request, quiz_id):
 def export_result(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
     quizTaker = get_object_or_404(QuizTakers, quiz_id=quiz_id, user_id=request.user.pk)
-    queryset = quizTaker.response_set.all().order_by("question_id")
+    if not quizTaker.has_ended:
+        messages.info(request, "The Test has not been submitted yet.")
+        return redirect("quiz", quiz_id=quiz.quiz_id)
+
+    responses = (
+        quizTaker.response_set.select_related("question")
+        .all()
+        .order_by("question_id")[::1]
+    )
 
     output = io.BytesIO()
     workbook = xlsxwriter.Workbook(output)
     worksheet = workbook.add_worksheet(name="Result")
 
     worksheet.set_column("B:B", 60)
-    cell_format = workbook.add_format()
-    cell_format.set_bold()
-    worksheet.merge_range("A1:B1", request.user.full_name, cell_format)
-    worksheet.merge_range("A2:B2", f"{request.user.email.upper()}", cell_format)
-    worksheet.merge_range("A3:B3", f"Quiz: {quiz.title}", cell_format)
+    worksheet.set_column("D:H", 20)
+    worksheet.set_column("J:K", 60)
+
+    bold_format = workbook.add_format()
+    bold_format.set_bold()
+    green_format = workbook.add_format({"bg_color": "#C6EFCE", "font_color": "#006100"})
+    green_bold_format = workbook.add_format(
+        {"bold": True, "bg_color": "#C6EFCE", "font_color": "#006100"}
+    )
+    red_format = workbook.add_format({"bg_color": "#FFC7CE", "font_color": "#9C0006"})
+    red_bold_format = workbook.add_format(
+        {"bold": True, "bg_color": "#FFC7CE", "font_color": "#9C0006"}
+    )
+
+    worksheet.merge_range("A1:B1", request.user.full_name, bold_format)
+    worksheet.merge_range("A2:B2", f"{request.user.email.upper()}", bold_format)
+    worksheet.merge_range("A3:B3", f"Quiz: {quiz.title}", bold_format)
+
+    total_marks = sum([r.question.marks for r in responses])
+    marks_obtained = sum([q.marks for q in responses])
+    worksheet.merge_range("A6:B6", f"Total Marks: {total_marks}", bold_format)
+    worksheet.merge_range("A7:B7", f"Total Obtained: {marks_obtained}", bold_format)
+    if 100 * marks_obtained / total_marks > 33:
+        worksheet.merge_range("A9:B9", f"Status: Passed", green_bold_format)
+    else:
+        worksheet.merge_range("A9:B9", f"Status: Failed", red_bold_format)
+
+    rNo = 11
+
+    worksheet.write(f"A{rNo}", "Que No.", bold_format)
+    worksheet.write(f"B{rNo}", "Question Statement", bold_format)
+    worksheet.write(f"D{rNo}", "Option 1", bold_format)
+    worksheet.write(f"E{rNo}", "Option 2", bold_format)
+    worksheet.write(f"F{rNo}", "Option 3", bold_format)
+    worksheet.write(f"G{rNo}", "Option 4", bold_format)
+    worksheet.write(f"H{rNo}", "Option 5", bold_format)
+    worksheet.write(f"J{rNo}", "Correct Answer", bold_format)
+    worksheet.write(f"K{rNo}", "Your Answer", bold_format)
+    worksheet.write(f"L{rNo}", "Is Correct", bold_format)
+    worksheet.write(f"M{rNo}", "Marks", bold_format)
 
     workbook.close()
 
@@ -236,6 +279,7 @@ def export_result(request, quiz_id):
     response["Content-Disposition"] = f"attachment; filename={filename}"
 
     return response
+    return HttpResponse("")
 
 
 def quiz_upcoming(request, quiz_id):
