@@ -48,12 +48,12 @@ body {
 
 .nav-quiz
 {
-    position: fixed;
+    position: sticky;
     top:0;
     max-height: 70px;
     width:100vw;
-    display: flex;
-    justify-content: space-between;
+    /* display: flex;
+    justify-content: space-between;  */
 }
 .nav-quiz .navbar-text
 {
@@ -63,6 +63,14 @@ body {
 @media only screen and (max-width: 768px) {
     .navbar {
         padding: 20px 40px;
+    }
+    .nav-quiz
+    {
+        max-height: 400px;
+    }
+    .nav-quiz .navbar-nav
+    {
+        flex-direction: row;
     }
 }
 
@@ -90,12 +98,9 @@ body {
     font-family: "Poppins", sans-serif;
     display: flex;    
 }
-#testPage .sidebar,
+/* #testPage .sidebar, */
 #testPage .main
 {
-    /* equals to the height of the navbar */
-    margin-top:70px;
-    /* 100% height - height of navbar */
     height:calc(100vh - 70px);
 }
 .sidebar
@@ -165,6 +170,8 @@ pre
     font-size: 100%;
     color:inherit;
     font-family: inherit;
+    white-space: pre-wrap;
+  word-break: keep-all
 }
 
 #testPage p#q-title {

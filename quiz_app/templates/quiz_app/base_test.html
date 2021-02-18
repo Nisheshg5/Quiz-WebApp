@@ -23,29 +23,36 @@
 <body>
 	<nav class="navbar navbar-expand-md navbar-dark nav-quiz" style="color:white">
 
-		<ul class="nav navbar-nav" id="collapsibleNavbar">
-			<span class="navbar-text mx-2 navbar-brand">
-				Quiz App
-			</span>
-			{% if user.is_authenticated %}
-				<li class="navbar-text mx-2">
-					Hi {{ user.full_name }}!
-				</li>
-			{% endif %}					
-		</ul>
-
-		<ul class="nav navbar-nav">
-			<li class="nav-item">
-				<a class="nav-link nav-text">
-					<span id="timer"></span>
-				</a>
-			</li>
-			<button class="btn btn-finish f-right">Finish Test</button>
-		</ul>
-
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
 			<span class="navbar-toggler-icon"></span>
 		</button>
+
+		
+
+		<div class="collapse navbar-collapse order-1" id="collapsibleNavbar">
+			<ul class="navbar-nav">
+				<li class="navbar-text mx-2 navbar-brand">
+					Quiz App
+				</li>
+				{% if user.is_authenticated %}
+					<li class="navbar-text mx-2">
+						Hi {{ user.full_name }}!
+					</li>
+				{% endif %}					
+			</ul>
+		</div>	
+		
+		
+		<div class="order-2">
+			<li class="navbar-text mx-2">
+				<span id="timer"></span>
+			</li>
+			<button class="btn btn-finish mx-2">Finish Test</button>
+		</div>
+
+			
+
+		
 	</nav>
 
 
