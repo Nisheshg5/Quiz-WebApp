@@ -1,8 +1,10 @@
+import io
 import json
 import random
 from json import JSONEncoder
 from uuid import UUID
 
+import xlsxwriter
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.core import serializers
@@ -21,7 +23,7 @@ from django.views import generic
 from verify_email.email_handler import send_verification_email
 
 from .forms import QuizForm, QuizPasswordForm, SignUpForm
-from .models import Question, Quiz, QuizTakers, Response
+from .models import Account, Question, Quiz, QuizTakers, Response
 
 old_default = JSONEncoder.default
 
@@ -188,11 +190,150 @@ def quiz_result(request, quiz_id):
     if not request.user.is_authenticated:
         return redirect("login")
 
-    # fetch from the database
-    # quiz questions, user answers, correct answers
+    quizTaker = get_object_or_404(QuizTakers, quiz_id=quiz_id, user_id=request.user.pk)
+    queryset = quizTaker.response_set.all().order_by("question_id")
+    questions = []
+    responses = []
+    for response in queryset:
+        questions.append(model_to_dict(response.question))
+        responses.append(model_to_dict(response))
 
-    context = {}
+    context = {
+        "quiz": quiz,
+        "questions": json.dumps(questions),
+        "responses": responses,
+        "quizTaker": quizTaker,
+    }
+
     return render(request, "quiz_app/quiz_result.html", context)
+
+
+def export_result(request, quiz_id):
+    quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
+    quizTaker = get_object_or_404(QuizTakers, quiz_id=quiz_id, user_id=request.user.pk)
+    if not quizTaker.has_ended:
+        messages.info(request, "The Test has not been submitted yet.")
+        return redirect("quiz", quiz_id=quiz.quiz_id)
+
+    responses = (
+        quizTaker.response_set.select_related("question")
+        .all()
+        .order_by("question_id")[::1]
+    )
+
+    output = io.BytesIO()
+    workbook = xlsxwriter.Workbook(output)
+    worksheet = workbook.add_worksheet(name="Result")
+
+    worksheet.set_column("B:B", 60)
+    worksheet.set_column("D:H", 20)
+    worksheet.set_column("J:K", 30)
+
+    bold_format = workbook.add_format({"bold": True})
+    bold_y_format = workbook.add_format({"bold": True, "top": 1, "bottom": 1,})
+    green_format = workbook.add_format(
+        {"bg_color": "#C6EFCE", "font_color": "#006100", "text_wrap": "true",}
+    )
+    green_y_format = workbook.add_format(
+        {
+            "bg_color": "#C6EFCE",
+            "font_color": "#006100",
+            "text_wrap": "true",
+            "top": 1,
+            "bottom": 1,
+        }
+    )
+    green_bold_format = workbook.add_format(
+        {
+            "bold": True,
+            "bg_color": "#C6EFCE",
+            "font_color": "#006100",
+            "text_wrap": "true",
+        }
+    )
+    red_format = workbook.add_format(
+        {"bg_color": "#FFC7CE", "font_color": "#9C0006", "text_wrap": "true",}
+    )
+    red_y_format = workbook.add_format(
+        {
+            "bg_color": "#FFC7CE",
+            "font_color": "#9C0006",
+            "text_wrap": "true",
+            "top": 1,
+            "bottom": 1,
+        }
+    )
+    red_bold_format = workbook.add_format(
+        {
+            "bold": True,
+            "bg_color": "#FFC7CE",
+            "font_color": "#9C0006",
+            "text_wrap": "true",
+        }
+    )
+
+    worksheet.merge_range("A1:B1", request.user.full_name, bold_format)
+    worksheet.merge_range("A2:B2", f"{request.user.email.upper()}", bold_format)
+    worksheet.merge_range("A3:B3", f"Quiz: {quiz.title}", bold_format)
+
+    total_marks = sum([r.question.marks for r in responses])
+    marks_obtained = sum([q.marks for q in responses])
+    worksheet.merge_range("A6:B6", f"Total Marks: {total_marks}", bold_format)
+    worksheet.merge_range("A7:B7", f"Marks Obtained: {marks_obtained}", bold_format)
+    if 100 * marks_obtained / total_marks > 33:
+        worksheet.merge_range("A9:B9", f"Status: Passed", green_bold_format)
+    else:
+        worksheet.merge_range("A9:B9", f"Status: Failed", red_bold_format)
+
+    rNo = 11
+
+    worksheet.write(f"A{rNo}", "Que No.", bold_y_format)
+    worksheet.write(f"B{rNo}", "Question Statement", bold_y_format)
+    worksheet.write(f"C{rNo}", "", bold_y_format)
+    worksheet.write(f"D{rNo}", "Option 1", bold_y_format)
+    worksheet.write(f"E{rNo}", "Option 2", bold_y_format)
+    worksheet.write(f"F{rNo}", "Option 3", bold_y_format)
+    worksheet.write(f"G{rNo}", "Option 4", bold_y_format)
+    worksheet.write(f"H{rNo}", "Option 5", bold_y_format)
+    worksheet.write(f"I{rNo}", "", bold_y_format)
+    worksheet.write(f"J{rNo}", "Correct Answer", bold_y_format)
+    worksheet.write(f"K{rNo}", "Your Answer", bold_y_format)
+    worksheet.write(f"L{rNo}", "Is Correct", bold_y_format)
+    worksheet.write(f"M{rNo}", "Marks", bold_y_format)
+
+    for i, response in enumerate(responses):
+        rNo += 1
+        if response.isCorrect:
+            format = green_y_format
+        else:
+            format = red_y_format
+        worksheet.write(f"A{rNo}", i + 1, format)
+        worksheet.write(f"B{rNo}", f"{response.question.title}", format)
+        worksheet.write(f"C{rNo}", "", format)
+        worksheet.write(f"D{rNo}", f"{response.question.choice_1}", format)
+        worksheet.write(f"E{rNo}", f"{response.question.choice_2}", format)
+        worksheet.write(f"F{rNo}", f"{response.question.choice_3}", format)
+        worksheet.write(f"G{rNo}", f"{response.question.choice_4}", format)
+        worksheet.write(f"H{rNo}", f"{response.question.choice_5}", format)
+        worksheet.write(f"I{rNo}", "", format)
+        worksheet.write(f"J{rNo}", f"{response.question.correct}", format)
+        worksheet.write(f"K{rNo}", f"{response.answer}", format)
+        worksheet.write(f"L{rNo}", f"{response.isCorrect}", format)
+        worksheet.write(f"M{rNo}", response.marks, format)
+
+    workbook.close()
+
+    output.seek(0)
+
+    filename = f"Result {request.user.full_name}.xlsx"
+    response = HttpResponse(
+        output,
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+    response["Content-Disposition"] = f"attachment; filename={filename}"
+
+    return response
+    # return HttpResponse("")
 
 
 def quiz_upcoming(request, quiz_id):
