@@ -131,7 +131,7 @@ class QuizAdmin(admin.ModelAdmin):
     inlines = [
         QuestionAdmin,
     ]
-    change_form_template = "admin/admin_quiz_change_form.html"
+    change_form_template = "admin/quiz_change_form.html"
 
 
 class Question_bank_admin(ImportExportModelAdmin):
@@ -215,9 +215,7 @@ class Question_bank_admin(ImportExportModelAdmin):
             "question_bank": queryset,
             "quiz": quiz,
         }
-        return render(
-            request, "admin/admin_question_bank_confirmation.html", context=context
-        )
+        return render(request, "admin/question_bank_confirmation.html", context=context)
 
     add_questions_to_quiz.short_description = "Add Questions To Quiz"
 
@@ -249,7 +247,7 @@ class Question_bank_admin(ImportExportModelAdmin):
     fieldsets = ()
     actions = ["add_questions_to_quiz"]
     resource_class = Question_bank_resource
-    change_list_template = "admin/admin_question_bank_list.html"
+    change_list_template = "admin/question_bank_list.html"
 
 
 class QuizTakersAdmin(admin.ModelAdmin):

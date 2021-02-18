@@ -6,6 +6,7 @@ from uuid import UUID
 from django.contrib import messages
 from django.db.models import F
 from django.forms.models import model_to_dict
+from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.timezone import datetime
@@ -226,3 +227,21 @@ def signup(request):
     else:
         form = SignUpForm()
     return render(request, "registration/signup.html", {"form": form})
+
+
+def quiz_report(request, quiz_id):
+    quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
+    context = {
+        "quiz": quiz,
+        "opts": "quiz_app.quiz",
+        "app_label": "quiz_app",
+        "change": True,
+        "add": False,
+        "is_popup": False,
+        "save_as": False,
+        "has_delete_permission": False,
+        "has_add_permission": False,
+        "has_change_permission": True,
+    }
+    return render(request, "admin/quiz_report.html", context)
+

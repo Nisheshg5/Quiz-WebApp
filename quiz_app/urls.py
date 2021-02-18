@@ -14,4 +14,7 @@ urlpatterns = [
     path("quiz/response/save/", ajax.saveResponse, name="save_response"),
     path("quiz/completed/", ajax.completed, name="completed"),
     path("signup/", views.signup, name="signup"),
+    path(
+        "admin/quiz_app/quiz/<quiz_id>/report/", views.quiz_report, name="quiz_report"
+    ),
 ]
