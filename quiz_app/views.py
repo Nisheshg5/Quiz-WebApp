@@ -225,6 +225,7 @@ def export_result(request, quiz_id):
     workbook = xlsxwriter.Workbook(output)
     worksheet = workbook.add_worksheet(name="Result")
 
+    worksheet.set_column("A:A", 20)
     worksheet.set_column("B:B", 60)
     worksheet.set_column("D:H", 20)
     worksheet.set_column("J:K", 30)
@@ -272,21 +273,41 @@ def export_result(request, quiz_id):
         }
     )
 
-    worksheet.merge_range("A1:B1", request.user.full_name, bold_format)
-    worksheet.merge_range("A2:B2", f"{request.user.email.upper()}", bold_format)
-    worksheet.merge_range("A3:B3", f"Quiz: {quiz.title}", bold_format)
+    rNo = 1
+
+    worksheet.merge_range(f"A{rNo}:B{rNo}", request.user.full_name, bold_format)
+    rNo += 1
+    worksheet.merge_range(
+        f"A{rNo}:B{rNo}", f"{request.user.email.upper()}", bold_format
+    )
+    rNo += 1
+    worksheet.merge_range(f"A{rNo}:B{rNo}", f"Quiz: {quiz.title}", bold_format)
+
+    rNo += 2
+    started = datetime.strftime(quizTaker.started, "%Y-%m-%d %H:%M:%S")
+    worksheet.write(f"A{rNo}", "Started At:", bold_format)
+    worksheet.write(f"B{rNo}", f"{started}", bold_format)
+
+    rNo += 1
+    ended = datetime.strftime(quizTaker.completed, "%Y-%m-%d %H:%M:%S")
+    worksheet.write(f"A{rNo}", "Submitted At:", bold_format)
+    worksheet.write(f"B{rNo}", f"{ended}", bold_format)
+    rNo += 2
 
     total_marks = sum([r.question.marks for r in responses])
     marks_obtained = sum([q.marks for q in responses])
-    worksheet.merge_range("A6:B6", f"Total Marks: {total_marks}", bold_format)
-    worksheet.merge_range("A7:B7", f"Marks Obtained: {marks_obtained}", bold_format)
+    worksheet.merge_range(f"A{rNo}:B{rNo}", f"Total Marks: {total_marks}", bold_format)
+    rNo += 1
+    worksheet.merge_range(
+        f"A{rNo}:B{rNo}", f"Marks Obtained: {marks_obtained}", bold_format
+    )
+    rNo += 2
     if 100 * marks_obtained / total_marks > 33:
-        worksheet.merge_range("A9:B9", f"Status: Passed", green_bold_format)
+        worksheet.merge_range(f"A{rNo}:B{rNo}", f"Status: Passed", green_bold_format)
     else:
-        worksheet.merge_range("A9:B9", f"Status: Failed", red_bold_format)
+        worksheet.merge_range(f"A{rNo}:B{rNo}", f"Status: Failed", red_bold_format)
 
-    rNo = 11
-
+    rNo += 2
     worksheet.write(f"A{rNo}", "Que No.", bold_y_format)
     worksheet.write(f"B{rNo}", "Question Statement", bold_y_format)
     worksheet.write(f"C{rNo}", "", bold_y_format)
