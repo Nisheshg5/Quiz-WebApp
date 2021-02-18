@@ -105,13 +105,16 @@ body {
 }
 .sidebar
 {
-    box-shadow: 2px 5px 10px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 2px 5px 10px 10px rgba(0, 0, 0, 0.2) inset;
     padding:20px 15px;    
+    max-height: calc(100vh - 70px);
+    overflow-y: scroll;
 }
 
 #testPage .main 
 {
     padding-right: 0;   /* removing the padding of col*/
+    padding-left: 0;
 }
 .circle-wrap
 {
