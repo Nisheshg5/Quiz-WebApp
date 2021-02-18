@@ -244,6 +244,23 @@ pre
 }
 
 @media(max-width:768px) {
+    .sidebar
+    {
+        overflow-x: scroll;
+    }
+    .circle-wrap
+    {
+        display: inline-flex;
+        flex-wrap:nowrap;
+    }
+    .circle-wrap .circle,
+    .circle-wrap .circle.unattempt
+    {
+        width:32px;
+        height:32px;
+        margin:5px;
+        font-size:16px;
+    }
     .main
     {
         margin: 20px auto;
