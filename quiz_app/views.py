@@ -1,10 +1,8 @@
-import io
 import json
 import random
 from json import JSONEncoder
 from uuid import UUID
 
-import xlsxwriter
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.core import serializers
@@ -21,6 +19,8 @@ from django.utils import timezone
 from django.utils.timezone import datetime
 from django.views import generic
 from verify_email.email_handler import send_verification_email
+
+from quiz_app.excel import generate_result_as_excel
 
 from .forms import QuizForm, QuizPasswordForm, SignUpForm
 from .models import Account, Question, Quiz, QuizTakers, Response
@@ -221,140 +221,14 @@ def export_result(request, quiz_id):
         .order_by("question_id")[::1]
     )
 
-    output = io.BytesIO()
-    workbook = xlsxwriter.Workbook(output)
-    worksheet = workbook.add_worksheet(name="Result")
-
-    worksheet.set_column("A:A", 20)
-    worksheet.set_column("B:B", 60)
-    worksheet.set_column("D:H", 20)
-    worksheet.set_column("J:K", 30)
-
-    bold_format = workbook.add_format({"bold": True})
-    bold_y_format = workbook.add_format({"bold": True, "top": 1, "bottom": 1,})
-    green_format = workbook.add_format(
-        {"bg_color": "#C6EFCE", "font_color": "#006100", "text_wrap": "true",}
-    )
-    green_y_format = workbook.add_format(
-        {
-            "bg_color": "#C6EFCE",
-            "font_color": "#006100",
-            "text_wrap": "true",
-            "top": 1,
-            "bottom": 1,
-        }
-    )
-    green_bold_format = workbook.add_format(
-        {
-            "bold": True,
-            "bg_color": "#C6EFCE",
-            "font_color": "#006100",
-            "text_wrap": "true",
-        }
-    )
-    red_format = workbook.add_format(
-        {"bg_color": "#FFC7CE", "font_color": "#9C0006", "text_wrap": "true",}
-    )
-    red_y_format = workbook.add_format(
-        {
-            "bg_color": "#FFC7CE",
-            "font_color": "#9C0006",
-            "text_wrap": "true",
-            "top": 1,
-            "bottom": 1,
-        }
-    )
-    red_bold_format = workbook.add_format(
-        {
-            "bold": True,
-            "bg_color": "#FFC7CE",
-            "font_color": "#9C0006",
-            "text_wrap": "true",
-        }
-    )
-
-    rNo = 1
-
-    worksheet.merge_range(f"A{rNo}:B{rNo}", request.user.full_name, bold_format)
-    rNo += 1
-    worksheet.merge_range(
-        f"A{rNo}:B{rNo}", f"{request.user.email.upper()}", bold_format
-    )
-    rNo += 1
-    worksheet.merge_range(f"A{rNo}:B{rNo}", f"Quiz: {quiz.title}", bold_format)
-
-    rNo += 2
-    started = datetime.strftime(quizTaker.started, "%Y-%m-%d %H:%M:%S")
-    worksheet.write(f"A{rNo}", "Started At:", bold_format)
-    worksheet.write(f"B{rNo}", f"{started}", bold_format)
-
-    rNo += 1
-    ended = datetime.strftime(quizTaker.completed, "%Y-%m-%d %H:%M:%S")
-    worksheet.write(f"A{rNo}", "Submitted At:", bold_format)
-    worksheet.write(f"B{rNo}", f"{ended}", bold_format)
-    rNo += 2
-
-    total_marks = sum([r.question.marks for r in responses])
-    marks_obtained = sum([q.marks for q in responses])
-    worksheet.merge_range(f"A{rNo}:B{rNo}", f"Total Marks: {total_marks}", bold_format)
-    rNo += 1
-    worksheet.merge_range(
-        f"A{rNo}:B{rNo}", f"Marks Obtained: {marks_obtained}", bold_format
-    )
-    rNo += 2
-    if 100 * marks_obtained / total_marks > 33:
-        worksheet.merge_range(f"A{rNo}:B{rNo}", f"Status: Passed", green_bold_format)
-    else:
-        worksheet.merge_range(f"A{rNo}:B{rNo}", f"Status: Failed", red_bold_format)
-
-    rNo += 2
-    worksheet.write(f"A{rNo}", "Que No.", bold_y_format)
-    worksheet.write(f"B{rNo}", "Question Statement", bold_y_format)
-    worksheet.write(f"C{rNo}", "", bold_y_format)
-    worksheet.write(f"D{rNo}", "Option 1", bold_y_format)
-    worksheet.write(f"E{rNo}", "Option 2", bold_y_format)
-    worksheet.write(f"F{rNo}", "Option 3", bold_y_format)
-    worksheet.write(f"G{rNo}", "Option 4", bold_y_format)
-    worksheet.write(f"H{rNo}", "Option 5", bold_y_format)
-    worksheet.write(f"I{rNo}", "", bold_y_format)
-    worksheet.write(f"J{rNo}", "Correct Answer", bold_y_format)
-    worksheet.write(f"K{rNo}", "Your Answer", bold_y_format)
-    worksheet.write(f"L{rNo}", "Is Correct", bold_y_format)
-    worksheet.write(f"M{rNo}", "Marks", bold_y_format)
-
-    for i, response in enumerate(responses):
-        rNo += 1
-        if response.isCorrect:
-            format = green_y_format
-        else:
-            format = red_y_format
-        worksheet.write(f"A{rNo}", i + 1, format)
-        worksheet.write(f"B{rNo}", f"{response.question.title}", format)
-        worksheet.write(f"C{rNo}", "", format)
-        worksheet.write(f"D{rNo}", f"{response.question.choice_1}", format)
-        worksheet.write(f"E{rNo}", f"{response.question.choice_2}", format)
-        worksheet.write(f"F{rNo}", f"{response.question.choice_3}", format)
-        worksheet.write(f"G{rNo}", f"{response.question.choice_4}", format)
-        worksheet.write(f"H{rNo}", f"{response.question.choice_5}", format)
-        worksheet.write(f"I{rNo}", "", format)
-        worksheet.write(f"J{rNo}", f"{response.question.correct}", format)
-        worksheet.write(f"K{rNo}", f"{response.answer}", format)
-        worksheet.write(f"L{rNo}", f"{response.isCorrect}", format)
-        worksheet.write(f"M{rNo}", response.marks, format)
-
-    workbook.close()
-
-    output.seek(0)
-
     filename = f"Result {request.user.full_name}.xlsx"
     response = HttpResponse(
-        output,
+        generate_result_as_excel(request, quiz, quizTaker, responses),
         content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     )
     response["Content-Disposition"] = f"attachment; filename={filename}"
 
     return response
-    # return HttpResponse("")
 
 
 def quiz_upcoming(request, quiz_id):
