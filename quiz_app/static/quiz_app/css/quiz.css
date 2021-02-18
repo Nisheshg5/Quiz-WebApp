@@ -46,6 +46,20 @@ body {
     margin-left: 30px;
 }
 
+.nav-quiz
+{
+    position: fixed;
+    top:0;
+    max-height: 70px;
+    width:100vw;
+    display: flex;
+    justify-content: space-between;
+}
+.nav-quiz .navbar-text
+{
+    color: #fff;
+}
+
 @media only screen and (max-width: 768px) {
     .navbar {
         padding: 20px 40px;
@@ -74,11 +88,25 @@ body {
 #testPage {
     color: #000;
     font-family: "Poppins", sans-serif;
+    display: flex;    
+}
+#testPage .sidebar,
+#testPage .main
+{
+    /* equals to the height of the navbar */
+    margin-top:70px;
+    /* 100% height - height of navbar */
+    height:calc(100vh - 70px);
 }
 .sidebar
 {
     box-shadow: 2px 5px 10px 10px rgba(0, 0, 0, 0.2);
-    padding:20px 15px;
+    padding:20px 15px;    
+}
+
+#testPage .main 
+{
+    padding-right: 0;   /* removing the padding of col*/
 }
 .circle-wrap
 {
@@ -114,15 +142,14 @@ body {
     border:3px solid #6b1c89;
 }
 
-#testPage .wrapper {
+#testPage .main-content {
     box-shadow: 2px 5px 10px 10px rgba(0, 0, 0, 0.2);
     padding: 40px;
-    display: flex;
-    justify-content: flex-start;
-}
-#testPage .main
-{
     width:100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
 }
 
 

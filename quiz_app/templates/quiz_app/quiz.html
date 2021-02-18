@@ -5,8 +5,8 @@
 {% endblock %}
 
 {% block content %}
-<div id="testPage" class="container-fluid">
-    <div class="row">
+<div id="testPage-wrapper" class="container-fluid">
+    <div class="row" id="testPage">
         <div class="sidebar col-md-3">
             <ul class="circle-wrap" id="circle-wrap">
                 <li class="circle">1</li>
@@ -23,47 +23,45 @@
                 <li class="circle">1</li>
             </ul>
         </div>
-        <div class="col-md-9">
-            <div class="wrapper">
-                <div class="main">
-                    <div class="question">
-                        <p id="q-title"></p>
-                        <p class="p-2">
-                            <span id="bookmark"><i class="fa fa-bookmark-o" aria-hidden="true"></i></span>
-                            <span id="q-marks">Marks: 1</span></p>
-                    </div>
-                    <small class="small">Please select an option</small>
-                    <form id="opForm">
-                        {% csrf_token %}
-                        <div class="options" id="q-options">
-                            <div class="option">
-                                <input type="radio" name="que" value="1" id="opt1">
-                                <label for="opt1"><span>A. </span> <span id="o1"></span></label>
-                            </div>
-                            <div class="option">
-                                <input type="radio" name="que" value="2" id="opt2">
-                                <label for="opt2"><span>B. </span> <span></span></label>
-                            </div>
-                            <div class="option">
-                                <input type="radio" name="que" value="3" id="opt3">
-                                <label for="opt3"><span>C. </span> <span></span></label>
-                            </div>
-                            <div class="option">
-                                <input type="radio" name="que" value="4" id="opt4">
-                                <label for="opt4"><span>D. </span> <span></span></label>
-                            </div>
-                        </div>
-                        {% if quiz.allow_backtracking %}
-                        <button class="btn btn-primary mt-3" id="btn-prev" type="submit">Prev</button>
-                        {% endif %}
-                        <button class="btn btn-primary mt-3" id="btn-submit" type="submit">Submit</button>
-                        <button class="btn btn-primary mt-3" id="btn-next" type="submit">Next</button>
-                    </form>
-                </div>
+        <div class="col-md-9 main">
+            <div class="main-content">
+				<div class="question">
+					<p id="q-title"></p>
+					<p class="p-2">
+						<span id="bookmark"><i class="fa fa-bookmark-o" aria-hidden="true"></i></span>
+						<span id="q-marks">Marks: 1</span>
+					</p>
+				</div>
+				<small class="small">Please select an option</small>
+				<form id="opForm">
+					{% csrf_token %}
+					<div class="options" id="q-options">
+						<div class="option">
+							<input type="radio" name="que" value="1" id="opt1">
+							<label for="opt1"><span>A. </span> <span id="o1"></span></label>
+						</div>
+						<div class="option">
+							<input type="radio" name="que" value="2" id="opt2">
+							<label for="opt2"><span>B. </span> <span></span></label>
+						</div>
+						<div class="option">
+							<input type="radio" name="que" value="3" id="opt3">
+							<label for="opt3"><span>C. </span> <span></span></label>
+						</div>
+						<div class="option">
+							<input type="radio" name="que" value="4" id="opt4">
+							<label for="opt4"><span>D. </span> <span></span></label>
+						</div>
+					</div>
+					{% if quiz.allow_backtracking %}
+					<button class="btn btn-primary mt-3" id="btn-prev" type="submit">Prev</button>
+					{% endif %}
+					<button class="btn btn-primary mt-3" id="btn-submit" type="submit">Submit</button>
+					<button class="btn btn-primary mt-3" id="btn-next" type="submit">Next</button>
+				</form>
             </div>
         </div>
     </div>
-
 </div>
 
 
