@@ -1,9 +1,10 @@
+import io
 import json
 import random
 from json import JSONEncoder
 from uuid import UUID
 
-import xlwt
+import xlsxwriter
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.core import serializers
@@ -212,42 +213,27 @@ def export_result(request, quiz_id):
     quizTaker = get_object_or_404(QuizTakers, quiz_id=quiz_id, user_id=request.user.pk)
     queryset = quizTaker.response_set.all().order_by("question_id")
 
-    response = HttpResponse(content_type="application/ms-excel")
-    response["Content-Disposition"] = 'attachment; filename="Result.xls"'
+    output = io.BytesIO()
+    workbook = xlsxwriter.Workbook(output)
+    worksheet = workbook.add_worksheet(name="Result")
 
-    wb = xlwt.Workbook(encoding="utf-8")
-    ws = wb.add_sheet("Result Data")  # this will make a sheet named Users Data
+    worksheet.set_column("B:B", 60)
+    cell_format = workbook.add_format()
+    cell_format.set_bold()
+    worksheet.merge_range("A1:B1", request.user.full_name, cell_format)
+    worksheet.merge_range("A2:B2", f"{request.user.email.upper()}", cell_format)
+    worksheet.merge_range("A3:B3", f"Quiz: {quiz.title}", cell_format)
 
-    # Sheet header, first row
+    workbook.close()
 
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
+    output.seek(0)
 
-    columns = [
-        "ID",
-        "Full Name",
-        "Email Address",
-    ]
-
-    ws.write(0, 0, request.user.full_name, font_style)
-    ws.write(1, 0, request.user.email, font_style)
-    ws.write(2, 0, f"Quiz: {quiz.title}", font_style)
-
-    row_num = 3
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)  # at 0 row 0 column
-
-    # Sheet body, remaining rows
-    font_style = xlwt.XFStyle()
-
-    rows = Account.objects.all().values_list("id", "full_name", "email")
-    print(rows)
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws.write(row_num, col_num, row[col_num], font_style)
-
-    wb.save(response)
+    filename = f"Result {request.user.full_name}.xlsx"
+    response = HttpResponse(
+        output,
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+    response["Content-Disposition"] = f"attachment; filename={filename}"
 
     return response
 
