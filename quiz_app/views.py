@@ -60,10 +60,10 @@ context = {}
 
 def quiz(request, quiz_id):
     global context
-    # if context:
-    #     print("Fast Checkout")
-    #     return render(request, "quiz_app/quiz.html", context)
-    # print("DB load")
+    if context:
+        print("Fast Checkout")
+        return render(request, "quiz_app/quiz.html", context)
+    print("DB load")
 
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
     if not quiz.has_started:

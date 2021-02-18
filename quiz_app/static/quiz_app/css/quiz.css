@@ -272,6 +272,7 @@ pre
     #testPage .main-content
     {
         box-shadow: none;
+        overflow-y: inherit;
     }
     #testPage .question
     {
