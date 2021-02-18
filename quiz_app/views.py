@@ -463,3 +463,4 @@ def signup(request):
 
 #     content = "Hello there, " + clean_name + "! It's " + formatted_now
 #     return HttpResponse(content)
+
