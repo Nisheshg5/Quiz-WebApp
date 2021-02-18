@@ -287,7 +287,7 @@
 						csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
 					},
 					success:function(success) {
-						window.location.pathname = `{{ url 'quiz_result' quiz.quiz_id}}`;
+						window.location.pathname = `{% url 'quiz_result' quiz.quiz_id %}`;
 					},
 					error:function(error) {
 						Swal.close();

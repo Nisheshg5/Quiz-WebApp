@@ -3,6 +3,7 @@ import random
 from json import JSONEncoder
 from uuid import UUID
 
+import xlwt
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.core import serializers
@@ -21,7 +22,7 @@ from django.views import generic
 from verify_email.email_handler import send_verification_email
 
 from .forms import QuizForm, QuizPasswordForm, SignUpForm
-from .models import Question, Quiz, QuizTakers, Response
+from .models import Account, Question, Quiz, QuizTakers, Response
 
 old_default = JSONEncoder.default
 
@@ -204,6 +205,51 @@ def quiz_result(request, quiz_id):
     }
 
     return render(request, "quiz_app/quiz_result.html", context)
+
+
+def export_result(request, quiz_id):
+    quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
+    quizTaker = get_object_or_404(QuizTakers, quiz_id=quiz_id, user_id=request.user.pk)
+    queryset = quizTaker.response_set.all().order_by("question_id")
+
+    response = HttpResponse(content_type="application/ms-excel")
+    response["Content-Disposition"] = 'attachment; filename="Result.xls"'
+
+    wb = xlwt.Workbook(encoding="utf-8")
+    ws = wb.add_sheet("Result Data")  # this will make a sheet named Users Data
+
+    # Sheet header, first row
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = [
+        "ID",
+        "Full Name",
+        "Email Address",
+    ]
+
+    ws.write(0, 0, request.user.full_name, font_style)
+    ws.write(1, 0, request.user.email, font_style)
+    ws.write(2, 0, f"Quiz: {quiz.title}", font_style)
+
+    row_num = 3
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)  # at 0 row 0 column
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+    rows = Account.objects.all().values_list("id", "full_name", "email")
+    print(rows)
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+
+    return response
 
 
 def quiz_upcoming(request, quiz_id):
