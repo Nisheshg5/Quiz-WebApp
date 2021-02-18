@@ -12,25 +12,9 @@ Home page
 		<form class="quiz_form" action="" method="GET" id="codeForm">
 			{{ quizForm.quiz_id.label }}
 			{{ quizForm.quiz_id }}
-			{% comment %} {{ quizIdForm.hidden_tag() }}
-			{{ quizIdForm.quiz_id(class="form-control form-control-lg") }}
-			{{ quizIdForm.submitBtn(class="btn") }} {% endcomment %}
 			<input type="submit" class="btn">
 		</form>
 	</div>
 
 </div>
-<!-- <script>
-	let myForm = document.getElementById("codeForm")
-	myForm.addEventListener("submit", function (e) {
-		e.preventDefault();
-		let quiz_id = document.getElementById("quiz_id").value;
-		if (isNaN(parseInt(quiz_id))) {
-			alert("Invalid Quiz Id");
-			return false;
-		}
-		myForm.setAttribute("action", "/quiz/" + quiz_id);
-		myForm.submit();
-	});
-</script> -->
 {% endblock %}

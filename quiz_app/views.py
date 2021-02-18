@@ -214,20 +214,6 @@ def quiz_instructions(request, quiz_id):
     return render(request, "quiz_app/quiz_instructions.html", context)
 
 
-def about(request):
-    return render(request, "quiz_app/about.html")
-
-
-def contact(request):
-    return render(request, "quiz_app/contact.html")
-
-
-def hello_there(request, name):
-    return render(
-        request, "quiz_app/hello_there.html", {"name": name, "date": datetime.now()}
-    )
-
-
 def signup(request):
     if request.method == "POST":
         form = SignUpForm(request.POST)
@@ -240,21 +226,3 @@ def signup(request):
     else:
         form = SignUpForm()
     return render(request, "registration/signup.html", {"form": form})
-
-
-# def hello_there(request, name):
-#     now = datetime.now()
-#     formatted_now = now.strftime("%A, %d %B, %Y at %X")
-
-#     # Filter the name argument to letters only using regular expressions. URL arguments
-#     # can contain arbitrary text, so we restrict to safe characters only.
-#     match_object = re.match("[a-zA-Z]+", name)
-
-#     if match_object:
-#         clean_name = match_object.group(0)
-#     else:
-#         clean_name = "Friend"
-
-#     content = "Hello there, " + clean_name + "! It's " + formatted_now
-#     return HttpResponse(content)
-

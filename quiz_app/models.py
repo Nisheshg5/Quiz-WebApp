@@ -239,13 +239,3 @@ class Response(models.Model):
             "quiztaker",
             "question",
         ]
-
-
-# @receiver(pre_save, sender=Response)
-# def set_response(sender, instance, *args, **kwargs):
-#     print(instance)
-#     if instance.answer != "" and instance.answer == instance.question.correct:
-#         instance.isCorrect = True
-#     if instance.isCorrect and instance.marks == 0:
-#         instance.marks = instance.question.marks
-

@@ -79,51 +79,6 @@
 	{% endif %}
 	{% endfor %}
 	{% endif %}
-
-	{% comment %} {% with messages = get_flashed_messages(with_categories=true) %}
-	{% if messages %}
-	{% for category, error in messages %}
-	{% if category == 'validation' %}
-	{% for field, errors in error %}
-	<script>
-		Swal.fire({
-			icon: 'error',
-			title: 'Error',
-			html: '{{ field }}: {{ ", ".join(errors) }}',
-			position: 'top',
-			timerProgressBar: true,
-			showConfirmButton: false,
-			timer: 1500
-		});
-	</script>
-	{% endfor %}
-	{% elif category == 'success' %}
-	<script>
-		Swal.fire({
-			icon: 'success',
-			html: '{{ "<br>".join(error) | safe}}',
-			position: 'top',
-			timerProgressBar: true,
-			showConfirmButton: false,
-			timer: 1500
-		});
-	</script>
-	{% else %}
-	<script>
-		Swal.fire({
-			icon: '{{ category }}',
-			title: 'Error',
-			html: '{{ ", ".join(error) }}',
-			position: 'top',
-			timerProgressBar: true,
-			showConfirmButton: false,
-			timer: 1500
-		});
-	</script>
-	{% endif %}
-	{% endfor %}
-	{% endif %}
-	{% endwith %} {% endcomment %}
 </body>
 
 </html>
