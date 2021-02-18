@@ -1,8 +1,8 @@
 from django.contrib import messages
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse
 from django.http.response import JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
 from django.template.loader import render_to_string
 from django.utils import timezone
 
@@ -48,13 +48,25 @@ def completed(request):
         }
         msg_plain = render_to_string("email/test_confirmation.txt", context)
         msg_html = render_to_string("email/test_confirmation.html", context)
-        send_mail(
+        email = EmailMultiAlternatives(
             "Test submitted successfully",
             msg_plain,
             "webmaster@localhost",
             [request.user.email],
-            html_message=msg_html,
         )
+        email.attach_alternative(msg_html, "text/html")
+
+        responses = (
+            quizTaker.response_set.select_related("question")
+            .all()
+            .order_by("question_id")[::1]
+        )
+        filename = f"Result {request.user.full_name}.xlsx"
+        output = generate_result_as_excel(request, quizTaker.quiz, quizTaker, responses)
+        email.attach(
+            filename, content=output.read(), mimetype="application/vnd.ms-excel"
+        )
+        email.send()
     return JsonResponse({"success": "Quiz successfully saved"})
 
 
