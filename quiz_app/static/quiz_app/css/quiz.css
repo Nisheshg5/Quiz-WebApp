@@ -171,7 +171,7 @@ pre
     color:inherit;
     font-family: inherit;
     white-space: pre-wrap;
-  word-break: keep-all
+    word-break: keep-all
 }
 
 #testPage p#q-title {
@@ -244,6 +244,19 @@ pre
 }
 
 @media(max-width:768px) {
+    .main
+    {
+        margin: 20px auto;
+        padding-left:0;
+    }
+    #testPage .main-content
+    {
+        box-shadow: none;
+    }
+    #testPage .question
+    {
+        grid-template-columns: 90% 10%;
+    }
     #testPage label {
         width: 100%;
 
