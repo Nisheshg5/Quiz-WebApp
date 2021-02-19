@@ -4,6 +4,7 @@ from json import JSONEncoder
 from uuid import UUID
 
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from django.db.models import F
 from django.forms.models import model_to_dict
 from django.http.response import HttpResponse
@@ -28,28 +29,49 @@ JSONEncoder.default = new_default
 
 
 def home(request):
-    key = request.GET.get("key")
-    if key:
-        try:
-            quiz = Quiz.objects.filter(key=key).first()
-            if quiz:
-                if not quiz.has_started:
-                    return redirect("quiz_upcoming", quiz_id=quiz.pk)
-                elif not quiz.has_ended:
-                    return redirect("quiz_started", quiz_id=quiz.pk)
-                else:
-                    return redirect("quiz_ended", quiz_id=quiz.pk)
+    quizForm = QuizForm(request.POST or None)
+    if request.user.is_authenticated:
+        quizForm.fields.pop("email")
+        quizForm.fields.pop("password")
+    context = {"quizForm": quizForm}
 
+    if request.method == "POST":
+        key = request.POST.get("key", None)
+        if not request.user.is_authenticated:
+            user = authenticate(
+                request,
+                email=request.POST.get("email", ""),
+                password=request.POST.get("password", ""),
+            )
+            print(user)
+            if not user:
+                messages.error(request, "Invalid Email Or Password")
+                return render(request, "quiz_app/home.html", context)
+            elif not user.is_active:
+                messages.error(request, "Please Confirm Your Email First")
+                return render(request, "quiz_app/home.html", context)
             else:
-                messages.error(request, "No Quiz Found For Given ID")
+                login(request, user)
+        if key:
+            try:
+                quiz = Quiz.objects.filter(key=key).first()
+                if quiz:
+                    messages.success(request, "Successfully Logged In")
+                    if not quiz.has_started:
+                        return redirect("quiz_upcoming", quiz_id=quiz.pk)
+                    elif not quiz.has_ended:
+                        return redirect("quiz_started", quiz_id=quiz.pk)
+                    else:
+                        return redirect("quiz_ended", quiz_id=quiz.pk)
+
+                else:
+                    messages.error(request, "No Quiz Found For Given ID")
+                    return redirect("home")
+
+            except ValueError:
+                messages.error(request, "Invalid Id")
                 return redirect("home")
 
-        except ValueError:
-            messages.error(request, "Invalid Id")
-            return redirect("home")
-
-    quizForm = QuizForm()
-    context = {"quizForm": quizForm}
     return render(request, "quiz_app/home.html", context)
 
 

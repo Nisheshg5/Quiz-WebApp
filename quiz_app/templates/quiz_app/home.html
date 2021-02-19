@@ -8,8 +8,15 @@ Home page
 	<div class="home_div_content">
 		<h2>Welcome</h2>
 		<br>
+		{% if not request.user.is_authenticated %}
+		<h5>Please Enter Login Credentials and the Quiz Code:</h5>
+		{% else %}
 		<h5>Please Enter the Quiz Code:</h5>
-		<form class="quiz_form" action="" method="GET" id="codeForm">
+		{% endif %}
+		<form class="quiz_form" action="" method="POST" id="codeForm">
+			{% csrf_token %}
+			{{ quizForm.email }}
+			{{ quizForm.password }}
 			{{ quizForm.key }}
 			<input type="submit" class="btn">
 		</form>

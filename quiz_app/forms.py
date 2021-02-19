@@ -7,8 +7,27 @@ from .models import Account, Quiz
 
 
 class QuizForm(forms.Form):
+    email = forms.CharField(
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control form-control-lg",
+                "placeholder": "Enter Email",
+            }
+        ),
+    )
+    password = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "form-control form-control-lg",
+                "placeholder": "Enter Password",
+            }
+        ),
+    )
     key = forms.CharField(
         max_length=8,
+        required=True,
         widget=forms.TextInput(
             attrs={
                 "class": "form-control form-control-lg",

@@ -93,6 +93,18 @@
 			timer: 3000
 		});
 	</script>
+	{% elif 'success' in message.tags %}
+	<script>
+		Swal.fire({
+			icon: 'success',
+			html: '{{ message }}',
+			position: 'top-right',
+			toast: true,
+			timerProgressBar: true,
+			showConfirmButton: false,
+			timer: 1500
+		});
+	</script>
 	{% endif %}
 	{% endfor %}
 	{% endif %}
