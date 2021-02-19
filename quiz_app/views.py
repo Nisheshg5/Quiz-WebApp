@@ -27,7 +27,6 @@ def new_default(self, obj):
 JSONEncoder.default = new_default
 
 
-
 def home(request):
     quiz_id = request.GET.get("quiz_id")
     if quiz_id:
@@ -228,21 +227,4 @@ def signup(request):
     else:
         form = SignUpForm()
     return render(request, "registration/signup.html", {"form": form})
-
-
-def quiz_report(request, quiz_id):
-    quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
-    context = {
-        "quiz": quiz,
-        "opts": "quiz_app.quiz",
-        "app_label": "quiz_app",
-        "change": True,
-        "add": False,
-        "is_popup": False,
-        "save_as": False,
-        "has_delete_permission": False,
-        "has_add_permission": False,
-        "has_change_permission": True,
-    }
-    return render(request, "admin/quiz_report.html", context)
 

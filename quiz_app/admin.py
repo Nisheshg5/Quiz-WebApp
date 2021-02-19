@@ -6,7 +6,10 @@ from django.db import models
 from django.forms import Textarea
 from django.forms.models import model_to_dict
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
+from django.template import RequestContext
+from django.template.response import TemplateResponse
+from django.urls import path
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from import_export import resources
@@ -101,6 +104,36 @@ class QuizAdmin(admin.ModelAdmin):
             if db_field.name == "title":
                 field.widget.attrs["cols"] = 40
             return field
+
+    def get_urls(self):
+        urls = super(QuizAdmin, self).get_urls()
+        my_urls = [
+            path(
+                "<quiz_id>/report/",
+                self.admin_site.admin_view(self.quiz_report),
+                name="quiz_report",
+            ),
+        ]
+        return my_urls + urls
+
+    def quiz_report(self, request, quiz_id):
+        context = dict(
+            self.admin_site.each_context(request),
+            title="Report",
+            quiz=self.get_object(request, quiz_id),
+            opts=self.model._meta,
+            app_label=self.model._meta.app_label,
+            change=True,
+            add=False,
+            is_popup=False,
+            save_as=False,
+            has_delete_permission=False,
+            has_add_permission=False,
+            has_change_permission=True,
+            has_view_permission=True,
+            has_editable_inline_admin_formsets=True,
+        )
+        return TemplateResponse(request, "admin/quiz_report.html", context)
 
     def get_action_choices(self, request):
         choices = super(QuizAdmin, self).get_action_choices(request)
