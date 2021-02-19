@@ -27,6 +27,7 @@ def new_default(self, obj):
 JSONEncoder.default = new_default
 
 
+
 def home(request):
     quiz_id = request.GET.get("quiz_id")
     if quiz_id:
