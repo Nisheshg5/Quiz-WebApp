@@ -89,7 +89,7 @@ class QuizAdmin(admin.ModelAdmin):
 
         def question_number(self, obj):
             self.question_numbering += 1
-            return f"Q{self.question_numbering:2}"
+            return f"{self.question_numbering:2}"
 
         question_number.short_description = "#"
 
@@ -144,7 +144,7 @@ class QuizAdmin(admin.ModelAdmin):
         "quiz_id",
         "title",
         "instructions",
-        "password",
+        "key",
         "start_date",
         "end_date",
         "duration",

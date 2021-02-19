@@ -28,20 +28,17 @@ JSONEncoder.default = new_default
 
 
 def home(request):
-    quiz_id = request.GET.get("quiz_id")
-    if quiz_id:
+    key = request.GET.get("key")
+    if key:
         try:
-            val = UUID(quiz_id).version
-            if val != 4:
-                raise ValueError(0)
-            quiz = Quiz.objects.filter(pk=quiz_id).first()
+            quiz = Quiz.objects.filter(key=key).first()
             if quiz:
                 if not quiz.has_started:
-                    return redirect("quiz_upcoming", quiz_id=quiz_id)
+                    return redirect("quiz_upcoming", quiz_id=quiz.pk)
                 elif not quiz.has_ended:
-                    return redirect("quiz_started", quiz_id=quiz_id)
+                    return redirect("quiz_started", quiz_id=quiz.pk)
                 else:
-                    return redirect("quiz_ended", quiz_id=quiz_id)
+                    return redirect("quiz_ended", quiz_id=quiz.pk)
 
             else:
                 messages.error(request, "No Quiz Found For Given ID")
@@ -171,11 +168,11 @@ def quiz_started(request, quiz_id):
     if quiz.has_ended:
         return redirect("quiz_ended", quiz_id=quiz_id)
 
-    form = QuizPasswordForm(request.POST or None)
+    form = QuizPasswordForm(request.POST or None, instance=quiz)
 
     if request.method == "POST":
         if form.is_valid() and Quiz.objects.filter(
-            pk=quiz_id, password=request.POST.get("password")
+            pk=quiz_id, key=request.POST.get("key")
         ):
             if request.user.is_authenticated:
                 QuizTakers.objects.get_or_create(quiz=quiz, user=request.user)

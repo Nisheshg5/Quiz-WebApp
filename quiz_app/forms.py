@@ -7,13 +7,13 @@ from .models import Account, Quiz
 
 
 class QuizForm(forms.Form):
-    quiz_id = forms.CharField(
-        max_length=36,
+    key = forms.CharField(
+        max_length=8,
         widget=forms.TextInput(
             attrs={
                 "class": "form-control form-control-lg",
-                "placeholder": "Enter Quiz Code",
-                "value": "24cf6d26-655d-4fe3-a377-3c8b55a3ba00",
+                "placeholder": "XXXXXX",
+                "style": "text-transform:uppercase",
             }
         ),
     )
@@ -25,16 +25,20 @@ class QuizForm(forms.Form):
 
 
 class QuizPasswordForm(forms.ModelForm):
-    password = forms.CharField(
-        max_length=32,
-        widget=forms.PasswordInput(
-            attrs={"autocomplete": "new-password", "value": "password"}
+    key = forms.CharField(
+        max_length=8,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control form-control-lg",
+                "placeholder": "XXXXXX",
+                "style": "text-transform:uppercase",
+            }
         ),
     )
 
     class Meta:
         model = Quiz
-        fields = ["password"]
+        fields = ["key"]
 
 
 class SignUpForm(UserCreationForm):

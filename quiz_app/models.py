@@ -1,7 +1,10 @@
+import random
+import string
 from datetime import datetime, timedelta
 from uuid import uuid4
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.core.validators import MinLengthValidator
 from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
@@ -69,10 +72,19 @@ class Quiz(models.Model):
     def default_end_datetime():
         return datetime.utcnow() + timedelta(hours=6)
 
+    def random_code():
+        return "".join(random.choices(string.ascii_uppercase + string.digits, k=6))
+
     quiz_id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     title = models.CharField(max_length=30, blank=False, null=False)
     instructions = models.TextField(default="Instructions here")
-    password = models.CharField(max_length=120)
+    description = models.TextField(default="Description here")
+    key = models.CharField(
+        unique=True,
+        max_length=8,
+        validators=[MinLengthValidator(6)],
+        default=random_code,
+    )
     start_date = models.DateTimeField(
         verbose_name="start time", default=default_start_datetime
     )
@@ -83,6 +95,7 @@ class Quiz(models.Model):
     isShuffle = models.BooleanField(default=True)
     allow_backtracking = models.BooleanField(default=True)
     isProctered = models.BooleanField(default=True)
+    showResults = models.BooleanField(default=True)
     max_suspicion_count = models.IntegerField(default=999)
     created_at = models.DateTimeField(auto_now_add=True)
 
