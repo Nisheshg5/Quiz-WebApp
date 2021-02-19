@@ -70,7 +70,44 @@
 
 	{% if messages %}
 	{% for message in messages %}
-	{% if 'error' in message.tags%}
+	{% if 'email_verification' in message.tags%}
+	<script>
+		Swal.fire({
+			icon: 'info',
+			title: 'Email Not Verified',
+			html: '{{ message|safe }}',
+			position: 'center',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$.ajax({
+					type: "POST",
+					url: '{% url "send_verification_email" %}',
+					data: {
+						email: $("#id_email").val(),
+						password: $("#id_password").val(),
+						csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
+					},
+					success:function(success) {
+						Swal.fire({
+							toast: true,
+							position: 'top-end',
+							icon: 'success',
+							html: `Email Sent`,
+							animation: true,
+							timer: 1000,
+							timerProgressBar: true,
+							showConfirmButton: false,
+						});
+						window.location.pathname = `{% url 'home' %}`;
+					},
+				});
+			}
+		});
+	</script>
+	{% elif 'error' in message.tags%}
 	<script>
 		Swal.fire({
 			icon: 'error',

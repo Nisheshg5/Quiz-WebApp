@@ -29,11 +29,11 @@ JSONEncoder.default = new_default
 
 
 def home(request):
-    quizForm = QuizForm(request.POST or None)
+    form = QuizForm(request.POST or None)
     if request.user.is_authenticated:
-        quizForm.fields.pop("email")
-        quizForm.fields.pop("password")
-    context = {"quizForm": quizForm}
+        form.fields.pop("email")
+        form.fields.pop("password")
+    context = {"quizForm": form}
 
     if request.method == "POST":
         key = request.POST.get("key", None)
@@ -43,12 +43,15 @@ def home(request):
                 email=request.POST.get("email", ""),
                 password=request.POST.get("password", ""),
             )
-            print(user)
             if not user:
                 messages.error(request, "Invalid Email Or Password")
                 return render(request, "quiz_app/home.html", context)
             elif not user.is_active:
-                messages.error(request, "Please Confirm Your Email First")
+                messages.error(
+                    request,
+                    "Do You Want to send the verification email again?",
+                    extra_tags="email_verification",
+                )
                 return render(request, "quiz_app/home.html", context)
             else:
                 login(request, user)

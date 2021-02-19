@@ -1,14 +1,22 @@
 import random
 import string
+from base64 import urlsafe_b64encode
 from datetime import datetime, timedelta
+from smtplib import SMTPException
 from uuid import uuid4
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import BadHeaderError, EmailMultiAlternatives, send_mail
 from django.core.validators import MinLengthValidator
 from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+from django.template.loader import render_to_string
 from django.utils import timezone
+from django.utils.html import strip_tags
+from verify_email.app_configurations import GetFieldFromSettings
+from verify_email.email_handler import _VerifyEmail
 
 
 class AccountManager(BaseUserManager):
@@ -60,6 +68,40 @@ class Account(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
+
+    class VerifyEmail(_VerifyEmail):
+        def send_verification_link(self, request, user):
+            try:
+                useremail = user.email
+                verification_url = self.__make_verification_url(
+                    request, user, useremail
+                )
+                subject = self.settings.get("subject")
+                msg = render_to_string(
+                    self.settings.get("html_message_template", raise_exception=True),
+                    {"link": verification_url},
+                )
+
+                try:
+                    send_mail(
+                        subject,
+                        strip_tags(msg),
+                        from_email=self.settings.get("from_alias"),
+                        recipient_list=[useremail],
+                        html_message=msg,
+                    )
+                    return user
+                except (BadHeaderError, SMTPException):
+                    # user.delete()
+                    return False
+
+            except Exception as error:
+                # user.delete()
+                if self.settings.get("debug_settings"):
+                    raise Exception(error)
+
+    def verify_email(self, request):
+        return Account.VerifyEmail().send_verification_link(request, self)
 
     class Meta:
         db_table = "account"

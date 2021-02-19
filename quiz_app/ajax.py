@@ -1,13 +1,18 @@
+from smtplib import SMTPException
+
 from django.contrib import messages
-from django.core.mail import EmailMultiAlternatives
+from django.contrib.auth import authenticate
+from django.core.mail import BadHeaderError, EmailMultiAlternatives, send_mail
 from django.http import HttpResponse
 from django.http.response import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.template.loader import render_to_string
 from django.utils import timezone
+from django.utils.html import strip_tags
+from verify_email.email_handler import _VerifyEmail
 
 from .excel import generate_result_as_excel
-from .models import Question, Quiz, QuizTakers, Response
+from .models import Account, Question, Quiz, QuizTakers, Response
 
 
 def saveResponse(request):
@@ -91,3 +96,15 @@ def export_result(request, quiz_id):
     response["Content-Disposition"] = f"attachment; filename={filename}"
 
     return response
+
+
+def send_verification_email(request, user=None):
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        user = authenticate(request, email=email, password=password)
+    if user and user.verify_email(request):
+        return JsonResponse({"success": "Quiz successfully saved"})
+    else:
+        jsonResponse = JsonResponse({"error": "Email Could Not Be Sent"})
+        jsonResponse.status_code = 400
