@@ -36,6 +36,44 @@ Login
 
 {% for field, errors in form.errors.items %}
 {% for error in errors %}
+{% if "This account is inactive." in error %}
+<script>
+Swal.fire({
+			icon: 'info',
+			title: 'Email Not Verified',
+			html: 'Do You Want to send the verification email again?',
+			position: 'center',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$.ajax({
+					type: "POST",
+					url: '{% url "send_verification_email" %}',
+					data: {
+						email: $("#id_username").val(),
+						password: $("#id_password").val(),
+						csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
+					},
+					success:function(success) {
+						Swal.fire({
+							toast: true,
+							position: 'top-end',
+							icon: 'success',
+							html: `Email Sent`,
+							animation: true,
+							timer: 1000,
+							timerProgressBar: true,
+							showConfirmButton: false,
+						});
+						window.location.pathname = `{% url 'home' %}`;
+					},
+				});
+			}
+		});
+</script>
+{% else %}
 <script>
     Swal.fire({
         icon: 'warning',
@@ -46,6 +84,7 @@ Login
         timer: 3000
     });
 </script>
+{% endif %}
 {%endfor %}
 {%endfor %}
 {% endblock %}
