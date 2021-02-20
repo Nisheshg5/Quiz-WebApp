@@ -13,13 +13,14 @@
 			<h1 class="text-center">Instructions</h1>
 			<ol class="instruction-list mx-auto my-0">
 				{% for instruction in quiz.instructions.splitlines %}
-					<li>{{ instruction }}</li>
+				<li>{{ instruction }}</li>
 				{% endfor %}
 			</ol>
 		</div>
 		<div class="col-12 col-md-5 my-5 d-flex justify-content-center align-content-center" style="height: 100%;">
-			<form class="" style="min-width:250px; width:fit-content">
-				<a class="start_test" href="{% url 'quiz' quiz.quiz_id%}" id="test-start-btn">Start Test</a>
+			<form method="POST" class="" style="min-width:250px; width:fit-content">
+				{% csrf_token %}
+				<input type="submit" class="start_test" value="Submit">
 			</form>
 		</div>
 	</div>

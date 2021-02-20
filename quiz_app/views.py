@@ -56,11 +56,11 @@ def home(request):
                 return render(request, "quiz_app/home.html", context)
             else:
                 login(request, user)
+                messages.success(request, "Successfully Logged In")
         if key:
             try:
                 quiz = Quiz.objects.filter(key=key).first()
                 if quiz:
-                    messages.success(request, "Successfully Logged In")
                     if not quiz.has_started:
                         return redirect("quiz_upcoming", quiz_id=quiz.pk)
                     elif not quiz.has_ended:
@@ -195,13 +195,6 @@ def quiz_started(request, quiz_id):
     if quiz.has_ended:
         return redirect("quiz_ended", quiz_id=quiz_id)
 
-    if request.method == "POST":
-        if request.user.is_authenticated:
-            QuizTakers.objects.get_or_create(quiz=quiz, user=request.user)
-            return redirect("quiz_instructions", quiz_id=quiz_id)
-        else:
-            return redirect("login")
-
     context = {"quiz": quiz}
     return render(request, "quiz_app/quiz_started.html", context)
 
@@ -220,13 +213,17 @@ def quiz_ended(request, quiz_id):
 @login_required
 def quiz_instructions(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
+    quizTaker = QuizTakers.objects.get_or_create(quiz=quiz, user=request.user)[0]
     if not quiz.has_started:
         return redirect("quiz_upcoming", quiz_id=quiz_id)
-    if quiz.has_ended:
+    if quiz.has_ended and not quizTaker.started:
         return redirect("quiz_ended", quiz_id=quiz_id)
-
-    if not request.user.is_authenticated:
-        return redirect("login")
+    if quizTaker.completed:
+        return redirect("quiz_result", quiz_id=quiz_id)
+    if quizTaker.started:
+        return redirect("quiz", quiz_id=quiz_id)
+    if request.method == "POST":
+        return redirect("quiz", quiz_id=quiz_id)
 
     context = {"quiz": quiz}
     return render(request, "quiz_app/quiz_instructions.html", context)
