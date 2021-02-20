@@ -42,19 +42,6 @@ class QuizForm(forms.Form):
     #         'quiz_id'
     #     ]
 
-
-class QuizPasswordForm(forms.ModelForm):
-    key = forms.CharField(
-        max_length=8,
-        widget=forms.TextInput(
-            attrs={
-                "class": "form-control form-control-lg",
-                "placeholder": "XXXXXX",
-                "style": "text-transform:uppercase",
-            }
-        ),
-    )
-
     class Meta:
         model = Quiz
         fields = ["key"]

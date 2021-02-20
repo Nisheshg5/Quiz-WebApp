@@ -15,8 +15,6 @@
 			<form class="quiz_pwd_form" method="POST" style="min-width:250px; width:fit-content">
 				{% if user.is_authenticated %}
 				{% csrf_token %}
-				<h3>Enter {{form.key.label}}</h3>
-				<input class="form-control" name="key" type="text" required>
 				<input type="submit" class="btn btn-sm" value="Submit">
 				{% else %}
 				<h1><a href="{% url 'login' %}">Please Login to continue</a></h1>

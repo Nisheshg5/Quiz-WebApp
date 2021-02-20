@@ -5,6 +5,7 @@ from uuid import UUID
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.db.models import F
 from django.forms.models import model_to_dict
 from django.http.response import HttpResponse
@@ -13,7 +14,7 @@ from django.utils import timezone
 from django.utils.timezone import datetime
 from verify_email.email_handler import send_verification_email
 
-from .forms import QuizForm, QuizPasswordForm, SignUpForm
+from .forms import QuizForm, SignUpForm
 from .models import Quiz, QuizTakers, Response
 
 old_default = JSONEncoder.default
@@ -81,6 +82,7 @@ def home(request):
 context = {}
 
 
+@login_required
 def quiz(request, quiz_id):
     global context
     if context:
@@ -181,11 +183,11 @@ def quiz_upcoming(request, quiz_id):
     if quiz.has_started:
         return redirect("quiz_started", quiz_id=quiz_id)
 
-    form = QuizPasswordForm(request.POST or None)
-    context = {"quiz": quiz, "form": form}
+    context = {"quiz": quiz}
     return render(request, "quiz_app/quiz_upcoming.html", context)
 
 
+@login_required
 def quiz_started(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
     if not quiz.has_started:
@@ -193,21 +195,14 @@ def quiz_started(request, quiz_id):
     if quiz.has_ended:
         return redirect("quiz_ended", quiz_id=quiz_id)
 
-    form = QuizPasswordForm(request.POST or None, instance=quiz)
-
     if request.method == "POST":
-        if form.is_valid() and Quiz.objects.filter(
-            pk=quiz_id, key=request.POST.get("key")
-        ):
-            if request.user.is_authenticated:
-                QuizTakers.objects.get_or_create(quiz=quiz, user=request.user)
-                return redirect("quiz_instructions", quiz_id=quiz_id)
-            else:
-                return redirect("login")
+        if request.user.is_authenticated:
+            QuizTakers.objects.get_or_create(quiz=quiz, user=request.user)
+            return redirect("quiz_instructions", quiz_id=quiz_id)
         else:
-            messages.error(request, "Wrong Password")
+            return redirect("login")
 
-    context = {"quiz": quiz, "form": form}
+    context = {"quiz": quiz}
     return render(request, "quiz_app/quiz_started.html", context)
 
 
@@ -218,11 +213,11 @@ def quiz_ended(request, quiz_id):
     if not quiz.has_ended:
         return redirect("quiz_started", quiz_id=quiz_id)
 
-    form = QuizPasswordForm(request.POST or None)
-    context = {"quiz": quiz, "form": form}
+    context = {"quiz": quiz}
     return render(request, "quiz_app/quiz_ended.html", context)
 
 
+@login_required
 def quiz_instructions(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
     if not quiz.has_started:
