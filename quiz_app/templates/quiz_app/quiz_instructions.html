@@ -20,7 +20,7 @@
 		<div class="col-12 col-md-5 my-5 d-flex justify-content-center align-content-center" style="height: 100%;">
 			<form method="POST" class="" style="min-width:250px; width:fit-content">
 				{% csrf_token %}
-				<input type="submit" class="start_test" value="Submit">
+				<input id="start" type="submit" class="start_test" value="Start Test">
 			</form>
 		</div>
 	</div>
@@ -28,8 +28,62 @@
 </div>
 <script>
 	let quiz_id = `{{ quiz.quiz_id}}`;
-	console.log(quiz_id);
-	let testStartBtn = document.getElementById("test-start-btn");
+	let form = $("form");
+	
+	form.on("submit", function(e) {
+		e.preventDefault();
+
+		extra = {};
+		{% for extra in quiz.extra.splitlines %}
+		extra["{{extra}}"] = ("")
+		{% endfor %}
+		const keys = Object.keys(extra);
+		const length = keys.length;
+
+		const steps = Array.from(new Array(length), (x, i) => i + 1);
+		const swalQueueStep = Swal.mixin({
+			confirmButtonText: 'Forward',
+			allowOutsideClick: false,
+			allowEscapeKey: false,
+			cancelButtonText: 'Back',
+			progressSteps: steps,
+			input: 'text',
+			inputAttributes: {
+				required: true
+			},
+			reverseButtons: true,
+			validationMessage: 'This field is required'
+		})
+
+		const values = []
+		let currentStep
+		(async () => {
+		for (currentStep = 0; currentStep < length;) {
+			const result = await swalQueueStep.fire({
+				title: `Enter ${keys[currentStep]}`,
+				inputValue: extra[keys[currentStep]],
+				showCancelButton: currentStep > 0,
+				currentProgressStep: currentStep
+			})
+
+			if (result.value) {
+				extra[keys[currentStep]] = result.value
+				currentStep++
+			} else if (result.dismiss === Swal.DismissReason.cancel) {
+				currentStep--
+			} else {
+				break
+			}
+		}
+
+		if (currentStep === steps.length) {
+			Swal.fire(JSON.stringify(extra))
+		}
+		})()
+	})
+
+
+	{% comment %} let testStartBtn = document.getElementById("test-start-btn");
 	testStartBtn.addEventListener("click", function(e){
 		e.preventDefault();
 		console.log("button clicked");
@@ -60,7 +114,7 @@
 		} else if (elem.msRequestFullscreen) { /* IE11 */
 			elem.msRequestFullscreen();
 		}
-	}
+	} {% endcomment %}
 </script>
 
 {% endblock %}
