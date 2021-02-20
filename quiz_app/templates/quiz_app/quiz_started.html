@@ -8,17 +8,18 @@
 
 <div class="quiz-started">
 	<div class="row inner">
-		<div class="col-12 col-md-6 d-flex">
-			<h1 class="mx-auto">Quiz Has Started</h1>
+		<div class="col-12 col-md-7 instructions">
+			<h1 class="text-center">{{ quiz.title }}</h1>
+			<div class="mx-auto my-0" style="padding: 0 20px;">
+				{% for desc in quiz.description.splitlines %}
+				{{ desc }} <br>
+				{% endfor %}
+			</div>
 		</div>
-		<div class="col-12 col-md-6">
-			<form class="quiz_pwd_form" method="POST" style="min-width:250px; width:fit-content">
-				{% if user.is_authenticated %}
+		<div class="col-12 col-md-5 my-5 d-flex justify-content-center align-content-center" style="height: 100%;">
+			<form class="" style="min-width:250px; width:fit-content">
 				{% csrf_token %}
-				<input type="submit" class="btn btn-sm" value="Submit">
-				{% else %}
-				<h1><a href="{% url 'login' %}">Please Login to continue</a></h1>
-				{% endif %}
+				<a class="start_test" href="{% url 'quiz_instructions' quiz.quiz_id%}" id="test-start-btn">Continue</a>
 			</form>
 		</div>
 	</div>

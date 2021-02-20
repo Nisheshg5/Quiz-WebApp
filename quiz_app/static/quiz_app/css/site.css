@@ -80,8 +80,7 @@ body::before {
     transform: translate(-50%, -50%);
 }
 
-.quiz_form input[type='text'],
-.quiz_pwd_form input[type='text'] {
+.quiz_form input[type='text'] {
     margin-top: 50px;
     margin-bottom: 30px;
     padding: 10px 20px 10px 20px;
@@ -96,7 +95,6 @@ body::before {
 }
 
 .quiz_form input[type='submit'],
-.quiz_pwd_form input[type='submit'],
 .start_test {
     text-align: center;
     padding: 1em 3em;
@@ -175,15 +173,6 @@ body::before {
 }
 
 
-.quiz_pwd_form {
-    background: rgba(0, 0, 0, 0.3);
-    position: relative;
-    color: #fff;
-    margin: 0 auto;
-    padding: 40px 30px;
-    width: 60%;
-    border-radius: 8px;
-}
 
 @font-face {
     font-family: "password-mask";
