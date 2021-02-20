@@ -127,6 +127,7 @@ class Quiz(models.Model):
         validators=[MinLengthValidator(6)],
         default=random_code,
     )
+    extra = models.TextField(default="Roll No")
     start_date = models.DateTimeField(
         verbose_name="start time", default=default_start_datetime
     )
@@ -246,6 +247,7 @@ class Question(models.Model):
 class QuizTakers(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    extra = models.TextField(blank=True, null=True)
     started = models.DateTimeField(blank=True, null=True)
     completed = models.DateTimeField(blank=True, null=True)
     suspicion_count = models.IntegerField(default=0)
@@ -269,6 +271,11 @@ class QuizTakers(models.Model):
         db_table = "QuizTaker"
         app_label = "quiz_app"
         verbose_name_plural = "QuizTakers"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["quiz", "user"], name="Unique Quiz Taker"
+            ),
+        ]
         ordering = [
             "quiz",
             "user",

@@ -145,6 +145,7 @@ class QuizAdmin(admin.ModelAdmin):
         "title",
         "instructions",
         "key",
+        "extra",
         "start_date",
         "end_date",
         "duration",
@@ -304,6 +305,7 @@ class QuizTakersAdmin(admin.ModelAdmin):
     list_display = (
         "quiz",
         "user",
+        "extra",
         "started",
         "completed",
         "suspicion_count",
