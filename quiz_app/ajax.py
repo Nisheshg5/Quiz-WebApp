@@ -1,3 +1,4 @@
+import json
 from smtplib import SMTPException
 
 from django.contrib import messages
@@ -108,3 +109,17 @@ def send_verification_email(request, user=None):
     else:
         jsonResponse = JsonResponse({"error": "Email Could Not Be Sent"})
         jsonResponse.status_code = 400
+
+
+def save_extra(request):
+    if request.method == "POST":
+        extra = request.POST.get("extra")
+        # extra = json.loads(extra)
+        quiz_id = request.POST.get("quiz")
+        quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
+        quizTaker = QuizTakers.objects.get_or_create(quiz=quiz, user=request.user)[0]
+        quizTaker.extra = extra
+        quizTaker.save()
+        return JsonResponse({"success": "Extra Information saved successfully"})
+    jsonResponse = JsonResponse({"error": "Extra Information Could Not Be Saved"})
+    jsonResponse.status_code = 400

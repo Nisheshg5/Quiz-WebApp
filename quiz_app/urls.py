@@ -11,8 +11,13 @@ urlpatterns = [
     path("quiz/started/<quiz_id>", views.quiz_started, name="quiz_started"),
     path("quiz/ended/<quiz_id>", views.quiz_ended, name="quiz_ended"),
     path("quiz/inst/<quiz_id>", views.quiz_instructions, name="quiz_instructions"),
+    path("quiz/inst/save_extra/", ajax.save_extra, name="save_extra"),
     path("quiz/response/save/", ajax.saveResponse, name="save_response"),
     path("quiz/completed/", ajax.completed, name="completed"),
-    path("send_verification_email/", ajax.send_verification_email, name="send_verification_email"),
+    path(
+        "send_verification_email/",
+        ajax.send_verification_email,
+        name="send_verification_email",
+    ),
     path("signup/", views.signup, name="signup"),
 ]
