@@ -1,8 +1,12 @@
+import json
+from collections import Counter
+
 from django.contrib import admin, messages
 from django.contrib.admin import SimpleListFilter
 from django.contrib.auth.admin import UserAdmin
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Count, F, Sum
 from django.forms import Textarea
 from django.forms.models import model_to_dict
 from django.http import HttpResponseRedirect
@@ -16,10 +20,9 @@ from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 from import_export.fields import Field
 from import_export.formats import base_formats
-from django.db.models import Sum, Count
+
 from .forms import SignUpForm
 from .models import Account, Question, Question_bank, Quiz, QuizTakers, Response
-from django.db.models import F
 
 
 class AccountAdmin(UserAdmin):
@@ -128,12 +131,13 @@ class QuizAdmin(admin.ModelAdmin):
             .annotate(marks_obtained=Sum("response__marks"))
         )
         marks = [i[1] for i in marks]
+        marks = dict(Counter(marks))
 
         context = dict(
             self.admin_site.each_context(request),
             title="Report",
             quiz=quiz,
-            marks=marks,
+            marks=json.dumps(marks),
             totalMarks=totalMarks,
             opts=self.model._meta,
             app_label=self.model._meta.app_label,

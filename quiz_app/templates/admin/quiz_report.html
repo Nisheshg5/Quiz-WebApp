@@ -2,6 +2,20 @@
 {% load i18n admin_urls %}
 
 
+
+{% block extrahead %}
+{{ block.super }}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css" />
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+{% endblock %}
+
+
+
 {% if not is_popup %}
 {% block breadcrumbs %}
 <div class="breadcrumbs">
@@ -19,7 +33,66 @@
 {% if title %}
 <h1>Report For Quiz {{ original.title }}</h1>
 {% endif %}
+<br>
+Max Marks: {{ totalMarks }}
+<br>
+<span id="sNo">Total Students: {{ totalMarks }}</span>
+<canvas id="myChart" width="400" height="100"></canvas>
+<script>
+	marks = JSON.parse(`{{ marks|safe }}`);
+	maxMarks = {{totalMarks}}
+	var totalStudents = 0;
+	var labels = [...Array(maxMarks+1).keys()];
+	var data = new Array(maxMarks).fill(0);
+	var backgroundColor = new Array(maxMarks).fill('rgba(255, 99, 132, 0.2)');
+	var borderColor = new Array(maxMarks).fill('rgba(255,99,132,1)');
+	for (const [key, value] of Object.entries(marks)) {
+		data[key] = value;
+		totalStudents += value;
+		if(key/maxMarks >= 0.33) {
+			backgroundColor[key] = 'rgba(75, 192, 192, 0.2)';
+			borderColor[key] = 'rgba(75, 192, 192, 1)';
+		}
+	}
+	var ctx = $("#myChart").get(0).getContext("2d");
+	var config = {
+		type: 'bar',
+		data: {
+			labels: labels,
+			datasets: [{
+				label: 'No Of Students',
+				data: data,
+				backgroundColor: backgroundColor,
+				borderColor: borderColor,
+				borderWidth: 1,
+			}]
+		},
+		options: {
+			scales: {
+				xAxes: [{
+					scaleLabel: {
+						display: true,
+						labelString: 'Marks'
+					}
+				}],
+				yAxes: [{
+					scaleLabel: {
+						display: true,
+						labelString: 'No Of Students'
+					}
+				}],
+			}
+			}
+	};
+	var chart = new Chart(ctx, config);
+	$("#sNo").html(`Total Students: ${totalStudents}`);
+</script>
 {% endblock %}
 
-{% block object-tools-items %}
-{% endblock %}
+
+
+{% block object-tools-items %}{% endblock %}
+
+
+
+{% block submit_buttons_bottom %}{% endblock %}
