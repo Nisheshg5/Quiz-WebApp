@@ -125,12 +125,17 @@
 </div>
 
 <script>
-    let responses, questions, quizTaker, quiz;
+    let responses = [], response = {}, quizTaker, quiz;
 
-    responses = {{ responses|safe }};
-    questions = {{ questions | safe}};
-    // quiz = {{ quiz | safe}};
-    // quizTaker = {{ quizTaker|safe }};
+    {% for r in responses %}
+    response = {"question":{
+        "title": `{{ r.question.title|safe }}`,
+    },
+    "isCorrect": `{{ r.isCorrect|safe }}`};
+    responses.push(response);
+    console.log(`{{ r.question.title|safe }}`);
+    {% endfor %}
+    console.log(responses);
 
 </script>
 

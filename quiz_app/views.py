@@ -6,6 +6,7 @@ from uuid import UUID
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.core import serializers
 from django.db.models import F
 from django.forms.models import model_to_dict
 from django.http.response import HttpResponse
@@ -174,16 +175,10 @@ def quiz_result(request, quiz_id):
     queryset = (
         quizTaker.response_set.select_related("question").all().order_by("question_id")
     )
-    questions = []
-    responses = []
-    for response in queryset:
-        questions.append(model_to_dict(response.question))
-        responses.append(model_to_dict(response))
 
     context = {
         "quiz": quiz,
-        "questions": questions, 
-        "responses": responses,
+        "responses": queryset[::1],
         "quizTaker": quizTaker,
     }
 
