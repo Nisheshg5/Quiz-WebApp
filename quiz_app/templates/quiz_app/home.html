@@ -4,23 +4,24 @@ Home page
 {% endblock %}
 
 {% block content %}
-<div class="home_div">
-	<div class="home_div_content">
-		<h2>Welcome</h2>
-		<br>
-		{% if not request.user.is_authenticated %}
-		<h5>Please Enter Login Credentials and the Quiz Code:</h5>
-		{% else %}
-		<h5>Please Enter the Quiz Code:</h5>
-		{% endif %}
-		<form class="quiz_form" action="" method="POST" id="codeForm">
-			{% csrf_token %}
-			{{ quizForm.email }}
-			{{ quizForm.password }}
-			{{ quizForm.key }}
-			<input type="submit" class="btn">
-		</form>
+<div class="container-fluid" id="home">
+	<div class="home_div row justify-content-center">
+		<div class="home_div_content col-12 col-md-5 my-4">
+			<h2>Welcome</h2>
+			<br>
+			{% if not request.user.is_authenticated %}
+			<h5>Please Enter Login Credentials and the Quiz Code:</h5>
+			{% else %}
+			<h5>Please Enter the Quiz Code:</h5>
+			{% endif %}
+			<form class="quiz_form" action="" method="POST" id="codeForm">
+				{% csrf_token %}
+				{{ quizForm.email }}
+				{{ quizForm.password }}
+				{{ quizForm.key }}
+				<input type="submit" class="btn">
+			</form>
+		</div>
 	</div>
-
 </div>
 {% endblock %}

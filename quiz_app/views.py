@@ -18,14 +18,15 @@ from verify_email.email_handler import send_verification_email
 from .forms import QuizForm, SignUpForm
 from .models import Quiz, QuizTakers, Response
 
-old_default = JSONEncoder.default
 
+# For setting the UUID field to string
+# To pass that field to json object
+old_default = JSONEncoder.default
 
 def new_default(self, obj):
     if isinstance(obj, UUID):
         return str(obj)
     return old_default(self, obj)
-
 
 JSONEncoder.default = new_default
 
@@ -91,8 +92,8 @@ def quiz(request, quiz_id):
     #     print("Fast Checkout")
     #     return render(request, "quiz_app/quiz.html", context)
 
-    # if(len(quiz_id)==0):
-    #     return redirect("home")
+
+    # print("DB Load")
 
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
     if not quiz.has_started:

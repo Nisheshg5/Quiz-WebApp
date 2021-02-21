@@ -16,59 +16,67 @@
         <div class="row justify-content-center">
             <div class="col-6 col-md-3 d-flex align-items-center justify-content-center">Your Score: </div>
             <div class="col-6 col-md-3">
-                <span class="score">84</span>/100 <span class="res text-success">Passed</span>
+                <span class="score" id="score">84</span>/<span id="total">100</span> <span class="res" id="status">Passed</span>
             </div>
         </div>
         <div class="row justify-content-center">
             <div class="col-6 col-md-3">Attempted: </div>
             <div class="col-6 col-md-3">
                 <div class="progress">
-                    <div class="progress-bar" style="width:100%">100</div>
+                    <div class="progress-bar" style="width:0%" id="attempted">100</div>
                 </div>
             </div>
         </div>
         <div class="row justify-content-center">
             <div class="col-6 col-md-3">Correct: </div>
-            <div class="col-3 col-md-3">
+            <div class="col-6 col-md-3">
                 <div class="progress">
-                    <div class="progress-bar bg-success" style="width:84%">84</div>
+                    <div class="progress-bar bg-success" style="width:0%" id="correct">84</div>
                 </div>
             </div>
         </div>
         <div class="row justify-content-center">
             <div class="col-6 col-md-3">Incorrect: </div>
-            <div class="col-3 col-md-3">
+            <div class="col-6 col-md-3">
                 <div class="progress">
-                    <div class="progress-bar bg-danger" style="width:16%">16</div>
+                    <div class="progress-bar bg-danger" style="width:0%" id="incorrect">16</div>
                 </div>
             </div>
         </div>
         <div class="row justify-content-center">
             <div class="col-6 col-md-3">Accuracy: </div>
-            <div class="col-3 col-md-3">
+            <div class="col-6 col-md-3">
                 <div class="progress">
-                    <div class="progress-bar bg-dark" style="width:84%">84 Percent</div>
+                    <div class="progress-bar bg-dark" style="width:0%" id="accuracy">84 Percent</div>
                 </div>
             </div>
         </div>
         <div class="row justify-content-center">
             <div class="col-6 col-md-3">Reports: </div>
-            <div class="col-3 col-md-3 text-left">
-                <a id="" class="btn btn-info btn-sm" href="{% url 'export_result' quiz.quiz_id %}" role="button">
-                    <i class="fa fa-file-excel-o"></i> 
+            <div class="col-6 col-md-3 text-left">
+                <a id="" class="btn btn-info btn-sm" style="white-space: normal" href="{% url 'export_result' quiz.quiz_id %}" role="button">
+                    <i class="fa fa-file-excel-o mr-2"></i>  
                     Download Detailed Report
                 </a>
             </div>
         </div>
         <div class="row justify-content-center mt-4">
-            <button class="btn btn-primary mr-3" data-toggle="collapse" data-target="#report-table">View Questions</button>
-            <a class="btn btn-info" href="{% url 'home' %}">Click Here to Continue</a>
+            <button class="btn btn-primary mx-3" data-toggle="collapse" data-target="#report-table">View Questions</button>
+            <a class="btn btn-info mt-1 mt-md-0" href="{% url 'home' %}">Click Here to Continue</a>
         </div>
     </div>
 
-    <div class="description container mt-4 px-0 table-responsive-md collapseee" id="report-table">
-        <table class="table table-bordered table-striped table-hover table-dark">
+    <div class="description container my-4 px-0 table-responsive-md collapse" id="report-table">
+        <table class="table">
             <thead>
+                <tr>
+                    <th>S. No</th>
+                    <th>Question</th>
+                    <th>Your Answer</th>
+                    <th>Correct Answer</th>
+                </tr>
+            </thead>
+            <tbody>
                 {% for response in responses %}
                     <tr class="{% if response.isCorrect %}bg-success{%else%} bg-danger {%endif%}">
                         <td>{{forloop.counter}}</td>
@@ -88,26 +96,58 @@
             {{ responses.0.marks }}<br> -->
 
         </table>
-    </div>
-
-    {{ responses }}
-    
-    
+    </div>    
 </div>
 
+
 <script>
-    let responses = [], response = {}, quizTaker, quiz;
+    let responses = [], response = {}, quizTaker, quiz, attempted = 0, totalQuestions, totalMarks = 0, marks=0, correct = 0, incorrect = 0, accuracy, len, percentage;
+    let score = document.getElementById("score");
+    let total = document.getElementById("total");
+    let attemptBar = document.getElementById("attempted");
+    let correctBar = document.getElementById("correct");
+    let incorrectBar = document.getElementById("incorrect");
+    let accuracyBar = document.getElementById("accuracy");
+    let status = document.getElementById("status");
 
+
+    totalQuestions = {{ responses | length }}
     {% for r in responses %}
-    response = {"question":{
-        "title": `{{ r.question.title|safe }}`,
-    },
-    "isCorrect": `{{ r.isCorrect|safe }}`};
-    responses.push(response);
-    console.log(`{{ r.question.title|safe }}`);
-    {% endfor %}
-    console.log(responses);
+        len = {{ r.answer | length }};
+        marks += {{ r.marks }};
+        totalMarks += {{ r.question.marks }};
 
+        {% if r.isCorrect %}
+            correct += 1;
+            attempted += 1;
+        {% elif not r.answer %}
+            incorrect += 1;
+            attempted += 1;
+        {% endif %}
+    {% endfor %}
+
+    function init(){
+        score.innerText = marks;
+        total.innerText = totalMarks;
+        attemptBar.innerHTML = attempted + "/" + totalQuestions;
+        attemptBar.style.width = (attempted/totalQuestions)*100 + '%';
+        correctBar.innerHTML = correct;
+        correctBar.style.width = (correct/totalQuestions)*100 + '%';
+        incorrectBar.innerHTML = incorrect;
+        incorrectBar.style.width = (incorrect/totalQuestions)*100 + '%';
+        accuracy = (correct/attempted)*100;
+        accuracyBar.innerHTML = accuracy.toFixed(2) + '%';
+        accuracyBar.style.width = accuracy + '%';
+        percentage = (marks/totalMarks)*100;
+        if(percentage >= 33.3){
+            status.innerText = "Passed";
+            status.classList.add("text-success");
+        }else{
+            status.innerText = "Failed";
+            status.classList.add("text-danger");
+        }
+    }
+    init();
 </script>
 
 {% endblock %}
