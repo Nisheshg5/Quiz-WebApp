@@ -54,7 +54,18 @@ body::before {
 {
     box-shadow: 2px 5px 10px 10px rgba(0, 0, 0, 0.2);
 }
+
+#quiz_result .description .table
+{
+    color:#fff;
+    margin-bottom: 0;
+}
 #quiz_result .description thead tr
 {
     background: #6b1c89;
+}
+#quiz_result .description tr th,
+#quiz_result .description tr td
+{
+    vertical-align: middle;
 }
