@@ -181,7 +181,7 @@ def quiz_result(request, quiz_id):
     context = {
         "quiz": quiz,
         "questions": json.dumps(questions),
-        "responses": responses,
+        "responses": json.dumps(responses),
         "quizTaker": quizTaker,
     }
 

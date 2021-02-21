@@ -1,7 +1,6 @@
 * {
     margin: 0;
     padding: 0;
-    color: #fff;
 }
 
 body {
@@ -13,6 +12,7 @@ body {
     overflow-x: hidden;
     width: 100vw;
     position: relative;
+    color:#fff;
 }
 
 body::before {
