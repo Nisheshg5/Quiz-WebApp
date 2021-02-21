@@ -126,7 +126,7 @@ def quiz(request, quiz_id):
             for response in queryset:
                 questions.append(model_to_dict(response.question, exclude=["correct"]))
                 responses.append(
-                    model_to_dict(response, exclude=["isCorrect", "marks"])
+                    model_to_dict(response, exclude=["id", "isCorrect", "marks"])
                 )
         else:
             quizTaker.started = timezone.now()
@@ -134,13 +134,15 @@ def quiz(request, quiz_id):
             shuffledQuestions = quiz.question_set.all()[::1]
             random.shuffle(shuffledQuestions)
 
+            responseList = []
             for question in shuffledQuestions:
                 response = Response(quiztaker=quizTaker, question=question, answer="")
-                response.save()
+                responseList.append(response)
                 questions.append(model_to_dict(question, exclude=["correct"]))
                 responses.append(
-                    model_to_dict(response, exclude=["isCorrect", "marks"])
+                    model_to_dict(response, exclude=["id", "isCorrect", "marks"])
                 )
+            Response.objects.bulk_create(responseList)
     else:
         return redirect("quiz_started", quiz_id=quiz_id)
     shuffle = quiz.isShuffle
