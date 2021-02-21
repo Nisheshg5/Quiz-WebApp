@@ -1,4 +1,6 @@
 import io
+import json
+
 import xlsxwriter
 from django.utils.timezone import datetime
 
@@ -13,7 +15,7 @@ def generate_result_as_excel(request, quiz, quizTaker, responses):
     worksheet.set_column("D:H", 20)
     worksheet.set_column("J:K", 30)
 
-    bold_format = workbook.add_format({"bold": True})
+    bold_format = workbook.add_format({"bold": True, "text_wrap": True,})
     bold_y_format = workbook.add_format({"bold": True, "top": 1, "bottom": 1,})
     green_format = workbook.add_format(
         {"bg_color": "#C6EFCE", "font_color": "#006100", "text_wrap": "true",}
@@ -36,7 +38,7 @@ def generate_result_as_excel(request, quiz, quizTaker, responses):
         }
     )
     red_format = workbook.add_format(
-        {"bg_color": "#FFC7CE", "font_color": "#9C0006", "text_wrap": "true",}
+        {"bg_color": "#FFC7CE", "font_color": "#9C0006", "text_wrap": True,}
     )
     red_y_format = workbook.add_format(
         {
@@ -65,8 +67,23 @@ def generate_result_as_excel(request, quiz, quizTaker, responses):
     )
     rNo += 1
     worksheet.merge_range(f"A{rNo}:B{rNo}", f"Quiz: {quiz.title}", bold_format)
+    rNo += 1
+    worksheet.merge_range(f"A{rNo}:B{rNo}", "")
+    rNo += 1
+    descLength = len(quiz.description.split("\n"))
+    worksheet.merge_range(
+        f"A{rNo}:B{rNo + descLength - 1}", f"{quiz.description}", bold_format
+    )
 
-    rNo += 2
+    rNo += descLength + 1
+
+    extra = json.loads(quizTaker.extra)
+    for key, value in extra.items():
+        worksheet.write(f"A{rNo}", f"{key}:", bold_format)
+        worksheet.write(f"B{rNo}", f"{value}", bold_format)
+        rNo += 1
+
+    rNo += 1
     started = datetime.strftime(quizTaker.started, "%Y-%m-%d %H:%M:%S")
     worksheet.write(f"A{rNo}", "Started At:", bold_format)
     worksheet.write(f"B{rNo}", f"{started}", bold_format)
