@@ -7,70 +7,119 @@
 {% block content %}
 <div id="quiz_result" class="container-fluid">
     <div class="row mt-2">
-        <div class="col-12 text-center">
-            <h1>Quiz Result</h1>
-        </div>
-        <div class="col-12 text-center">
+        <div class="container text-center shadow">
+            <h2>Quiz Result</h2>
             <h1>Full Stack ST-1</h1>
         </div>
     </div>
-    <div class="row">
-        <div class="col-12 col-md-12 text-center">
-            <div class="row">
-                <div class="col-6">Your Score: </div>
-                <div class="col-3">
-                    <span class="score">84</span>/100 <span class="res">Passed</span>
-                </div>
+    <div class="content text-center container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-6 col-md-3 d-flex align-items-center justify-content-center">Your Score: </div>
+            <div class="col-6 col-md-3">
+                <span class="score">84</span>/100 <span class="res text-success">Passed</span>
             </div>
-            <div class="row">
-                <div class="col-6">Attempted</div>
-                <div class="col-3">
-                    <div class="progress" style="height:20px">
-                        <div class="progress-bar" style="width:100%;height:20px">100</div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6">Correct</div>
-                <div class="col-3">
-                    <div class="progress" style="height:20px">
-                        <div class="progress-bar bg-success" style="width:84%;height:20px">84</div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6">Incorrect</div>
-                <div class="col-3">
-                    <div class="progress" style="height:20px">
-                        <div class="progress-bar bg-danger" style="width:16%;height:20px">16</div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6">Accuracy</div>
-                <div class="col-3">
-                    <div class="progress" style="height:20px">
-                        <div class="progress-bar bg-dark" style="width:84%;height:20px">84 Percent</div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6">Reports</div>
-                <div class="col-3">
-                    <a id="" class="btn btn-info btn-sm" href="{% url 'export_result' quiz.quiz_id %}" role="button">
-                        <i class="fa fa-file-excel-o"></i> 
-                        Download Detailed Report
-                    </a>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-6 col-md-3">Attempted: </div>
+            <div class="col-6 col-md-3">
+                <div class="progress">
+                    <div class="progress-bar" style="width:100%">100</div>
                 </div>
             </div>
         </div>
-        <div class="col-12 col-md-6">
-
+        <div class="row justify-content-center">
+            <div class="col-6 col-md-3">Correct: </div>
+            <div class="col-3 col-md-3">
+                <div class="progress">
+                    <div class="progress-bar bg-success" style="width:84%">84</div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-6 col-md-3">Incorrect: </div>
+            <div class="col-3 col-md-3">
+                <div class="progress">
+                    <div class="progress-bar bg-danger" style="width:16%">16</div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-6 col-md-3">Accuracy: </div>
+            <div class="col-3 col-md-3">
+                <div class="progress">
+                    <div class="progress-bar bg-dark" style="width:84%">84 Percent</div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-6 col-md-3">Reports: </div>
+            <div class="col-3 col-md-3 text-left">
+                <a id="" class="btn btn-info btn-sm" href="{% url 'export_result' quiz.quiz_id %}" role="button">
+                    <i class="fa fa-file-excel-o"></i> 
+                    Download Detailed Report
+                </a>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-4">
+            <button class="btn btn-primary mr-3" data-toggle="collapse" data-target="#report-table">View Questions</button>
+            <a class="btn btn-info" href="{% url 'home' %}">Click Here to Continue</a>
         </div>
     </div>
-    
 
+    <div class="description container mt-4 px-0 table-responsive-md collapse" id="report-table">
+        <table class="table table-bordered table-striped table-hover table-dark">
+            <thead>
+                <tr>
+                    <th>S. No</th>
+                    <th>Question</th>
+                    <th>Your answer</th>
+                    <th>Correct Answer</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>John</td>
+                    <td>Doe</td>
+                    <td>john@example.com</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Mary</td>
+                    <td>Moe</td>
+                    <td>mary@example.com</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>July</td>
+                    <td>Dooley</td>
+                    <td>july@example.com</td>
+                </tr>
+                {% for response in responses %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{response}}</td>
+                        <td>{{response.answer}}</td>
+                        <td>{{response.question.correct}}</td>
+                    </tr>
+                {% endfor %}
 
+                {% for question in questions %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ question }}</td>
+                        {%with index=forloop.counter0%}
+                            <td>{{ responses.index }}</td>
+                        {%endwith%}
+                        <td>{{ question.correct }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            {{ responses.0.answer }}
+        </table>
+    </div>
+
+    {{ responses }}
     
     
 </div>

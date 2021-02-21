@@ -152,8 +152,10 @@ def quiz(request, quiz_id):
     }
     return render(request, "quiz_app/quiz.html", context)
 
+
 def quiz_view(request):
     return redirect("home")
+
 
 def quiz_result(request, quiz_id):
     global context
@@ -180,8 +182,8 @@ def quiz_result(request, quiz_id):
 
     context = {
         "quiz": quiz,
-        "questions": json.dumps(questions),
-        "responses": json.dumps(responses),
+        "questions": questions, 
+        "responses": responses,
         "quizTaker": quizTaker,
     }
 
