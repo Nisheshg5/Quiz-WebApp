@@ -1,20 +1,16 @@
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body
 {
     background: rgb(210, 210, 210);
+    overflow-x: hidden;
 }
 
-body::before {
-    content: "";
-    position: fixed;
-    display: block;
-    z-index: -1;
-    top: 0;
-    width: 100vw;
-    height: 100vh;
-    background: none;
-    background-size: cover;
-    background-repeat: no-repeat;
-}
 .navbar {
     background-color: #6b1c89;
     font-size: 1em;
@@ -26,6 +22,15 @@ body::before {
 #quiz_result
 {
     color: #000;
+    min-height: calc(100vh - 70px - 70px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+#quiz_result div:nth-child(1)
+{
+    width:100%;
 }
 .shadow
 {
@@ -69,7 +74,8 @@ body::before {
 {
     vertical-align: middle;
 }
-.footer {
+.footer
+{
     height: 70px;
     background: #6b1c89;
     width: 100%;
