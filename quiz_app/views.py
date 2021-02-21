@@ -84,11 +84,14 @@ context = {}
 
 @login_required
 def quiz(request, quiz_id):
-    global context
-    if context:
-        print("Fast Checkout")
-        return render(request, "quiz_app/quiz.html", context)
-    print("DB load")
+
+    # global context
+    # if context:
+    #     print("Fast Checkout")
+    #     return render(request, "quiz_app/quiz.html", context)
+
+    if(len(quiz_id)==0):
+        return redirect("home")
 
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
     if not quiz.has_started:
@@ -149,6 +152,8 @@ def quiz(request, quiz_id):
     }
     return render(request, "quiz_app/quiz.html", context)
 
+def quiz_view(request):
+    return redirect("home")
 
 def quiz_result(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
