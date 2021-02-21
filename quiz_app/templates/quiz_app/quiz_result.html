@@ -1,11 +1,29 @@
-{% extends "quiz_app/base_test.html" %}
+{% extends "quiz_app/layout.html" %}
 
 {% block title %}
 {{ quiz.title | title }} - Results
 {% endblock %}
 
 {% block content %}
+<div id="quiz_result">
+    <h1>Quiz Result Page</h1>
+    <a name="" id="" class="btn btn-primary" href="{% url 'export_result' quiz.quiz_id %}" role="button">Download Result</a>
+    {{ quiz }}
+    <br><br>
+    <!-- {{ questions }} -->
+    <br><br>
+    {{ quizTaker }}
+    <br><br>
+    {{ responses }}
+    <br><br>
+</div>
 
-<h1>Quiz Result Page</h1>
-<a name="" id="" class="btn btn-primary" href="{% url 'export_result' quiz.quiz_id %}" role="button">Download Result</a>
+<script>
+    let responses, questions;
+
+    responses = {{ responses|safe }};
+    questions = {{ questions | safe}};
+
+</script>
+
 {% endblock %}

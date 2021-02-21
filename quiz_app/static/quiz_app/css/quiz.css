@@ -11,7 +11,6 @@
 
 body {
     background: rgb(210, 210, 210);
-    /* background: #6b1c89; */
     overflow-x: hidden;
     width: 100vw;
     position: relative;
@@ -52,8 +51,6 @@ body {
     top:0;
     max-height: 70px;
     width:100vw;
-    /* display: flex;
-    justify-content: space-between;  */
 }
 .nav-quiz .navbar-text
 {
@@ -85,9 +82,9 @@ body {
     color: #8337d2;
 }
 
-.btn-purple:hover,
-.btn-purple:active,
-.btn-purple:focus {
+#testPage .btn-purple:hover,
+#testPage .btn-purple:active,
+#testPage .btn-purple:focus {
     background: #863dd4;
     border-color: #863dd4;
     box-shadow: rgb(131 55 210 / 25%);
@@ -103,7 +100,7 @@ body {
 {
     height:calc(100vh - 70px);
 }
-.sidebar
+#testPage .sidebar
 {
     box-shadow: 2px 5px 10px 10px rgba(0, 0, 0, 0.2) inset;
     padding:20px 15px;    
@@ -116,15 +113,15 @@ body {
     padding-right: 0;   /* removing the padding of col*/
     padding-left: 0;
 }
-.circle-wrap
+#testPage .circle-wrap
 {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     
 }
-.circle-wrap .circle,
-.circle-wrap .circle.unattempt
+#testPage .circle-wrap .circle,
+#testPage .circle-wrap .circle.unattempt
 {
     background: #eee;
     list-style: none;
@@ -140,17 +137,18 @@ body {
     color: #6b1c89;
     font-weight: bold;
 }
-.circle-wrap .circle.attempt
+#testPage .circle-wrap .circle.attempt
 {
     background:#28a745;
     color: #eee;
 }
-.circle-wrap .circle.mark
+#testPage .circle-wrap .circle.mark
 {
     border:3px solid #6b1c89;
 }
 
-#testPage .main-content {
+#testPage .main-content 
+{
     box-shadow: 2px 5px 10px 10px rgba(0, 0, 0, 0.2);
     padding: 40px;
     width:100%;
@@ -161,13 +159,14 @@ body {
 }
 
 
-#testPage .question {
+#testPage .question 
+{
     display: grid;
     grid-template-columns: 90% minmax(80px, 20%);
     width: 100%;
 }
 
-pre
+#testPage pre
 {
     margin-bottom: inherit;
     font-size: 100%;
@@ -177,7 +176,8 @@ pre
     word-break: keep-all
 }
 
-#testPage p#q-title {
+#testPage p#q-title 
+{
     font-size: 20px;
 }
 #testPage .fa.fa-bookmark,
@@ -186,15 +186,18 @@ pre
     font-size:20px !important;
     color:#6b1c89 !important;
 }
-#testPage input[type="radio"] {
+#testPage input[type="radio"] 
+{
     -webkit-appearance: none;
 }
 
-#testPage #opForm .option {
+#testPage #opForm .option 
+{
     display: flex;
 }
 
-#testPage label {
+#testPage label 
+{
     width: 80%;
     border: 2px solid #000;
     position: relative;
@@ -212,7 +215,8 @@ pre
     align-items: center;
 }
 
-#testPage input[type="radio"]:checked+label {
+#testPage input[type="radio"]:checked+label
+{
     background: #6b1c89 !important;
     color: #fff;
     box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
@@ -221,7 +225,8 @@ pre
 
 #testPage #btn-prev,
 #testPage #btn-submit,
-#testPage #btn-next {
+#testPage #btn-next
+{
     background: inherit;
     margin: 5px;
     border: 2px solid #6b1c89;
@@ -231,19 +236,11 @@ pre
 
 #testPage #btn-prev:hover,
 #testPage #btn-submit:hover,
-#testPage #btn-next:hover {
+#testPage #btn-next:hover
+{
     background: #6b1c89;
     border: 2px solid #6b1c89;
     color: #fff;
-}
-
-.footer {
-    left: 0;
-    bottom: 0;
-    margin-top: 100px;
-    width: 100%;
-    color: white;
-    text-align: center;
 }
 
 @media(max-width:768px) {
@@ -264,7 +261,7 @@ pre
         margin:5px;
         font-size:16px;
     }
-    .main
+    #testPage .main
     {
         margin: 20px auto;
         padding-left:0;
@@ -278,7 +275,8 @@ pre
     {
         grid-template-columns: 90% 10%;
     }
-    #testPage label {
+    #testPage label
+    {
         width: 100%;
 
     }

@@ -1,0 +1,21 @@
+body
+{
+    background: rgb(210, 210, 210);
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    display: block;
+    z-index: -1;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: none;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+#quiz_result
+{
+    color: #000;
+}
