@@ -88,8 +88,24 @@ body::before {
     margin-left: 30px;
 }
 
+#home
+{
+    background:url('https://thumbs.dreamstime.com/z/colorful-word-cube-quiz-retro-color-tone-89567708.jpg');
+    min-height: calc(100vh - 70px - 70px);
+    background-repeat: no-repeat;
+    background-size:cover;
+    background-position: center;
+}
+
 .home_div {
-    margin: 50px auto 10px auto;
+    margin: 50px auto 10px auto;    
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.home_div_content {
+    
     padding: 100px;
     background-color: rgba(0, 0, 0, 0.5);
     -webkit-backdrop-filter: blur(5px);
@@ -98,13 +114,6 @@ body::before {
     border-radius: 20px;
     text-align: center;
     color: white;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.home_div_content {
-
 }
 
 .quiz_form input[type='text'] {
@@ -227,9 +236,8 @@ body::before {
 }
 
 .footer {
-    left: 0;
-    bottom: 0;
-    margin-top: 20px;
+    height: 70px;
+    background: 
     width: 100%;
     color: white;
     text-align: center;

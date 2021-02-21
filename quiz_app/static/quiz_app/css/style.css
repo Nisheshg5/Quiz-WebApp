@@ -69,3 +69,12 @@ body::before {
 {
     vertical-align: middle;
 }
+.footer {
+    height: 70px;
+    background: #6b1c89;
+    width: 100%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
