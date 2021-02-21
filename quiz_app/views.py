@@ -166,7 +166,7 @@ def quiz_result(request, quiz_id):
     #     print("Fast Checkout")
     #     return render(request, "quiz_app/quiz_result.html", context)
 
-    print("DB Load")
+    # print("DB Load")
 
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
 

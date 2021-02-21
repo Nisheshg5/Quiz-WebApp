@@ -16,9 +16,10 @@ from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 from import_export.fields import Field
 from import_export.formats import base_formats
-
+from django.db.models import Sum, Count
 from .forms import SignUpForm
 from .models import Account, Question, Question_bank, Quiz, QuizTakers, Response
+from django.db.models import F
 
 
 class AccountAdmin(UserAdmin):
@@ -117,10 +118,23 @@ class QuizAdmin(admin.ModelAdmin):
         return my_urls + urls
 
     def quiz_report(self, request, quiz_id):
+
+        quiz = Quiz.objects.get(quiz_id=quiz_id)
+        totalMarks = quiz.question_set.aggregate(Sum("marks"))["marks__sum"]
+        marks = (
+            QuizTakers.objects.filter(quiz=quiz)
+            .prefetch_related("response_set__marks")
+            .values_list("id")
+            .annotate(marks_obtained=Sum("response__marks"))
+        )
+        marks = [i[1] for i in marks]
+
         context = dict(
             self.admin_site.each_context(request),
             title="Report",
-            quiz=self.get_object(request, quiz_id),
+            quiz=quiz,
+            marks=marks,
+            totalMarks=totalMarks,
             opts=self.model._meta,
             app_label=self.model._meta.app_label,
             change=True,
