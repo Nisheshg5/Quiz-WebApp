@@ -12,6 +12,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
 {% endblock %}
 
 
@@ -36,32 +37,45 @@
 <br>
 Max Marks: {{ totalMarks }}
 <br>
-<span id="sNo">Total Students: {{ totalMarks }}</span>
-<canvas id="myChart" width="400" height="100"></canvas>
+<span id="total">Total Students:</span>
+<canvas id="barChart" width="400" height="100"></canvas>
+<br>
+<br>
+<span id="passed">Students Passed: </span>
+<br>
+<span id="failed">Students Failed:</span>
+<canvas id="pieChart" width="400" height="100"></canvas>
 <script>
 	marks = JSON.parse(`{{ marks|safe }}`);
 	maxMarks = {{totalMarks}}
 	var totalStudents = 0;
-	var labels = [...Array(maxMarks+1).keys()];
-	var data = new Array(maxMarks).fill(0);
+	var passedStudents = 0;
+	var barLabels = [...Array(maxMarks+1).keys()];
+	var barData = new Array(maxMarks).fill(0);
 	var backgroundColor = new Array(maxMarks).fill('rgba(255, 99, 132, 0.2)');
 	var borderColor = new Array(maxMarks).fill('rgba(255,99,132,1)');
 	for (const [key, value] of Object.entries(marks)) {
-		data[key] = value;
+		barData[key] = value;
 		totalStudents += value;
 		if(key/maxMarks >= 0.33) {
+			passedStudents += value;
 			backgroundColor[key] = 'rgba(75, 192, 192, 0.2)';
 			borderColor[key] = 'rgba(75, 192, 192, 1)';
 		}
 	}
-	var ctx = $("#myChart").get(0).getContext("2d");
-	var config = {
+	$("#total").html(`Total Students: ${totalStudents}`);
+	$("#passed").html(`Students Passed: ${passedStudents}`);
+	$("#failed").html(`Students Failed: ${totalStudents - passedStudents}`);
+	var barChart = $("#barChart").get(0).getContext("2d");
+	var pieChart = $("#pieChart").get(0).getContext("2d");
+
+	var barConfig = {
 		type: 'bar',
 		data: {
-			labels: labels,
+			labels: barLabels,
 			datasets: [{
 				label: 'No Of Students',
-				data: data,
+				data: barData,
 				backgroundColor: backgroundColor,
 				borderColor: borderColor,
 				borderWidth: 1,
@@ -84,8 +98,50 @@ Max Marks: {{ totalMarks }}
 			}
 			}
 	};
-	var chart = new Chart(ctx, config);
-	$("#sNo").html(`Total Students: ${totalStudents}`);
+	var barChart = new Chart(barChart, barConfig);
+
+
+
+
+	var pieOptions = {
+		tooltips: {
+			enabled: false
+		},
+		plugins: {
+			datalabels: {
+				formatter: (value, ctx) => {
+					let sum = 0;
+					let dataArr = ctx.chart.data.datasets[0].data;
+					dataArr.map(data => {
+						sum += data;
+					});
+					let percentage = (value*100 / sum).toFixed(2)+"%";
+					return percentage;
+				
+				},
+			color: '#fff',
+			}
+		}
+    };
+
+	var pieConfig = {
+		type: 'pie',
+		data: {
+			labels: [
+				"Passed",
+				"Failed",
+			],
+			datasets: [{
+				data: [passedStudents, totalStudents - passedStudents],
+				backgroundColor: [
+					"#63FF84",
+					"#FF6384",
+				]
+			}]
+		},
+		options: pieOptions
+	}
+	var pieChart = new Chart(pieChart, pieConfig);
 </script>
 {% endblock %}
 
