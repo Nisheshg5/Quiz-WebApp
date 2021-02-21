@@ -180,7 +180,7 @@ def quiz_result(request, quiz_id):
 
     context = {
         "quiz": quiz,
-        "responses": queryset[::1],
+        "responses": queryset,
         "quizTaker": quizTaker,
     }
 
