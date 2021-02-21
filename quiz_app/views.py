@@ -161,12 +161,12 @@ def quiz_view(request):
 
 
 def quiz_result(request, quiz_id):
-    global context
-    if context:
-        print("Fast Checkout")
-        return render(request, "quiz_app/quiz_result.html", context)
+    # global context
+    # if context:
+    #     print("Fast Checkout")
+    #     return render(request, "quiz_app/quiz_result.html", context)
 
-    print("DB Load")
+    # print("DB Load")
 
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
 
