@@ -153,6 +153,7 @@ LOGOUT_REDIRECT_URL = "home"
 # EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 # EMAIL_FILE_PATH = str(BASE_DIR.joinpath("sent_emails"))
 # DataFlair
+HTML_MESSAGE_TEMPLATE = "email/email_verification.html"
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.mailtrap.io"
 EMAIL_USE_TLS = True
