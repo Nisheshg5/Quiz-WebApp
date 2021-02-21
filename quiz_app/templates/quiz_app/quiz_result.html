@@ -66,56 +66,27 @@
         </div>
     </div>
 
-    <div class="description container mt-4 px-0 table-responsive-md collapse" id="report-table">
+    <div class="description container mt-4 px-0 table-responsive-md collapseee" id="report-table">
         <table class="table table-bordered table-striped table-hover table-dark">
             <thead>
-                <tr>
-                    <th>S. No</th>
-                    <th>Question</th>
-                    <th>Your answer</th>
-                    <th>Correct Answer</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>John</td>
-                    <td>Doe</td>
-                    <td>john@example.com</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Mary</td>
-                    <td>Moe</td>
-                    <td>mary@example.com</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>July</td>
-                    <td>Dooley</td>
-                    <td>july@example.com</td>
-                </tr>
                 {% for response in responses %}
-                    <tr>
+                    <tr class="{% if response.isCorrect %}bg-success{%else%} bg-danger {%endif%}">
                         <td>{{forloop.counter}}</td>
-                        <td>{{response}}</td>
+                        <td>{{response.question.title}}</td>
                         <td>{{response.answer}}</td>
                         <td>{{response.question.correct}}</td>
                     </tr>
                 {% endfor %}
 
-                {% for question in questions %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ question }}</td>
-                        {%with index=forloop.counter0%}
-                            <td>{{ responses.index }}</td>
-                        {%endwith%}
-                        <td>{{ question.correct }}</td>
-                    </tr>
-                {% endfor %}
             </tbody>
-            {{ responses.0.answer }}
+            <!-- {{ responses.0.question }}
+            {{ responses.0.question.title }}
+            {{ responses.0.question.correct }}
+            {{ responses.0.question.marks }}
+            {{ responses.0.question.choice_1 }}<br>
+            {{ responses.0.isCorrect }}<br>
+            {{ responses.0.marks }}<br> -->
+
         </table>
     </div>
 
