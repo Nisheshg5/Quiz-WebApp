@@ -15,7 +15,46 @@ body::before {
     background-size: cover;
     background-repeat: no-repeat;
 }
+.navbar {
+    background-color: #6b1c89;
+    font-size: 1em;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: white;
+    z-index: 1;
+    padding: 20px 100px 10px 100px;
+}
 #quiz_result
 {
     color: #000;
+}
+.shadow
+{
+    box-shadow: 2px 5px 10px 10px rgba(0, 0, 0, 0.2);
+}
+#quiz_result .content
+{
+    padding:20px 10px;
+    box-shadow: 2px 5px 10px 10px rgba(0, 0, 0, 0.2);
+}
+#quiz_result .content .row
+{
+    margin:5px  auto;
+    font-weight: bold;
+}
+#quiz_result .content .row .score
+{
+    font-size:30px;
+}
+#quiz_result .content .row .progress,
+#quiz_result .content .row .progress-bar
+{
+    height:25px;
+}
+#quiz_result .description
+{
+    box-shadow: 2px 5px 10px 10px rgba(0, 0, 0, 0.2);
+}
+#quiz_result .description thead tr
+{
+    background: #6b1c89;
 }
