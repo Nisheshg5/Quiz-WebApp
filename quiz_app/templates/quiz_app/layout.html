@@ -38,18 +38,18 @@
 
 				<li class="nav-item">
 					<a class="nav-link" href="{% url 'logout' %}">
-						<i class="fas fa-sign-out-alt"></i> Logout
+						<i class="fa fa-sign-out"></i> Logout
 					</a>
 				</li>
 				{% else %}
 				<li class="nav-item">
 					<a class="nav-link" href="{% url 'signup' %}">
-						<i class="fas fa-user-plus"></i> Sign Up
+						<i class="fa fa-user-plus"></i> Sign Up
 					</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="{% url 'login' %}">
-						<i class="fas fa-sign-in-alt"></i> Login
+						<i class="fa fa-sign-in"></i> Login
 					</a>
 				</li>
 				{% endif %}

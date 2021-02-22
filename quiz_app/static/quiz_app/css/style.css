@@ -19,10 +19,16 @@ body
     z-index: 1;
     padding: 20px 100px 10px 100px;
 }
+#home,
+.quiz-started,
+#quiz_result,
+.container-form
+{
+    min-height: calc(100vh - 70px - 70px);
+}
 #quiz_result
 {
     color: #000;
-    min-height: calc(100vh - 70px - 70px);
     display: flex;
     justify-content: center;
     align-items: center;

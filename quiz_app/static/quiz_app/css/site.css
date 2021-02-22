@@ -91,7 +91,6 @@ body {
 #home
 {
     background:url('https://thumbs.dreamstime.com/z/colorful-word-cube-quiz-retro-color-tone-89567708.jpg');
-    min-height: calc(100vh - 70px - 70px);
     background-repeat: no-repeat;
     background-size:cover;
     background-position: center;
@@ -188,7 +187,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 70px - 70px);
 }
 
 .quiz-upcoming .inner,
