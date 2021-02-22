@@ -2,7 +2,6 @@
 {% load i18n admin_urls %}
 
 
-
 {% block extrahead %}
 {{ block.super }}
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
@@ -13,7 +12,15 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+<style>
+	caption
+	{
+		caption-side: inherit;
+	}
+</style>
 {% endblock %}
+
+
 
 
 
