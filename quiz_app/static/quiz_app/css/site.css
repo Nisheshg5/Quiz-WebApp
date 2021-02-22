@@ -88,48 +88,7 @@ body {
     margin-left: 30px;
 }
 
-#home
-{
-    background:url('https://thumbs.dreamstime.com/z/colorful-word-cube-quiz-retro-color-tone-89567708.jpg');
-    background-repeat: no-repeat;
-    background-size:cover;
-    background-position: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 
-
-.home_div {
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    height:100%;
-    width:100%;
-}
-
-.home_div_content {
-    padding: 60px 50px;
-    background-color: rgba(0, 0, 0, 0.5);
-    -webkit-backdrop-filter: blur(5px);
-    -moz-backdrop-filter: blur(5px);
-    backdrop-filter: blur(5px);
-    border-radius: 20px;
-    text-align: center;
-    color: white;
-}
-
-@media only screen and (max-width: 998px) {
-    #home
-    {
-        background-position: top;
-        background-size:300%;
-    }
-    .home_div_content
-    {
-        padding: 50px 30px;
-    }
-}
 
 .quiz_form input[type='text'] {
     margin-top: 50px;
