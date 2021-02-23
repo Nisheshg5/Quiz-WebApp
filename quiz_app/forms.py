@@ -53,4 +53,5 @@ class SignUpForm(UserCreationForm):
         fields = (
             "full_name",
             "email",
+            "timeZone"
         )

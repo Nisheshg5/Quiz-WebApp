@@ -10,7 +10,11 @@ Profile Page
 			<h2>Welcome {{ request.user.full_name }}</h2>
 			<br>
 			<small>
-
+				{% for quizTaker in quizTakers %}
+				{{ quizTaker }} <br>
+				{{ quizTaker.user }} <br>
+				{{ quizTaker.quiz }}
+				{% endfor %}
 			</small>
 		</div>
 	</div>

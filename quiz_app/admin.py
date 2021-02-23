@@ -91,6 +91,7 @@ class AccountAdmin(UserAdmin):
         "email",
         "date_joined",
         "last_login",
+        "timeZone",
         "is_active",
         "is_admin",
         "is_staff",
@@ -111,7 +112,7 @@ class AccountAdmin(UserAdmin):
     list_filter = (EmptyQuizIDFilter,)
     fieldsets = (
         (None, {"fields": ("email", "password"),}),
-        (_("Personal info"), {"fields": ("full_name",)}),
+        (_("Personal info"), {"fields": ("full_name", "timeZone")}),
         (_("Permissions"), {"fields": ("is_active", "is_staff", "is_superuser",),}),
         (_("Important dates"), {"fields": ("last_login", "date_joined")}),
     )
@@ -223,7 +224,7 @@ class QuizAdmin(admin.ModelAdmin):
         "duration",
         "isShuffle",
         "allow_backtracking",
-        "isProctered",
+        "isProctored",
         "max_suspicion_count",
         "created_at",
     )

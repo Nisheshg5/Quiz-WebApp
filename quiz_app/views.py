@@ -262,6 +262,7 @@ def signup(request):
 
 @login_required
 def profile(request):
-    context = {}
+    quizTakers = QuizTakers.objects.filter(user=request.user).all()
+    context = {"quizTakers": quizTakers}
     return render(request, "registration/profile.html", context)
 

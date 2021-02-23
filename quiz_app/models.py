@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from smtplib import SMTPException
 from uuid import uuid4
 
+import pytz
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import BadHeaderError, EmailMultiAlternatives, send_mail
@@ -48,7 +49,9 @@ class Account(AbstractBaseUser):
     email = models.EmailField(verbose_name="email", max_length=254, unique=True)
     date_joined = models.DateTimeField(verbose_name="date joined", auto_now_add=True)
     last_login = models.DateTimeField(verbose_name="last login", auto_now=True)
-    timeZone = models.CharField(max_length=30, default="UTC")
+    timeZone = models.CharField(
+        max_length=30, default="UTC", choices=[(tz, tz) for tz in pytz.common_timezones]
+    )
     is_active = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
@@ -142,7 +145,7 @@ class Quiz(models.Model):
     duration = models.IntegerField(default=90)
     isShuffle = models.BooleanField(default=True)
     allow_backtracking = models.BooleanField(default=True)
-    isProctered = models.BooleanField(default=True)
+    isProctored = models.BooleanField(default=True)
     showResults = models.BooleanField(default=True)
     max_suspicion_count = models.IntegerField(default=999)
     created_at = models.DateTimeField(auto_now_add=True)
