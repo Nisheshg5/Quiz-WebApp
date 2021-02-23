@@ -270,6 +270,8 @@
 				return false;
 			}
 			saveResponse(activeQueNo, selectAns);
+			if(activeQueNo < totalQues - 1)
+				loadQuestion(questions, ++activeQueNo);
 		});
 	}
 
