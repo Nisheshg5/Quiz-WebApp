@@ -50,7 +50,9 @@ class Account(AbstractBaseUser):
     date_joined = models.DateTimeField(verbose_name="date joined", auto_now_add=True)
     last_login = models.DateTimeField(verbose_name="last login", auto_now=True)
     timeZone = models.CharField(
-        max_length=30, default="UTC", choices=[(tz, tz) for tz in pytz.common_timezones]
+        max_length=30,
+        default="Asia/Kolkata",
+        choices=[(tz, tz) for tz in pytz.common_timezones],
     )
     is_active = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)

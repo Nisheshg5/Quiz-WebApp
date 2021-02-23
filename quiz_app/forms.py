@@ -1,3 +1,4 @@
+import pytz
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
@@ -48,10 +49,12 @@ class QuizForm(forms.Form):
 
 
 class SignUpForm(UserCreationForm):
+    timeZone = forms.ChoiceField(
+        initial="Asia/Kolkata",
+        choices=[(tz, tz) for tz in pytz.common_timezones],
+        widget=forms.Select(attrs={"class": "form-control"}),
+    )
+
     class Meta:
         model = Account
-        fields = (
-            "full_name",
-            "email",
-            "timeZone"
-        )
+        fields = ("full_name", "email", "timeZone")

@@ -15,9 +15,13 @@ SignUp
             <label for={{ field.auto_id }}>
                 {% if field.label == "Username" %} Email {% else %}{{ field.label }}{% endif %}
             </label>
+            {% if 'timeZone' in field.html_name %}
+            {{field}}
+            {% else %}
             <input class="form-control" id="{{ field.id_for_label }}" maxlength="30" name="{{ field.html_name }}"
                 type={% if "password" in field.html_name %} password {% else %} {{ field.type }} {% endif %}
                 autocapitalize="none" required="" />
+            {% endif %}
         </div>
         {% endfor %}
         <div class="form-group">
