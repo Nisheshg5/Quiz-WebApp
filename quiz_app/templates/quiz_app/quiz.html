@@ -6,25 +6,25 @@
 
 {% block content %}
 <div id="testPage-wrapper" class="container-fluid">
-    <div class="row" id="testPage">
-        <div class="sidebar col-md-3">
-            <ul class="circle-wrap" id="circle-wrap">
-                <li class="circle">1</li>
-                <li class="circle">2</li>
-                <li class="circle">3</li>
-                <li class="circle">4</li>
-                <li class="circle">5</li>
-                <li class="circle">1</li>
-                <li class="circle">1</li>
-                <li class="circle">1</li>
-                <li class="circle">1</li>
-                <li class="circle">1</li>
-                <li class="circle">1</li>
-                <li class="circle">1</li>
-            </ul>
-        </div>
-        <div class="col-md-9 main">
-            <div class="main-content">
+	<div class="row" id="testPage">
+		<div class="sidebar col-md-3">
+			<ul class="circle-wrap" id="circle-wrap">
+				<li class="circle">1</li>
+				<li class="circle">2</li>
+				<li class="circle">3</li>
+				<li class="circle">4</li>
+				<li class="circle">5</li>
+				<li class="circle">1</li>
+				<li class="circle">1</li>
+				<li class="circle">1</li>
+				<li class="circle">1</li>
+				<li class="circle">1</li>
+				<li class="circle">1</li>
+				<li class="circle">1</li>
+			</ul>
+		</div>
+		<div class="col-md-9 main">
+			<div class="main-content">
 				<div class="question">
 					<p id="q-title"></p>
 					<p class="p-2">
@@ -59,9 +59,9 @@
 					<button class="btn btn-primary mt-3" id="btn-submit" type="submit">Submit</button>
 					<button class="btn btn-primary mt-3" id="btn-next" type="submit">Next</button>
 				</form>
-            </div>
-        </div>
-    </div>
+			</div>
+		</div>
+	</div>
 </div>
 
 
@@ -119,7 +119,7 @@
 		else
 			nextQueBtn.innerText = "Next";
 
-		qTitle.innerHTML = `<pre>${no+1}. ${question.title}</pre>`;
+		$("#q-title").html($(`<pre />`, {text: `${no+1}. ${question.title}`}));
 		qMarks.innerText = `${(question.marks) > 1 ? 'Marks: ': 'Mark: '} ${question.marks}`;
 		bookmark.innerHTML = `<i class="fa ${(responses[no]["bookmark"])?'fa-bookmark': 'fa-bookmark-o'}" aria-hidden="true"></i>`;
 		loadOptions(question);
