@@ -23,10 +23,12 @@ from .models import Quiz, QuizTakers, Response
 # To pass that field to json object
 old_default = JSONEncoder.default
 
+
 def new_default(self, obj):
     if isinstance(obj, UUID):
         return str(obj)
     return old_default(self, obj)
+
 
 JSONEncoder.default = new_default
 
@@ -91,7 +93,6 @@ def quiz(request, quiz_id):
     # if context:
     #     print("Fast Checkout")
     #     return render(request, "quiz_app/quiz.html", context)
-
 
     # print("DB Load")
 
@@ -225,7 +226,11 @@ def quiz_ended(request, quiz_id):
 @login_required
 def quiz_instructions(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
-    quizTaker = QuizTakers.objects.get_or_create(quiz=quiz, user=request.user)[0]
+    try:
+        quizTaker = QuizTakers.objects.get(quiz=quiz, user=request.user)
+    except QuizTakers.DoesNotExist:
+        messages.warning(request, "You are not authorized to access this test")
+        return redirect("home")
     if not quiz.has_started:
         return redirect("quiz_upcoming", quiz_id=quiz_id)
     if quiz.has_ended and not quizTaker.started:
