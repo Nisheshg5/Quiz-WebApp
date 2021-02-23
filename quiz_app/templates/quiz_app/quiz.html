@@ -91,6 +91,8 @@
 	var bookmarkIcon = document.querySelector("#bookmark .fa");
 	var bookmark = document.getElementById("bookmark");
 	
+	var attempted = $("#attemptedNo");
+
 	function loadQuestion(questions, no){
 		{% if quiz.allow_backtracking %}
 			if(no == 0) {
@@ -221,6 +223,7 @@
 				responses[qNo]["answer"] = selectAns;
 				setupSidebarBtns();
 				submitQueBtn.blur();
+				set_attempted();
 			},
 			error:function(error) {
 				if(error.status == 403 && error.responseJSON.error == "logged out") {
@@ -351,6 +354,21 @@
 		});
 	}
 
+
+	function set_attempted() {
+		let attNo = 0;
+		console.log(responses);
+		responses.forEach(function(response) {
+			console.log(response);
+			if(response["answer"]) {
+				attNo++;
+			}
+		})
+		attempted.text(`${attNo}/${totalQues}`);
+	}
+
+
+
 	function setup_timer(){
 		remaining_time = {{quizTaker.time_remaining}}|0;
 		let show_timer_warning = true;
@@ -464,6 +482,7 @@
 		{% endif %}
 		setupSubmitBtn();
 		setupNextBtn();
+		set_attempted();
 	}
 	init();
 
