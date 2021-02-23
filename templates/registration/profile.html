@@ -1,0 +1,18 @@
+{% extends "quiz_app/layout.html" %}
+{% block title %}
+Profile Page
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid" id="home">
+	<div class="home_div row justify-content-center">
+		<div class="home_div_content col-12 col-md-5 my-4">
+			<h2>Welcome {{ request.user.full_name }}</h2>
+			<br>
+			<small>
+
+			</small>
+		</div>
+	</div>
+</div>
+{% endblock %}

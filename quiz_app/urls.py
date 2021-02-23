@@ -21,4 +21,5 @@ urlpatterns = [
         name="send_verification_email",
     ),
     path("signup/", views.signup, name="signup"),
+    path("profile/", views.profile, name="profile"),
 ]

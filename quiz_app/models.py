@@ -48,6 +48,7 @@ class Account(AbstractBaseUser):
     email = models.EmailField(verbose_name="email", max_length=254, unique=True)
     date_joined = models.DateTimeField(verbose_name="date joined", auto_now_add=True)
     last_login = models.DateTimeField(verbose_name="last login", auto_now=True)
+    timeZone = models.CharField(max_length=30, default="UTC")
     is_active = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
@@ -116,6 +117,10 @@ class Quiz(models.Model):
 
     def random_code():
         return "".join(random.choices(string.ascii_uppercase + string.digits, k=6))
+
+    def save(self, *args, **kwargs):
+        self.key = self.key.upper()
+        return super(Quiz, self).save(*args, **kwargs)
 
     quiz_id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     title = models.CharField(max_length=30, blank=False, null=False)
@@ -272,9 +277,7 @@ class QuizTakers(models.Model):
         app_label = "quiz_app"
         verbose_name_plural = "QuizTakers"
         constraints = [
-            models.UniqueConstraint(
-                fields=["quiz", "user"], name="Unique Quiz Taker"
-            ),
+            models.UniqueConstraint(fields=["quiz", "user"], name="Unique Quiz Taker"),
         ]
         ordering = [
             "quiz",

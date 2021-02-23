@@ -259,3 +259,9 @@ def signup(request):
         form = SignUpForm()
     return render(request, "registration/signup.html", {"form": form})
 
+
+@login_required
+def profile(request):
+    context = {}
+    return render(request, "registration/profile.html", context)
+
