@@ -117,13 +117,15 @@
         marks += {{ r.marks }};
         totalMarks += {{ r.question.marks }};
 
-        {% if r.isCorrect %}
-            correct += 1;
-            attempted += 1;
-        {% elif not r.answer %}
-            incorrect += 1;
+        {% if r.answer %}
+            {% if r.isCorrect %}
+                correct += 1;
+            {% else %}
+                incorrect += 1;
+            {% endif %}
             attempted += 1;
         {% endif %}
+        
     {% endfor %}
 
     function init(){
