@@ -1,11 +1,14 @@
 {% extends "admin/change_form.html" %}
 {% block object-tools-items %}
 <li>
-	<a href="{% url "admin:quiz_report" quiz_id=original.pk %}" class="grp-state-focus addlink" style="margin-right:5px">
-		See Quiz Report
-	</a>
-	<a href="/admin/quiz_app/question_bank/?quizid={{ original.pk }}" class="grp-state-focus addlink">
+	<a href="/admin/quiz_app/question_bank/?quizid={{ original.pk }}" class="grp-state-focus addlink" style="margin-right:5px">
 		Import From Question Bank
+	</a>
+	<a href="/admin/quiz_app/account/?quizid={{ original.pk }}" class="grp-state-focus" style="margin-right:5px">
+		Assign Students
+	</a>
+	<a href="{% url "admin:quiz_report" quiz_id=original.pk %}" class="grp-state-focus">
+		See Quiz Report
 	</a>
 </li>
 {{ block.super }}

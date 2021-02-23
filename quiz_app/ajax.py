@@ -117,7 +117,7 @@ def save_extra(request):
         # extra = json.loads(extra)
         quiz_id = request.POST.get("quiz")
         quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
-        quizTaker = QuizTakers.objects.get_or_create(quiz=quiz, user=request.user)[0]
+        quizTaker = QuizTakers.objects.get(quiz=quiz, user=request.user)
         quizTaker.extra = extra
         quizTaker.save()
         return JsonResponse({"success": "Extra Information saved successfully"})

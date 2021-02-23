@@ -26,10 +26,63 @@ from .models import Account, Question, Question_bank, Quiz, QuizTakers, Response
 
 
 class AccountAdmin(UserAdmin):
+    class EmptyQuizIDFilter(SimpleListFilter):
+        title = _("Empty Filter For Quiz")
+        parameter_name = "quizid"
+
+        def lookups(self, request, model_admin):
+            return ()
+
     def get_action_choices(self, request):
         choices = super(AccountAdmin, self).get_action_choices(request)
         choices.pop(0)
+        choices.reverse()
+        try:
+            quiz_id = request.GET.get("quizid", None)
+            if not quiz_id:
+                raise Quiz.DoesNotExist()
+            Quiz.objects.get(pk=quiz_id)
+        except (Quiz.DoesNotExist, ValidationError):
+            choices.pop(0)
         return choices
+
+    def assign_users(self, request, queryset):
+        quiz_id = request.GET.get("quizid", "")
+        if not quiz_id:
+            messages.error(
+                request, mark_safe("No Quiz Entered<br>Please Select A Quiz First")
+            )
+            return redirect(request.get_full_path())
+
+        try:
+            quiz = Quiz.objects.prefetch_related(
+                "quiztakers_set", "quiztakers_set__user"
+            ).get(pk=quiz_id)
+        except ValidationError:
+            messages.error(request, mark_safe("Invalid Quiz Id Found"))
+            return redirect(request.get_full_path())
+
+        if not quiz:
+            messages.error(request, mark_safe("No Quiz Found For Given ID"))
+            return redirect(request.get_full_path())
+
+        if "apply" in request.POST:
+            if request.POST.get("apply", "") == "Cancel":
+                return redirect(request.get_full_path())
+            quizTakers = []
+            for user in queryset:
+                quizTaker = QuizTakers(quiz=quiz, user=user)
+                quizTakers.append(quizTaker)
+            QuizTakers.objects.bulk_create(quizTakers, ignore_conflicts=True)
+            return redirect(request.get_full_path())
+
+        context = {
+            "quiz": quiz,
+            "users": queryset,
+        }
+        return render(request, "admin/user_confirmation.html", context=context)
+
+    assign_users.short_description = "Assign Students To Test"
 
     add_form = SignUpForm
 
@@ -53,8 +106,9 @@ class AccountAdmin(UserAdmin):
 
     readonly_fields = ("id", "date_joined", "last_login")
 
+    actions = ["assign_users"]
     filter_horizontal = ()
-    list_filter = ()
+    list_filter = (EmptyQuizIDFilter,)
     fieldsets = (
         (None, {"fields": ("email", "password"),}),
         (_("Personal info"), {"fields": ("full_name",)}),

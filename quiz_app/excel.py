@@ -57,6 +57,26 @@ def generate_result_as_excel(request, quiz, quizTaker, responses):
             "text_wrap": "true",
         }
     )
+    blue_format = workbook.add_format(
+        {"bg_color": "#b4daff", "font_color": "#003171", "text_wrap": True,}
+    )
+    blue_y_format = workbook.add_format(
+        {
+            "bg_color": "#b4daff",
+            "font_color": "#003171",
+            "text_wrap": "true",
+            "top": 1,
+            "bottom": 1,
+        }
+    )
+    blue_bold_format = workbook.add_format(
+        {
+            "bold": True,
+            "bg_color": "#b4daff",
+            "font_color": "#003171",
+            "text_wrap": "true",
+        }
+    )
 
     rNo = 1
 
@@ -127,7 +147,10 @@ def generate_result_as_excel(request, quiz, quizTaker, responses):
         if response.isCorrect:
             format = green_y_format
         else:
-            format = red_y_format
+            if response.answer == "":
+                format = blue_y_format
+            else:
+                format = red_y_format
         worksheet.write(f"A{rNo}", i + 1, format)
         worksheet.write(f"B{rNo}", f"{response.question.title}", format)
         worksheet.write(f"C{rNo}", "", format)

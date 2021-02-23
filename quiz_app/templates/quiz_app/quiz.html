@@ -6,25 +6,25 @@
 
 {% block content %}
 <div id="testPage-wrapper" class="container-fluid">
-    <div class="row" id="testPage">
-        <div class="sidebar col-md-3">
-            <ul class="circle-wrap" id="circle-wrap">
-                <li class="circle">1</li>
-                <li class="circle">2</li>
-                <li class="circle">3</li>
-                <li class="circle">4</li>
-                <li class="circle">5</li>
-                <li class="circle">1</li>
-                <li class="circle">1</li>
-                <li class="circle">1</li>
-                <li class="circle">1</li>
-                <li class="circle">1</li>
-                <li class="circle">1</li>
-                <li class="circle">1</li>
-            </ul>
-        </div>
-        <div class="col-md-9 main">
-            <div class="main-content">
+	<div class="row" id="testPage">
+		<div class="sidebar col-md-3">
+			<ul class="circle-wrap" id="circle-wrap">
+				<li class="circle">1</li>
+				<li class="circle">2</li>
+				<li class="circle">3</li>
+				<li class="circle">4</li>
+				<li class="circle">5</li>
+				<li class="circle">1</li>
+				<li class="circle">1</li>
+				<li class="circle">1</li>
+				<li class="circle">1</li>
+				<li class="circle">1</li>
+				<li class="circle">1</li>
+				<li class="circle">1</li>
+			</ul>
+		</div>
+		<div class="col-md-9 main">
+			<div class="main-content">
 				<div class="question">
 					<p id="q-title"></p>
 					<p class="p-2">
@@ -59,9 +59,9 @@
 					<button class="btn btn-primary mt-3" id="btn-submit" type="submit">Submit</button>
 					<button class="btn btn-primary mt-3" id="btn-next" type="submit">Next</button>
 				</form>
-            </div>
-        </div>
-    </div>
+			</div>
+		</div>
+	</div>
 </div>
 
 
@@ -91,6 +91,8 @@
 	var bookmarkIcon = document.querySelector("#bookmark .fa");
 	var bookmark = document.getElementById("bookmark");
 	
+	var attempted = $("#attemptedNo");
+
 	function loadQuestion(questions, no){
 		{% if quiz.allow_backtracking %}
 			if(no == 0) {
@@ -119,7 +121,7 @@
 		else
 			nextQueBtn.innerText = "Next";
 
-		qTitle.innerHTML = `<pre>${no+1}. ${question.title}</pre>`;
+		$("#q-title").html($(`<pre />`, {text: `${no+1}. ${question.title}`}));
 		qMarks.innerText = `${(question.marks) > 1 ? 'Marks: ': 'Mark: '} ${question.marks}`;
 		bookmark.innerHTML = `<i class="fa ${(responses[no]["bookmark"])?'fa-bookmark': 'fa-bookmark-o'}" aria-hidden="true"></i>`;
 		loadOptions(question);
@@ -130,16 +132,37 @@
 	function loadOptions(question){
 		options.innerHTML = "";
 		question["options_array"].forEach(function(option,i) {
-			options.innerHTML += createOption(option, String.fromCharCode(65+i));
+			createOption(option, String.fromCharCode(65+i));
 		});
 	}
 
 	function createOption(choice, choiceNo){
-		let res = `<div class="option">
-						<input type="radio" name="que" value="${choice}" id="opt${choiceNo}" required> 
-						<label for="opt${choiceNo}"><span>${choiceNo}. </span> <span id=""><pre>${choice}</pre></span></label>
-					</div>`;
-		return res;
+		let div = $(`<div />`, {
+			"class": "option"
+		});
+		let input = $(`<input />`, {
+			type: "radio",
+			name: "que",
+			value: `${choice}`,
+			id: `opt${choiceNo}`,
+			required: true
+		});
+		let label = $(`<label />`, {
+			for: `opt${choiceNo}`,
+		});
+		let span1 = $(`<span />`, {
+			text: `${choiceNo}.`
+		});
+		let span2 = $(`<span />`);
+		let pre = $(`<pre />`, {
+			text: `${choice}`
+		});
+		pre.appendTo(span2);
+		span1.appendTo(label);
+		span2.appendTo(label);
+		input.appendTo(div);
+		label.appendTo(div);
+		div.appendTo("#q-options");
 	}
 
 	function shuffleArray(array) {
@@ -200,6 +223,7 @@
 				responses[qNo]["answer"] = selectAns;
 				setupSidebarBtns();
 				submitQueBtn.blur();
+				set_attempted();
 			},
 			error:function(error) {
 				if(error.status == 403 && error.responseJSON.error == "logged out") {
@@ -249,6 +273,8 @@
 				return false;
 			}
 			saveResponse(activeQueNo, selectAns);
+			if(activeQueNo < totalQues - 1)
+				loadQuestion(questions, ++activeQueNo);
 		});
 	}
 
@@ -327,6 +353,21 @@
 			}
 		});
 	}
+
+
+	function set_attempted() {
+		let attNo = 0;
+		console.log(responses);
+		responses.forEach(function(response) {
+			console.log(response);
+			if(response["answer"]) {
+				attNo++;
+			}
+		})
+		attempted.text(`${attNo}/${totalQues}`);
+	}
+
+
 
 	function setup_timer(){
 		remaining_time = {{quizTaker.time_remaining}}|0;
@@ -441,6 +482,7 @@
 		{% endif %}
 		setupSubmitBtn();
 		setupNextBtn();
+		set_attempted();
 	}
 	init();
 
