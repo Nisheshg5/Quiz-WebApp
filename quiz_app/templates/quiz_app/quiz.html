@@ -130,16 +130,37 @@
 	function loadOptions(question){
 		options.innerHTML = "";
 		question["options_array"].forEach(function(option,i) {
-			options.innerHTML += createOption(option, String.fromCharCode(65+i));
+			createOption(option, String.fromCharCode(65+i));
 		});
 	}
 
 	function createOption(choice, choiceNo){
-		let res = `<div class="option">
-						<input type="radio" name="que" value="${choice}" id="opt${choiceNo}" required> 
-						<label for="opt${choiceNo}"><span>${choiceNo}. </span> <span id=""><pre>${choice}</pre></span></label>
-					</div>`;
-		return res;
+		let div = $(`<div />`, {
+			"class": "option"
+		});
+		let input = $(`<input />`, {
+			type: "radio",
+			name: "que",
+			value: `${choice}`,
+			id: `opt${choiceNo}`,
+			required: true
+		});
+		let label = $(`<label />`, {
+			for: `opt${choiceNo}`,
+		});
+		let span1 = $(`<span />`, {
+			text: `${choiceNo}.`
+		});
+		let span2 = $(`<span />`);
+		let pre = $(`<pre />`, {
+			text: `${choice}`
+		});
+		pre.appendTo(span2);
+		span1.appendTo(label);
+		span2.appendTo(label);
+		input.appendTo(div);
+		label.appendTo(div);
+		div.appendTo("#q-options");
 	}
 
 	function shuffleArray(array) {
