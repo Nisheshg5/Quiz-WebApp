@@ -50,7 +50,7 @@ class QuizForm(forms.Form):
 
 class SignUpForm(UserCreationForm):
     timeZone = forms.ChoiceField(
-        initial="Asia/Kolkata",
+        initial="UTC",
         choices=[(tz, tz) for tz in pytz.common_timezones],
         widget=forms.Select(attrs={"class": "form-control"}),
     )
