@@ -54,7 +54,7 @@ Max Marks: {{ totalMarks }}
 	var totalStudents = 0;
 	var passedStudents = 0;
 	var barLabels = [...Array(maxMarks+1).keys()];
-	var barData = new Array(maxMarks).fill(0);
+	var barData = new Array(maxMarks+1).fill(0);
 	var backgroundColor = new Array(maxMarks).fill('rgba(255, 99, 132, 0.2)');
 	var borderColor = new Array(maxMarks).fill('rgba(255,99,132,1)');
 	for (const [key, value] of Object.entries(marks)) {
