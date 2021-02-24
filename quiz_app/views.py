@@ -13,11 +13,11 @@ from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.timezone import datetime
+import pytz
 from verify_email.email_handler import send_verification_email
 
 from .forms import QuizForm, SignUpForm
 from .models import Quiz, QuizTakers, Response
-
 
 # For setting the UUID field to string
 # To pass that field to json object
@@ -274,6 +274,10 @@ def profile(request):
             upcoming.append(quizTaker)
             continue
         current.append(quizTaker)
+    curDateTime = datetime.utcnow().replace(tzinfo=pytz.UTC)
+    past.sort(key=lambda q: abs(curDateTime - q.quiz.start_date))
+    current.sort(key=lambda q: abs(curDateTime - q.quiz.start_date))
+    upcoming.sort(key=lambda q: abs(curDateTime - q.quiz.start_date))
     context = {
         "past": past,
         "current": current,
