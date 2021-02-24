@@ -263,6 +263,22 @@ def signup(request):
 @login_required
 def profile(request):
     quizTakers = QuizTakers.objects.filter(user=request.user).all()
-    context = {"quizTakers": quizTakers}
+    past = []
+    current = []
+    upcoming = []
+    for quizTaker in quizTakers:
+        if quizTaker.completed:
+            past.append(quizTaker)
+            continue
+        if not quizTaker.quiz.has_started:
+            upcoming.append(quizTaker)
+            continue
+        current.append(quizTaker)
+    context = {
+        "past": past,
+        "current": current,
+        "upcoming": upcoming,
+    }
+    print(context)
     return render(request, "registration/profile.html", context)
 
