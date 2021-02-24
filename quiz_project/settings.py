@@ -99,9 +99,9 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "quiz",
-        "USER": "adminsql@quiz-mysql-db",
-        "PASSWORD": "Quiz@123",
-        "HOST": "quiz-mysql-db.mysql.database.azure.com",
+        "USER": "quiz@quiz-webapp",
+        "PASSWORD": "123@admin",
+        "HOST": "quiz-webapp.mysql.database.azure.com",
         "PORT": "3306",
         "OPTIONS": {"init_command": "SET sql_mode='STRICT_TRANS_TABLES'"},
     }
