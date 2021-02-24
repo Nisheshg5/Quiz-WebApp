@@ -1,6 +1,7 @@
 import io
 import json
 
+import pytz
 import xlsxwriter
 from django.utils.timezone import datetime
 
@@ -104,12 +105,20 @@ def generate_result_as_excel(request, quiz, quizTaker, responses):
         rNo += 1
 
     rNo += 1
-    started = datetime.strftime(quizTaker.started, "%Y-%m-%d %H:%M:%S")
+    started = quizTaker.started.astimezone(tz=pytz.timezone(request.user.timeZone))
+    try:
+        started = datetime.strftime(started, "%Y-%m-%d %-I:%M:%S %p")
+    except ValueError:
+        started = datetime.strftime(started, "%Y-%m-%d %#I:%M:%S %p")
     worksheet.write(f"A{rNo}", "Started At:", bold_format)
     worksheet.write(f"B{rNo}", f"{started}", bold_format)
 
     rNo += 1
-    ended = datetime.strftime(quizTaker.completed, "%Y-%m-%d %H:%M:%S")
+    ended = quizTaker.completed.astimezone(tz=pytz.timezone(request.user.timeZone))
+    try:
+        ended = datetime.strftime(ended, "%Y-%m-%d %-I:%M:%S %p")
+    except ValueError:
+        ended = datetime.strftime(ended, "%Y-%m-%d %#I:%M:%S %p")
     worksheet.write(f"A{rNo}", "Submitted At:", bold_format)
     worksheet.write(f"B{rNo}", f"{ended}", bold_format)
     rNo += 2
