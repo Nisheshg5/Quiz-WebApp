@@ -7,7 +7,7 @@
 	<title>{% block title %}{% endblock %}</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@3/dark.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 	{% load static %}
 	<!-- <link rel="shortcut icon" href="{%  static 'quiz_app/images/favicon.ico' %}"> -->
 	<link rel="stylesheet" type="text/css" href="{% static 'quiz_app/css/quiz.css' %}" />
@@ -25,7 +25,7 @@
 			<span class="navbar-toggler-icon"></span>
 		</button>
 
-		
+
 
 		<div class="collapse navbar-collapse order-1" id="collapsibleNavbar">
 			<ul class="navbar-nav">
@@ -33,14 +33,14 @@
 					Quiz App
 				</li>
 				{% if user.is_authenticated %}
-					<li class="navbar-text mx-2">
-						Hi {{ user.full_name }}!
-					</li>
-				{% endif %}					
+				<li class="navbar-text mx-2">
+					Hi {{ user.full_name }}!
+				</li>
+				{% endif %}
 			</ul>
-		</div>	
-		
-		
+		</div>
+
+
 		<div class="order-2">
 			<li class="navbar-text mx-2">
 				<span> Attempted: <span id="attemptedNo">1</span></span>
@@ -51,9 +51,9 @@
 			<button class="btn btn-finish mx-2" onclick="showResults()">Finish Test</button>
 		</div>
 
-			
 
-		
+
+
 	</nav>
 
 
@@ -91,6 +91,45 @@
 	{% endif %}
 	{% endfor %}
 	{% endif %}
+
+	<script>
+	var vis = (function(){
+		var stateKey, eventKey, keys = {
+			hidden: "visibilitychange",
+			webkitHidden: "webkitvisibilitychange",
+			mozHidden: "mozvisibilitychange",
+			msHidden: "msvisibilitychange"
+		};
+		for (stateKey in keys) {
+			if (stateKey in document) {
+				eventKey = keys[stateKey];
+				break;
+			}
+		}
+		return function(c) {
+			if (c) document.addEventListener(eventKey, c);
+			return !document[stateKey];
+		}
+	})();
+	vis(function(){
+		if(!vis()) {
+			$.ajax({
+				type: "POST",
+				url: '{% url "increase_suspicious" %}',
+				data: {
+					quiz: "{{ quiz.quiz_id }}",
+					csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
+				},
+			});
+			Swal.fire({
+				icon: 'warning',
+				html: 'Do Not switch tabs else the test will be marked as suspicious.',
+				position: 'top',
+				showConfirmButton: true,
+			});
+		}
+	});
+	</script>
 </body>
 
 </html>

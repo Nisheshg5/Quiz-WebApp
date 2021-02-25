@@ -123,3 +123,21 @@ def save_extra(request):
         return JsonResponse({"success": "Extra Information saved successfully"})
     jsonResponse = JsonResponse({"error": "Extra Information Could Not Be Saved"})
     jsonResponse.status_code = 400
+
+
+def increase_suspicious(request):
+    if request.method == "POST":
+        user = request.user
+        quiz_id = request.POST.get("quiz")
+        try:
+            quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
+            quizTaker = get_object_or_404(QuizTakers, quiz=quiz, user=user)
+            quizTaker.suspicion_count += 1
+            quizTaker.save()
+            return JsonResponse({"success": "Suspicious increased"})
+        except:
+            pass
+
+    jsonResponse = JsonResponse({"error": "Suspicious couldn't be increased"})
+    jsonResponse.status_code = 400
+
