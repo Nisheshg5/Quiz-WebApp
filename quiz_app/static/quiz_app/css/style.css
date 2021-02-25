@@ -23,12 +23,16 @@ body {
     color: white;
     z-index: 1;
     padding: 20px 100px 10px 100px;
+    position: sticky;
+    top:0;
 }
 
 #home,
 .quiz-started,
 #quiz_result,
-.container-form {
+.container-form,
+#profile
+{
     min-height: calc(100vh - 70px - 70px);
 }
 
@@ -140,4 +144,41 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index:2;
 }
+#profile
+{
+    background: #fff;
+}
+#profile .sidenav 
+{
+    height: 100%;
+    width: 160px;
+    position: fixed;
+    z-index: 1;
+    top: 70px;
+    left: 0;
+    background:#fff;
+    box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.2);
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+  
+#profile .sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+}
+  
+#profile .sidenav a:hover {
+    color: #222222;
+}
+#profile main 
+{
+    margin-left: 160px;
+    font-size: 28px;
+    padding: 0px 10px;
+}
+

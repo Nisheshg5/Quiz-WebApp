@@ -4,31 +4,55 @@ Profile Page
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid" id="home">
-	<div class="home_div row justify-content-center">
-		<div class="home_div_content col-12 col-md-5 my-4">
-			<h2>Welcome {{ request.user.full_name }}</h2>
-			<br>
-			<small>
-				{% for quizTaker in past %}
-				{{ quizTaker }} <br>
-				{{ quizTaker.user }} <br>
-				{{ quizTaker.quiz }}
-				{% endfor %}
+<div class="container-fluid" id="profile">
+	<ul class="sidenav">
+		<li><a href="#about">Tests</a></li>
+		<li><a href="#services">Profile</a></li>
+		<li><a href="#clients">Clients</a></li>
+		<li><a href="#contact">Contact</a></li>
+	</ul>
 
-				{% for quizTaker in current %}
-				{{ quizTaker }} <br>
-				{{ quizTaker.user }} <br>
-				{{ quizTaker.quiz }}
-				{% endfor %}
+	<main>
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+			  <a class="nav-link active" data-toggle="tab" href="#hom">Current Tests</a>
+			</li>
+			<li class="nav-item">
+			  <a class="nav-link" data-toggle="tab" href="#menu1">Upcoming Test</a>
+			</li>
+			<li class="nav-item">
+			  <a class="nav-link" data-toggle="tab" href="#menu2">Past Tests</a>
+			</li>
+		  </ul>
+		  
+		  <div class="tab-content">
+			<div class="tab-pane container active" id="hom">...</div>
+			<div class="tab-pane container fade" id="menu1">...</div>
+			<div class="tab-pane container fade" id="menu2">...</div>
+		  </div>
+		
 
-				{% for quizTaker in upcoming %}
-				{{ quizTaker }} <br>
-				{{ quizTaker.user }} <br>
-				{{ quizTaker.quiz }}
-				{% endfor %}
-			</small>
-		</div>
-	</div>
+		<small>
+			{% for quizTaker in past %}
+			{{ quizTaker }} <br>
+			{{ quizTaker.user }} <br>
+			{{ quizTaker.quiz }}
+			{% endfor %}
+
+			{% for quizTaker in current %}
+			{{ quizTaker }} <br>
+			{{ quizTaker.user }} <br>
+			{{ quizTaker.quiz }}
+			{% endfor %}
+
+			{% for quizTaker in upcoming %}
+			{{ quizTaker }} <br>
+			{{ quizTaker.user }} <br>
+			{{ quizTaker.quiz }}
+			{% endfor %}
+		</small>
+	</main>
+	
+			
 </div>
 {% endblock %}
