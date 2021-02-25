@@ -131,6 +131,9 @@
 	});
 
 
+
+
+
 	!function() {
 		function detectDevTool(allow) {
 			if(isNaN(+allow)) allow = 100;
@@ -172,6 +175,35 @@
 			window.addEventListener('blur', detectDevTool);
 		}
 	}();
+
+
+
+
+
+	function triggerFullScreen() {
+		Swal.close();
+		if(!document.fullscreenElement || document.fullscreenElement == null) {
+			Swal.fire({
+				icon: 'error',
+				title: 'warning',
+				text: 'The quiz need to be in full screen mode',
+				position: 'top',
+				timerProgressBar: true,
+			}).then((result) => {
+				if (result.isConfirmed) {
+					document.documentElement.requestFullscreen();
+				} else {
+					triggerFullScreen();
+				}
+			});
+		}
+	}
+	document.onfullscreenchange = function ( event ) {
+		triggerFullScreen();
+	}
+	$(document).ready(function() {
+		triggerFullScreen();
+	});
 	</script>
 </body>
 
