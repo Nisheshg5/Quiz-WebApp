@@ -102,51 +102,46 @@ def quiz(request, quiz_id):
     if quiz.has_ended:
         return redirect("quiz_ended", quiz_id=quiz_id)
 
-    try:
-        quizTaker = QuizTakers.objects.get(quiz=quiz, user=request.user)
-        if quizTaker.started and not quizTaker.completed:
-            quizTaker.suspicion_count = F("suspicion_count") + 1
-    except:
-        pass
-
     if not request.user.is_authenticated:
         messages.error(request, "You need to be logged in to access this.")
         return redirect("login")
-    quizTaker = QuizTakers.objects.filter(quiz=quiz, user=request.user)
-    if quizTaker.exists() and quizTaker.first().completed:
+    quizTaker = get_object_or_404(QuizTakers, quiz_id=quiz_id, user_id=request.user.pk)
+    if quizTaker.completed:
         return redirect("quiz_result", quiz_id=quiz_id)
 
     questions = []
     responses = []
 
-    if quizTaker.exists():
-        quizTaker = quizTaker.first()
-        if quizTaker.started:
-            queryset = (
-                quizTaker.response_set.select_related("question").all().order_by("pk")
-            )
-            for response in queryset:
-                questions.append(model_to_dict(response.question, exclude=["correct"]))
-                responses.append(
-                    model_to_dict(response, exclude=["id", "isCorrect", "marks"])
-                )
-        else:
-            quizTaker.started = timezone.now()
-            quizTaker.save()
-            shuffledQuestions = quiz.question_set.all()[::1]
-            random.shuffle(shuffledQuestions)
+    if quizTaker.started:
+        quizTaker.suspicion_count += 1
+        quizTaker.save()
+        messages.warning(
+            request, "Do not move away from the test or it will be marked suspicious."
+        )
 
-            responseList = []
-            for question in shuffledQuestions:
-                response = Response(quiztaker=quizTaker, question=question, answer="")
-                responseList.append(response)
-                questions.append(model_to_dict(question, exclude=["correct"]))
-                responses.append(
-                    model_to_dict(response, exclude=["id", "isCorrect", "marks"])
-                )
-            Response.objects.bulk_create(responseList)
+        queryset = (
+            quizTaker.response_set.select_related("question").all().order_by("pk")
+        )
+        for response in queryset:
+            questions.append(model_to_dict(response.question, exclude=["correct"]))
+            responses.append(
+                model_to_dict(response, exclude=["id", "isCorrect", "marks"])
+            )
     else:
-        return redirect("quiz_started", quiz_id=quiz_id)
+        quizTaker.started = timezone.now()
+        quizTaker.save()
+        shuffledQuestions = quiz.question_set.all()[::1]
+        random.shuffle(shuffledQuestions)
+
+        responseList = []
+        for question in shuffledQuestions:
+            response = Response(quiztaker=quizTaker, question=question, answer="")
+            responseList.append(response)
+            questions.append(model_to_dict(question, exclude=["correct"]))
+            responses.append(
+                model_to_dict(response, exclude=["id", "isCorrect", "marks"])
+            )
+        Response.objects.bulk_create(responseList)
     shuffle = quiz.isShuffle
     context = {
         "quiz": quiz,

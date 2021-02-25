@@ -65,7 +65,7 @@
 
 	{% if messages %}
 	{% for message in messages %}
-	{% if 'error' in message.tags%}
+	{% if 'error' in message.tags %}
 	<script>
 		Swal.fire({
 			icon: 'error',
@@ -75,6 +75,17 @@
 			timerProgressBar: true,
 			showConfirmButton: false,
 			timer: 1500
+		});
+	</script>
+	{% elif 'warning' in message.tags %}
+	<script>
+		Swal.fire({
+			icon: 'warning',
+			html: '{{ message }}',
+			position: 'top',
+			timerProgressBar: true,
+			showConfirmButton: false,
+			timer: 3000
 		});
 	</script>
 	{% endif %}
