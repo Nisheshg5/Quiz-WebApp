@@ -99,15 +99,14 @@ def quiz(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
     if not quiz.has_started:
         return redirect("quiz_upcoming", quiz_id=quiz_id)
-    if quiz.has_ended:
-        return redirect("quiz_ended", quiz_id=quiz_id)
 
-    if not request.user.is_authenticated:
-        messages.error(request, "You need to be logged in to access this.")
-        return redirect("login")
     quizTaker = get_object_or_404(QuizTakers, quiz_id=quiz_id, user_id=request.user.pk)
-    if quizTaker.completed:
+
+    if quizTaker.has_ended:
         return redirect("quiz_result", quiz_id=quiz_id)
+
+    if quiz.has_ended and not quizTaker.started:
+        return redirect("quiz_ended", quiz_id=quiz_id)
 
     questions = []
     responses = []
@@ -171,6 +170,10 @@ def quiz_result(request, quiz_id):
         return redirect("login")
 
     quizTaker = get_object_or_404(QuizTakers, quiz_id=quiz_id, user_id=request.user.pk)
+    if quiz.has_ended and not quizTaker.started:
+        return redirect("quiz_ended", quiz_id=quiz_id)
+    if quiz.has_started and not quizTaker.has_ended:
+        return redirect("quiz", quiz_id=quiz_id)
     queryset = (
         quizTaker.response_set.select_related("question").all().order_by("question_id")
     )
@@ -186,8 +189,15 @@ def quiz_result(request, quiz_id):
 
 def quiz_upcoming(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
-    if quiz.has_ended:
+    try:
+        quizTaker = QuizTakers.objects.get(quiz=quiz, user=request.user)
+    except QuizTakers.DoesNotExist:
+        messages.warning(request, "You are not authorized to access this test")
+        return redirect("home")
+    if quiz.has_ended and not quizTaker.started:
         return redirect("quiz_ended", quiz_id=quiz_id)
+    if quizTaker.has_ended:
+        return redirect("quiz_result", quiz_id=quiz_id)
     if quiz.has_started:
         return redirect("quiz_started", quiz_id=quiz_id)
 
@@ -198,10 +208,17 @@ def quiz_upcoming(request, quiz_id):
 @login_required
 def quiz_started(request, quiz_id):
     quiz = get_object_or_404(Quiz, quiz_id=quiz_id)
+    try:
+        quizTaker = QuizTakers.objects.get(quiz=quiz, user=request.user)
+    except QuizTakers.DoesNotExist:
+        messages.warning(request, "You are not authorized to access this test")
+        return redirect("home")
     if not quiz.has_started:
         return redirect("quiz_upcoming", quiz_id=quiz_id)
-    if quiz.has_ended:
+    if quiz.has_ended and not quizTaker.started:
         return redirect("quiz_ended", quiz_id=quiz_id)
+    if quizTaker.has_ended:
+        return redirect("quiz_result", quiz_id=quiz_id)
 
     context = {"quiz": quiz}
     return render(request, "quiz_app/quiz_started.html", context)
@@ -234,6 +251,7 @@ def quiz_instructions(request, quiz_id):
         return redirect("quiz_result", quiz_id=quiz_id)
     if quizTaker.started:
         return redirect("quiz", quiz_id=quiz_id)
+
     if request.method == "POST":
         return redirect("quiz", quiz_id=quiz_id)
 
