@@ -1,9 +1,11 @@
 {% extends "quiz_app/layout.html" %}
+{% load tz %}
 {% block title %}
 Profile Page
 {% endblock %}
 
 {% block content %}
+{% timezone request.user.timeZone %}
 <div class="container-fluid" id="profile">
 	<ul class="sidenav">
 		<li><a href="#about">Tests</a></li>
@@ -60,7 +62,7 @@ Profile Page
 					<li>
 						<a href="{% url 'quiz_upcoming' quizTaker.quiz.quiz_id %}">
 							{{ quizTaker.quiz.title }}
-						</a>
+						</a> - {{ quizTaker.quiz.start_date}}
 					</li>
 					{% endfor %}
 				</ol>
@@ -76,4 +78,5 @@ Profile Page
 
 
 </div>
+{% endtimezone %}
 {% endblock %}
