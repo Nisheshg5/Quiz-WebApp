@@ -273,9 +273,12 @@ class QuizTakers(models.Model):
     def has_ended(self):
         if self.completed:
             return True
+        if not self.started:
+            return False
         time = self.started + timedelta(minutes=self.quiz.duration) - timezone.now()
         if time.total_seconds() <= 0:
             self.completed = self.started + timedelta(minutes=self.quiz.duration)
+            self.save()
         return time.total_seconds() <= 0
 
     @property

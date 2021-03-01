@@ -262,7 +262,7 @@ def profile(request):
     current = []
     upcoming = []
     for quizTaker in quizTakers:
-        if quizTaker.completed:
+        if quizTaker.has_ended:
             past.append(quizTaker)
             continue
         if not quizTaker.quiz.has_started:

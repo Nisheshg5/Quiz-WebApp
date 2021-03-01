@@ -30,12 +30,14 @@ Profile Page
 				<ol>
 					{% for quizTaker in past %}
 					<li>
-						{{ quizTaker.quiz.title }}
-						{% if quizTaker.has_passed %}
-						<span style="color: ##006100">(Pass)</span>
-						{% else %}
-						<span style="color: #9C0006">(Fail)</span>
-						{% endif %}
+						<a target="_blank" href="{% url 'quiz_result' quizTaker.quiz.quiz_id %}">
+							{{ quizTaker.quiz.title }}
+							{% if quizTaker.has_passed %}
+							<span style="color: ##006100">(Pass)</span>
+							{% else %}
+							<span style="color: #9C0006">(Fail)</span>
+							{% endif %}
+						</a>
 					</li>
 					{% endfor %}
 				</ol>
@@ -43,7 +45,11 @@ Profile Page
 			<div class="tab-pane container fade" id="current">
 				<ol>
 					{% for quizTaker in current %}
-					<li>{{ quizTaker.quiz.title }}</li>
+					<li>
+						<a href="{% url 'quiz_started' quizTaker.quiz.quiz_id %}">
+							{{ quizTaker.quiz.title }}
+						</a>
+					</li>
 					{% endfor %}
 				</ol>
 
