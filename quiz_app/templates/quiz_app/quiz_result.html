@@ -152,6 +152,14 @@
         }
     }
     init();
+
+	
+	// Add the text change to the show questions button
+	var toggleTableBtn = document.querySelector("button[data-target='#report-table']");
+	toggleTableBtn.addEventListener("click", function(){
+		if(this.innerText == "View Questions") this.innerText = "Hide Questions";
+		else this.innerText = "View Questions";
+	})
 </script>
 
 {% endblock %}
