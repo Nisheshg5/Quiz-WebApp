@@ -15,44 +15,55 @@ Profile Page
 	<main>
 		<ul class="nav nav-tabs">
 			<li class="nav-item">
-			  <a class="nav-link active" data-toggle="tab" href="#hom">Current Tests</a>
+				<a class="nav-link active" data-toggle="tab" href="#past">Current Tests</a>
 			</li>
 			<li class="nav-item">
-			  <a class="nav-link" data-toggle="tab" href="#menu1">Upcoming Test</a>
+				<a class="nav-link" data-toggle="tab" href="#current">Upcoming Test</a>
 			</li>
 			<li class="nav-item">
-			  <a class="nav-link" data-toggle="tab" href="#menu2">Past Tests</a>
+				<a class="nav-link" data-toggle="tab" href="#upcoming">Past Tests</a>
 			</li>
-		  </ul>
-		  
-		  <div class="tab-content">
-			<div class="tab-pane container active" id="hom">...</div>
-			<div class="tab-pane container fade" id="menu1">...</div>
-			<div class="tab-pane container fade" id="menu2">...</div>
-		  </div>
-		
+		</ul>
+
+		<div class="tab-content" style="color: black">
+			<div class="tab-pane container active" id="past">
+				<ol>
+					{% for quizTaker in past %}
+					<li>
+						{{ quizTaker.quiz.title }}
+						{% if quizTaker.has_passed %}
+						<span style="color: ##006100">(Pass)</span>
+						{% else %}
+						<span style="color: #9C0006">(Fail)</span>
+						{% endif %}
+					</li>
+					{% endfor %}
+				</ol>
+			</div>
+			<div class="tab-pane container fade" id="current">
+				<ol>
+					{% for quizTaker in current %}
+					<li>{{ quizTaker.quiz.title }}</li>
+					{% endfor %}
+				</ol>
+
+			</div>
+			<div class="tab-pane container fade" id="upcoming">
+				<ol>
+					{% for quizTaker in upcoming %}
+					<li>{{ quizTaker.quiz.title }}</li>
+					{% endfor %}
+				</ol>
+			</div>
+		</div>
+
 
 		<small>
-			{% for quizTaker in past %}
-			{{ quizTaker }} <br>
-			{{ quizTaker.user }} <br>
-			{{ quizTaker.quiz }}
-			{% endfor %}
 
-			{% for quizTaker in current %}
-			{{ quizTaker }} <br>
-			{{ quizTaker.user }} <br>
-			{{ quizTaker.quiz }}
-			{% endfor %}
 
-			{% for quizTaker in upcoming %}
-			{{ quizTaker }} <br>
-			{{ quizTaker.user }} <br>
-			{{ quizTaker.quiz }}
-			{% endfor %}
 		</small>
 	</main>
-	
-			
+
+
 </div>
 {% endblock %}

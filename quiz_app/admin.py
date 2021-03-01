@@ -216,7 +216,6 @@ class QuizAdmin(admin.ModelAdmin):
     list_display = (
         "quiz_id",
         "title",
-        "instructions",
         "key",
         "extra",
         "start_date",
@@ -234,7 +233,7 @@ class QuizAdmin(admin.ModelAdmin):
         "created_at",
     )
 
-    ordering = ("created_at",)
+    ordering = ("-created_at",)
     inlines = [
         QuestionAdmin,
     ]

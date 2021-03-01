@@ -4,6 +4,7 @@ from base64 import urlsafe_b64encode
 from datetime import datetime, timedelta
 from smtplib import SMTPException
 from uuid import uuid4
+from django.db.models.aggregates import Sum
 
 import pytz
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
@@ -276,6 +277,14 @@ class QuizTakers(models.Model):
         if time.total_seconds() <= 0:
             self.completed = self.started + timedelta(minutes=self.quiz.duration)
         return time.total_seconds() <= 0
+
+    @property
+    def has_passed(self):
+        total_marks = self.quiz.question_set.aggregate(Sum("marks"))["marks__sum"]
+        marks_obtained = self.response_set.aggregate(Sum("marks"))["marks__sum"]
+        if 100 * marks_obtained / total_marks > 33:
+            return True
+        return False
 
     class Meta:
         db_table = "QuizTaker"
