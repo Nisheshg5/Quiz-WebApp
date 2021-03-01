@@ -15,13 +15,13 @@ Profile Page
 	<main>
 		<ul class="nav nav-tabs">
 			<li class="nav-item">
-				<a class="nav-link active" data-toggle="tab" href="#past">Current Tests</a>
+				<a class="nav-link active" data-toggle="tab" href="#past">Past Tests ({{ past|length }})</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" data-toggle="tab" href="#current">Upcoming Test</a>
+				<a class="nav-link" data-toggle="tab" href="#current">Live Tests ({{ current|length }})</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" data-toggle="tab" href="#upcoming">Past Tests</a>
+				<a class="nav-link" data-toggle="tab" href="#upcoming">Upcoming Tests ({{ upcoming|length }})</a>
 			</li>
 		</ul>
 
@@ -57,7 +57,11 @@ Profile Page
 			<div class="tab-pane container fade" id="upcoming">
 				<ol>
 					{% for quizTaker in upcoming %}
-					<li>{{ quizTaker.quiz.title }}</li>
+					<li>
+						<a href="{% url 'quiz_upcoming' quizTaker.quiz.quiz_id %}">
+							{{ quizTaker.quiz.title }}
+						</a>
+					</li>
 					{% endfor %}
 				</ol>
 			</div>
