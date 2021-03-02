@@ -61,7 +61,7 @@ Profile Page
 					<li class="list-group-item">
 						{{ forloop.counter }}.
 						{{ quizTaker.quiz.title }}
-						- 	<small>{{ quizTaker.quiz.start_date}}</small>
+						- 	<small>{{ quizTaker.started|date }}</small>
 						{% if quizTaker.has_passed %}
 						<small style="color: #006100">(Pass)</small>
 						{% else %}
