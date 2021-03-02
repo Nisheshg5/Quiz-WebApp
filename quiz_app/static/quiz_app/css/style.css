@@ -45,6 +45,23 @@ body {
     box-shadow: 2px 5px 10px 10px rgba(0, 0, 0, 0.2);
 }
 
+.result-success
+{
+    background: #C6EFCE;
+    color:#006100;
+}
+
+.result-danger
+{
+    background: #FFC7CE;
+    color:#9C0006;
+}
+
+.result-primary
+{
+    background: #b4daff;
+    color:#003171;
+}
 
 /* 
 Home Page CSS
@@ -70,7 +87,7 @@ Home Page CSS
 
 .home_div_content {
     padding: 60px 50px;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.3);
     -webkit-backdrop-filter: blur(5px);
     -moz-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);

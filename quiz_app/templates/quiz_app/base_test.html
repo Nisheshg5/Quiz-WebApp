@@ -91,7 +91,7 @@
 	{% endif %}
 	{% endfor %}
 	{% endif %}
-
+<!-- 
 	<script>
 	var vis = (function(){
 		var stateKey, eventKey, keys = {
@@ -123,7 +123,7 @@
 			});
 			Swal.fire({
 				icon: 'warning',
-				html: 'Do Not switch tabs or else the test will be marked as suspicious.',
+				html: 'Do not switch tabs or else the test will be marked as suspicious.',
 				position: 'top',
 				showConfirmButton: true,
 			});
@@ -136,6 +136,7 @@
 
 	!function() {
 		function detectDevTool(allow) {
+			console.log(allow);
 			if(isNaN(+allow)) allow = 100;
 			var start = +new Date();
 			debugger;
@@ -205,6 +206,7 @@
 		triggerFullScreen();
 	});
 	</script>
+-->
 </body>
 
 </html>

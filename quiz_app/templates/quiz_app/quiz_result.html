@@ -78,7 +78,7 @@
 			</thead>
 			<tbody>
 				{% for response in responses %}
-				<tr class="{% if response.isCorrect %}bg-success{%elif response.answer %} bg-danger {% else %} bg-primary {%endif%}">
+				<tr class="{% if response.isCorrect %}result-success{%elif response.answer %}result-danger{% else %}result-primary{%endif%}">
 					<td>{{forloop.counter}}</td>
 					<td>
 						<pre>{{response.question.title}}</pre>
