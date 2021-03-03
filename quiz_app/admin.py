@@ -22,7 +22,8 @@ from import_export.fields import Field
 from import_export.formats import base_formats
 
 from .forms import SignUpForm
-from .models import Account, Question, Question_bank, Quiz, QuizTakers, Response
+from .models import (Account, Question, Question_bank, Quiz, QuizTakers,
+                     Response)
 
 
 class AccountAdmin(UserAdmin):
@@ -401,6 +402,6 @@ admin.site.register(Account, AccountAdmin)
 admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Question_bank, Question_bank_admin)
 admin.site.register(QuizTakers, QuizTakersAdmin)
-admin.site.site_header = "Quiz Admin"
-admin.site.site_title = "Quiz Admin Portal"
-admin.site.index_title = "Welcome to Quiz Admin Portal"
+admin.site.site_header = "Admin"
+admin.site.site_title = "Admin Portal"
+admin.site.index_title = "Welcome to Quiz Masters"

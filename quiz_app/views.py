@@ -296,6 +296,5 @@ def profile(request):
         "current": current,
         "upcoming": upcoming,
     }
-    print(context)
     return render(request, "registration/profile.html", context)
 
