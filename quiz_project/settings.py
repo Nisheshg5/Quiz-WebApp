@@ -144,7 +144,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static_collected")
 
 # redirect of auth
 LOGIN_URL = "login"
-LOGIN_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = "profile"
 LOGOUT_REDIRECT_URL = "home"
 
 

@@ -37,7 +37,7 @@ Profile Page
 						<li class="list-group-item">
 							{{ forloop.counter }}.
 							{{ quizTaker.quiz.title }}						
-							<a target="_blank" class="btn btn-primary float-right" href="{% url 'quiz_started' quizTaker.quiz.quiz_id %}">Start Now</a>
+							<a class="btn btn-primary float-right" href="{% url 'home' %}">Start Now</a>
 						</li>
 						{% endfor %}
 					{% endif %}
