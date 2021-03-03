@@ -134,7 +134,10 @@ def increase_suspicious(request):
             quizTaker = get_object_or_404(QuizTakers, quiz=quiz, user=user)
             quizTaker.suspicion_count += 1
             quizTaker.save()
-            return JsonResponse({"success": "Suspicious increased"})
+            max_reached = quizTaker.suspicion_count >= quiz.max_suspicion_count
+            return JsonResponse(
+                {"success": "Suspicious increased", "max_reached": max_reached}
+            )
         except:
             pass
 

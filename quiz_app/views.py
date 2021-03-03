@@ -3,6 +3,7 @@ import random
 from json import JSONEncoder
 from uuid import UUID
 
+import pytz
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -13,7 +14,7 @@ from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.timezone import datetime
-import pytz
+from django.views.decorators.cache import cache_control
 from verify_email.email_handler import send_verification_email
 
 from .forms import QuizForm, SignUpForm
@@ -87,6 +88,7 @@ context = {}
 
 
 @login_required
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def quiz(request, quiz_id):
 
     # global context

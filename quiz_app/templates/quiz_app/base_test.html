@@ -93,6 +93,45 @@
 	{% endif %}
 
 	<script>
+	function max_suspicion_reached() {
+		$.ajax({
+			type: "POST",
+			url: 'completed/',
+			data: {
+				quizTaker: {{quizTaker.pk}},
+				csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
+			},
+			success:function(success) {
+				window.location.pathname = `{% url 'quiz_result' quiz.quiz_id %}`;
+			},
+			error:function(error) {
+				Swal.close();
+				max_suspicion_reached();
+			}
+		});
+		Swal.fire({
+			icon: 'warning',
+			html: 'The test is being terminated due to too much suspicious activity.',
+			position: 'center',
+			showConfirmButton: false,
+			allowOutsideClick: false,
+			allowEscapeKey: false,
+			preDeny: function (email) {
+				return new Promise(function (resolve, reject) {
+					reject();
+				}).catch(err => {
+					max_suspicion_reached();
+					return false;
+				});
+			}
+		});
+	}
+
+
+
+
+
+
 	var vis = (function(){
 		var stateKey, eventKey, keys = {
 			hidden: "visibilitychange",
@@ -120,6 +159,11 @@
 					quiz: "{{ quiz.quiz_id }}",
 					csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
 				},
+				success:function(success) {
+					if(success.max_reached) {
+						max_suspicion_reached();
+					}
+				}
 			});
 			Swal.fire({
 				icon: 'warning',
@@ -148,6 +192,11 @@
 						quiz: "{{ quiz.quiz_id }}",
 						csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
 					},
+					success:function(success) {
+						if(success.max_reached) {
+							max_suspicion_reached();
+						}
+					}
 				});
 				Swal.fire({
 					icon: 'warning',
