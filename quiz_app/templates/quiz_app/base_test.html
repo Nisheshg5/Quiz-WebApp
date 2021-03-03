@@ -91,7 +91,7 @@
 	{% endif %}
 	{% endfor %}
 	{% endif %}
- 
+
 	<script>
 	var vis = (function(){
 		var stateKey, eventKey, keys = {
@@ -136,7 +136,6 @@
 
 	!function() {
 		function detectDevTool(allow) {
-			console.log(allow);
 			if(isNaN(+allow)) allow = 100;
 			var start = +new Date();
 			debugger;
@@ -182,27 +181,30 @@
 
 
 	function triggerFullScreen() {
-		Swal.close();
 		if(!document.fullscreenElement || document.fullscreenElement == null) {
-			Swal.fire({
-				icon: 'error',
-				title: 'warning',
-				text: 'The quiz need to be in full screen mode',
-				position: 'top',
-				timerProgressBar: true,
-			}).then((result) => {
-				if (result.isConfirmed) {
-					document.documentElement.requestFullscreen();
-				} else {
-					triggerFullScreen();
-				}
-			});
+			if(!Swal.isVisible()) {
+				Swal.close();
+				Swal.fire({
+					icon: 'error',
+					title: 'warning',
+					text: 'The quiz need to be in full screen mode',
+					position: 'top',
+					timerProgressBar: true,
+				}).then((result) => {
+					if (result.isConfirmed) {
+						document.documentElement.requestFullscreen();
+					} else {
+						triggerFullScreen();
+					}
+				});
+			}
 		}
 	}
 	document.onfullscreenchange = function ( event ) {
 		triggerFullScreen();
 	}
 	$(document).ready(function() {
+		setInterval(triggerFullScreen, 500);
 		triggerFullScreen();
 	});
 	</script>
