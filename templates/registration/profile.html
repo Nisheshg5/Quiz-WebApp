@@ -49,8 +49,14 @@ Profile Page
 					<li class="list-group-item">
 						{{ forloop.counter }}.
 						{{ quizTaker.quiz.title }}
-						- 	<small>{{ quizTaker.quiz.start_date}}</small>
 						<a target="_blank" class="btn btn-primary float-right" href="{% url 'quiz_upcoming' quizTaker.quiz.quiz_id %}">View Test</a>
+						<br>
+						<small style="color: #808080; margin-left: 30px; font-size: small;">From: {{ quizTaker.quiz.start_date}}</small>
+						<br>
+						<small style="color: #808080; margin-left: 30px; font-size: small;">To: {{ quizTaker.quiz.end_date}}</small>
+						<br>
+						<small style="color: #808080; margin-left: 30px; font-size: small;">Duration: {{ quizTaker.quiz.duration}} Minutes</small>
+
 					</li>
 					{% endfor %}
 				</ol>
