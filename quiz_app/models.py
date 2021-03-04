@@ -4,7 +4,6 @@ from base64 import urlsafe_b64encode
 from datetime import datetime, timedelta
 from smtplib import SMTPException
 from uuid import uuid4
-from django.db.models.aggregates import Sum
 
 import pytz
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
@@ -12,6 +11,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import BadHeaderError, EmailMultiAlternatives, send_mail
 from django.core.validators import MinLengthValidator
 from django.db import models
+from django.db.models.aggregates import Sum
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.template.loader import render_to_string
@@ -154,7 +154,7 @@ class Quiz(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"id: {self.quiz_id}, title: {self.title}"
+        return f"{self.title}"
 
     @property
     def has_started(self):
