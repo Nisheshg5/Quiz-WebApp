@@ -304,5 +304,5 @@ def profile(request):
 
 
 def staff_profile(request):
-    context = {}
+    context = {"quizzes": Quiz.objects.filter(invigilator=request.user)}
     return render(request, "registration/staff_profile.html", context)
