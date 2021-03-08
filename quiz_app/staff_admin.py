@@ -51,14 +51,14 @@ class AccountAdmin(UserAdmin):
         delete_choice = [(x, y) for x, y in choices if x == "delete_selected"]
         if delete_choice:
             del choices[choices.index(delete_choice[0])]
-        choices.reverse()
         try:
             quiz_id = request.GET.get("quizid", None)
             if not quiz_id:
                 raise Quiz.DoesNotExist()
             Quiz.objects.get(pk=quiz_id)
-        except (Quiz.DoesNotExist, ValidationError):
             choices.pop(0)
+        except (Quiz.DoesNotExist, ValidationError):
+            choices.pop(1)
         return choices
 
     def has_view_permission(self, request, obj=None):
@@ -363,14 +363,14 @@ class Question_bank_admin(ImportExportModelAdmin):
     def get_action_choices(self, request):
         choices = super(Question_bank_admin, self).get_action_choices(request)
         choices.pop(0)
-        choices.reverse()
         try:
             quiz_id = request.GET.get("quizid", None)
             if not quiz_id:
                 raise Quiz.DoesNotExist()
             quiz = Quiz.objects.get(pk=quiz_id)
-        except (Quiz.DoesNotExist, ValidationError):
             choices.pop(0)
+        except (Quiz.DoesNotExist, ValidationError):
+            choices.pop(1)
         return choices
 
     def add_questions_to_quiz(self, request, queryset):
@@ -440,6 +440,7 @@ class Question_bank_admin(ImportExportModelAdmin):
     lookup_fields = [
         "quiz_id",
     ]
+    ordering = ("-created_at",)
     fieldsets = ()
     actions = ["add_questions_to_quiz"]
     resource_class = Question_bank_resource

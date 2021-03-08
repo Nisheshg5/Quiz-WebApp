@@ -358,6 +358,7 @@ class Question_bank_admin(ImportExportModelAdmin):
     lookup_fields = [
         "quiz_id",
     ]
+    ordering = ("-created_at",)
     fieldsets = ()
     actions = ["add_questions_to_quiz"]
     resource_class = Question_bank_resource
