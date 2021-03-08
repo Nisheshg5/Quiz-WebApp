@@ -26,7 +26,7 @@ from .models import Account, Question, Question_bank, Quiz, QuizTakers, Response
 
 
 class StaffAdminSite(AdminSite):
-    def home(*args):
+    def home(*args, **kwargs):
         return HttpResponseRedirect(reverse("staff_admin:quiz_app_quiz_changelist"))
 
     site_header = "Staff Admin"

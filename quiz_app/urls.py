@@ -26,5 +26,13 @@ urlpatterns = [
     path("profile/", views.profile, name="profile"),
     path("staff/", staff_admin_site.home),
     path("staff/quiz_app/", staff_admin_site.home),
+    path("staff/quiz_app/account/add/", staff_admin_site.home),
+    path("staff/quiz_app/account/<pk>/change/", staff_admin_site.home),
+    path("staff/quiz_app/account/<pk>/history/", staff_admin_site.home),
+    path("staff/quiz_app/account/<pk>/delete/", staff_admin_site.home),
+    path("staff/quiz_app/question_bank/add/", staff_admin_site.home),
+    path("staff/quiz_app/question_bank/<pk>/change/", staff_admin_site.home),
+    path("staff/quiz_app/question_bank/<pk>/history/", staff_admin_site.home),
+    path("staff/quiz_app/question_bank/<pk>/delete/", staff_admin_site.home),
     path("staff/", staff_admin_site.urls),
 ]
