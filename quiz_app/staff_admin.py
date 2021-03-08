@@ -48,7 +48,8 @@ class AccountAdmin(UserAdmin):
 
     def get_action_choices(self, request):
         choices = super(AccountAdmin, self).get_action_choices(request)
-        choices.pop(1)
+        choices.pop(0)
+        choices.pop(0)
         choices.reverse()
         try:
             quiz_id = request.GET.get("quizid", None)
@@ -301,7 +302,7 @@ class Question_bank_admin(ImportExportModelAdmin):
 
     def get_action_choices(self, request):
         choices = super(Question_bank_admin, self).get_action_choices(request)
-        choices.pop(1)
+        choices.pop(0)
         choices.reverse()
         try:
             quiz_id = request.GET.get("quizid", None)
