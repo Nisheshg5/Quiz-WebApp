@@ -61,6 +61,10 @@ class QuizAdmin(admin.ModelAdmin):
                 field.widget.attrs["cols"] = 40
             return field
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.filter(invigilator=request.user)
+
     def get_urls(self):
         urls = super(QuizAdmin, self).get_urls()
         my_urls = [
