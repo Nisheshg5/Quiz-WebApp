@@ -4,6 +4,7 @@ from collections import Counter
 from django.contrib import admin, messages
 from django.contrib.admin import SimpleListFilter
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Count, F, Sum
@@ -411,3 +412,4 @@ admin.site.register(QuizTakers, QuizTakersAdmin)
 admin.site.site_header = "Admin"
 admin.site.site_title = "Admin Portal"
 admin.site.index_title = "Welcome to Quiz Masters"
+admin.site.unregister(Group)
