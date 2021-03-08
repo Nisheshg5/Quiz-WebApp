@@ -219,7 +219,7 @@ class QuizAdmin(admin.ModelAdmin):
         return get_data
 
     list_display = (
-        "quiz_id",
+        # "quiz_id",
         "title",
         "key",
         "extra",

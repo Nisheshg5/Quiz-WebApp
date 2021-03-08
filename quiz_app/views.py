@@ -277,6 +277,8 @@ def signup(request):
 
 @login_required
 def profile(request):
+    if request.user.is_staff:
+        return staff_profile(request)
     quizTakers = QuizTakers.objects.filter(user=request.user).all()
     past = []
     current = []
@@ -300,3 +302,7 @@ def profile(request):
     }
     return render(request, "registration/profile.html", context)
 
+
+def staff_profile(request):
+    context = {}
+    return render(request, "registration/staff_profile.html", context)
