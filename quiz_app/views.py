@@ -277,6 +277,8 @@ def signup(request):
 
 @login_required
 def profile(request):
+    if request.user.is_staff:
+        return redirect("staff_admin:index")
     quizTakers = QuizTakers.objects.filter(user=request.user).all()
     past = []
     current = []
