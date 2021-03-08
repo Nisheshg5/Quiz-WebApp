@@ -48,8 +48,9 @@ class AccountAdmin(UserAdmin):
 
     def get_action_choices(self, request):
         choices = super(AccountAdmin, self).get_action_choices(request)
-        choices.pop(0)
-        choices.pop(0)
+        delete_choice = [(x, y) for x, y in choices if x == "delete_selected"]
+        if delete_choice:
+            del choices[choices.index(delete_choice[0])]
         choices.reverse()
         try:
             quiz_id = request.GET.get("quizid", None)
@@ -59,6 +60,18 @@ class AccountAdmin(UserAdmin):
         except (Quiz.DoesNotExist, ValidationError):
             choices.pop(0)
         return choices
+
+    def has_view_permission(self, request, obj=None):
+        return request.user.is_staff
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
     def assign_users(self, request, queryset):
         quiz_id = request.GET.get("quizid", "")
@@ -177,6 +190,36 @@ class QuizAdmin(admin.ModelAdmin):
             if db_field.name == "title":
                 field.widget.attrs["cols"] = 40
             return field
+
+        def has_view_permission(self, request, obj=None):
+            return request.user.is_staff
+
+        def has_add_permission(self, request):
+            return request.user.is_staff
+
+        def has_change_permission(self, request, obj=None):
+            return request.user.is_staff
+
+        def has_delete_permission(self, request, obj=None):
+            return request.user.is_staff
+
+    def has_view_permission(self, request, obj=None):
+        return request.user.is_staff and (
+            (obj and obj.invigilator == request.user) or not obj
+        )
+
+    def has_add_permission(self, request):
+        return request.user.is_staff
+
+    def has_change_permission(self, request, obj=None):
+        return request.user.is_staff and (
+            (obj and obj.invigilator == request.user) or not obj
+        )
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_staff and (
+            (obj and obj.invigilator == request.user) or not obj
+        )
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -300,9 +343,20 @@ class Question_bank_admin(ImportExportModelAdmin):
         )
         return [f for f in formats if f().can_import()]
 
+    def has_view_permission(self, request, obj=None):
+        return request.user.is_staff and obj and obj.invigilator == request.user
+
+    def has_add_permission(self, request):
+        return request.user.is_staff
+
+    def has_change_permission(self, request, obj=None):
+        return request.user.is_staff
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_staff
+
     def get_action_choices(self, request):
         choices = super(Question_bank_admin, self).get_action_choices(request)
-        choices.pop(0)
         choices.reverse()
         try:
             quiz_id = request.GET.get("quizid", None)
