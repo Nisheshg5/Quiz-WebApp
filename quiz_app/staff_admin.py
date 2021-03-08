@@ -42,9 +42,13 @@ class AccountAdmin(UserAdmin):
         def lookups(self, request, model_admin):
             return ()
 
+    def __init__(self, *args, **kwargs):
+        super(AccountAdmin, self).__init__(*args, **kwargs)
+        self.list_display_links = None
+
     def get_action_choices(self, request):
         choices = super(AccountAdmin, self).get_action_choices(request)
-        choices.pop(0)
+        choices.pop(1)
         choices.reverse()
         try:
             quiz_id = request.GET.get("quizid", None)
@@ -284,6 +288,10 @@ class Question_bank_admin(ImportExportModelAdmin):
         def lookups(self, request, model_admin):
             return ()
 
+    def __init__(self, *args, **kwargs):
+        super(Question_bank_admin, self).__init__(*args, **kwargs)
+        self.list_display_links = None
+
     def get_import_formats(self):
         formats = (
             base_formats.XLS,
@@ -293,7 +301,7 @@ class Question_bank_admin(ImportExportModelAdmin):
 
     def get_action_choices(self, request):
         choices = super(Question_bank_admin, self).get_action_choices(request)
-        choices.pop(0)
+        choices.pop(1)
         choices.reverse()
         try:
             quiz_id = request.GET.get("quizid", None)
