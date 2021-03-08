@@ -31,7 +31,7 @@
 			<ul class="nav navbar-nav ml-auto navbar-right">
 				{% if user.is_authenticated %}
 				<li class="nav-item">
-					<a class="nav-link nav-text" href="{% url 'profile' %}">
+					<a class="nav-link nav-text" href="{% if request.user.is_staff %}{% url 'staff_admin:index' %}{% else %}{% url 'profile' %}{% endif %}">
 						Hi {{ user.full_name }}!
 					</a>
 				</li>

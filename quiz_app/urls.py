@@ -1,6 +1,7 @@
 from django.urls import path
 
 from quiz_app import ajax, views
+from quiz_app.staff_admin import event_admin_site
 
 urlpatterns = [
     path("", views.home, name="home"),
@@ -23,4 +24,5 @@ urlpatterns = [
     ),
     path("signup/", views.signup, name="signup"),
     path("profile/", views.profile, name="profile"),
+    path("staff/", event_admin_site.urls),
 ]
