@@ -194,7 +194,7 @@ class QuizAdmin(admin.ModelAdmin):
         def has_view_permission(self, request, obj=None):
             return request.user.is_staff
 
-        def has_add_permission(self, request):
+        def has_add_permission(self, request, obj=None):
             return request.user.is_staff
 
         def has_change_permission(self, request, obj=None):
@@ -357,6 +357,7 @@ class Question_bank_admin(ImportExportModelAdmin):
 
     def get_action_choices(self, request):
         choices = super(Question_bank_admin, self).get_action_choices(request)
+        choices.pop(0)
         choices.reverse()
         try:
             quiz_id = request.GET.get("quizid", None)
@@ -441,7 +442,6 @@ class Question_bank_admin(ImportExportModelAdmin):
 
 
 staff_admin_site = StaffAdminSite(name="staff_admin")
-staff_admin_site.enable_nav_sidebar = False
 staff_admin_site.register(Account, AccountAdmin)
 staff_admin_site.register(Quiz, QuizAdmin)
 staff_admin_site.register(Question_bank, Question_bank_admin)
