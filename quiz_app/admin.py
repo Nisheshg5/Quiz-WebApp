@@ -21,9 +21,8 @@ from import_export.admin import ImportExportModelAdmin
 from import_export.fields import Field
 from import_export.formats import base_formats
 
-from .forms import SignUpForm
-from .models import (Account, Question, Question_bank, Quiz, QuizTakers,
-                     Response)
+from .forms import QuizAddForm, SignUpForm
+from .models import Account, Question, Question_bank, Quiz, QuizTakers, Response
 
 
 class AccountAdmin(UserAdmin):
@@ -214,6 +213,11 @@ class QuizAdmin(admin.ModelAdmin):
         choices.pop(0)
         return choices
 
+    def get_changeform_initial_data(self, request):
+        get_data = super(QuizAdmin, self).get_changeform_initial_data(request)
+        get_data["invigilator"] = request.user.pk
+        return get_data
+
     list_display = (
         "quiz_id",
         "title",
@@ -239,6 +243,7 @@ class QuizAdmin(admin.ModelAdmin):
     inlines = [
         QuestionAdmin,
     ]
+    form = QuizAddForm
     change_form_template = "admin/quiz_change_form.html"
 
 

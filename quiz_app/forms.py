@@ -48,6 +48,12 @@ class QuizForm(forms.Form):
         fields = ["key"]
 
 
+class QuizAddForm(forms.ModelForm):
+    class Meta:
+        model = Quiz
+        fields = "__all__"
+
+
 class SignUpForm(UserCreationForm):
     timeZone = forms.ChoiceField(
         initial="UTC",
