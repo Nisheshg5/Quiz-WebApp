@@ -3,6 +3,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import fields
+from django.forms.models import ModelChoiceField
 
 from .models import Account, Quiz
 
@@ -49,6 +50,21 @@ class QuizForm(forms.Form):
 
 
 class QuizAddForm(forms.ModelForm):
+    class Meta:
+        model = Quiz
+        fields = "__all__"
+
+
+class QuizAddFormStaff(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(QuizAddFormStaff, self).__init__(*args, **kwargs)
+        self.fields["invigilator"].widget = forms.HiddenInput()
+        self.fields["invigilator"].widget.attrs["disabled"] = "True"
+
+    invigilator = ModelChoiceField(
+        queryset=Account.objects.filter(is_staff=True).all(), required=False,
+    )
+
     class Meta:
         model = Quiz
         fields = "__all__"
