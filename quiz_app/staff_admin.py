@@ -274,10 +274,15 @@ class QuizAdmin(admin.ModelAdmin):
         choices.pop(0)
         return choices
 
-    def get_changeform_initial_data(self, request):
-        get_data = super(QuizAdmin, self).get_changeform_initial_data(request)
-        get_data["invigilator"] = request.user.pk
-        return get_data
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.invigilator = request.user
+        super(QuizAdmin, self).save_model(request, obj, form, change)
+
+    # def get_changeform_initial_data(self, request):
+    #     get_data = super(QuizAdmin, self).get_changeform_initial_data(request)
+    #     get_data["invigilator"] = request.user.pk
+    #     return get_data
 
     list_display = (
         # "quiz_id",
