@@ -222,6 +222,7 @@ class QuizAdmin(admin.ModelAdmin):
         "start_date",
         "end_date",
         "duration",
+        "invigilator",
         "isShuffle",
         "allow_backtracking",
         "isProctored",

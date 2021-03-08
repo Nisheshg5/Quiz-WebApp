@@ -146,6 +146,9 @@ class Quiz(models.Model):
         verbose_name="end time", default=default_end_datetime
     )
     duration = models.IntegerField(default=90)
+    invigilator = models.ForeignKey(
+        Account, on_delete=models.CASCADE, limit_choices_to={"is_staff": True}
+    )
     isShuffle = models.BooleanField(default=True)
     allow_backtracking = models.BooleanField(default=True)
     isProctored = models.BooleanField(default=True)
