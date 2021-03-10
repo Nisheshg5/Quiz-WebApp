@@ -8,7 +8,9 @@
 
 <div id="quiz_instruction">
 	<div class="row">
-		<div class="col-12 mb-4"><h1 class="text-center">Instructions</h1></div>
+		<div class="col-12 mb-4">
+			<h1 class="text-center">Instructions</h1>
+		</div>
 	</div>
 	<div class="row inner">
 		<div class="col-12 col-md-8 instructions">
@@ -57,8 +59,83 @@
 		})
 
 		const values = []
-		let currentStep
-		(async () => {
+		let currentStep;
+
+
+		if (navigator.mediaDevices === undefined) {
+			navigator.mediaDevices = {};
+		}
+
+		if (navigator.mediaDevices.getUserMedia === undefined) {
+			navigator.mediaDevices.getUserMedia = function (constraints) {
+
+				var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+				if (!getUserMedia) {
+					return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+				}
+
+				return new Promise(function (resolve, reject) {
+					getUserMedia.call(navigator, constraints, resolve, reject);
+				});
+			}
+		}
+
+
+
+
+
+
+		Swal.fire({
+			title: 'Submit your Github username',
+			html: `<video id="video" width="400px" height="300px" autoplay></video>`,
+			showCancelButton: false,
+			confirmButtonText: 'Check Webcam',
+			showLoaderOnConfirm: true,
+			allowOutsideClick: false,
+			allowEscapeKey: false,
+			preConfirm: (login) => {
+				let video = document.getElementById("video");
+				return navigator.mediaDevices.getUserMedia({ video: true })
+				.then((stream) => {
+					console.log("Camera Found");
+
+					video.srcObject = stream;
+					video.onloadedmetadata = (e) => {
+						video.play();
+					}
+				})
+				.catch((error) => {
+					Swal.showValidationMessage(
+						`Request failed: ${error}`
+					)
+					console.log(error.name + ": " + error.message);
+				})
+			},
+		}).then((result) => {
+			if (result.isConfirmed) {
+				Swal.fire({
+					title: 'Sweet!',
+					text: 'Modal with a custom image.',
+					imageUrl: 'https://unsplash.it/400/200',
+					imageWidth: 400,
+					imageHeight: 200,
+					imageAlt: 'Custom image',
+				}).then((result) => {
+					if (result.isConfirmed) {
+						Swal.fire({
+							title: `${result.value.login}'s avatar`,
+							imageUrl: result.value.avatar_url
+						})
+					}
+				})
+			}
+		})
+
+
+
+
+		{% comment %} (async () => {
 		for (currentStep = 0; currentStep < length;) {
 			const result = await swalQueueStep.fire({
 				title: `Enter ${keys[currentStep]}`,
@@ -126,7 +203,7 @@
 				}
 			});
 		}
-		})()
+		})() {% endcomment %}
 	})
 
 
