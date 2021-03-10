@@ -155,9 +155,33 @@ body {
 {
     border:3px solid var(--nav);
 }
-#testPage #video
+#testPage #video-outer p
 {
-    width:100%;
+    width:250px;
+    max-width: 100%;
+    background:var(--nav);
+    margin:0 auto;
+    color:#fff;
+    padding: 5px;
+    cursor:pointer;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+#testPage #video-inner
+{
+    position: relative;
+    width: fit-content;
+}
+#testPage #video-inner #video
+{
+    max-width: 100%;
+    /*position: relative;*/
+}
+#testPage #video-inner canvas{
+    position: absolute;
+    left:0;
+    top:0;
+    max-width: 100%;
 }
 
 #testPage .main-content 

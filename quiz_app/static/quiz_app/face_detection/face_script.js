@@ -1,13 +1,12 @@
 let video = document.getElementById("video");
-
 // LOAD ALL MODELS ASYNCHRONOUSLY
 // timyFaceDetector - make it fast
 
-/*
+
 Promise.all([
 	faceapi.nets.tinyFaceDetector.loadFromUri('/static/quiz_app/face_detection/models')
 ]).then(startVideo)
-*/
+
  
 function startVideo(){
 	navigator.mediaDevices.getUserMedia({ video: {}})
@@ -25,14 +24,15 @@ function startVideo(){
 		})
 }
 
-startVideo();
+// startVideo();
 
-/*
+
 video.addEventListener('playing', () => {
 
 	console.log("Video Start playing");
 	const canvas = faceapi.createCanvasFromMedia(video);
-	document.body.append(canvas);
+	document.getElementById("video-inner").append(canvas);
+	// document.body.append(canvas);
 	const displaySize = { width: video.width, height: video.height};
 	console.log(displaySize);
 	faceapi.matchDimensions(canvas, displaySize);
@@ -47,10 +47,10 @@ video.addEventListener('playing', () => {
 			console.error("Multiple people detected");
 		}else if(detections.length == 1){
 			console.log("User Found");
+		}else{
+			console.error("No User Found");
 		}
-		console.log(detections.length)
 	}, 1000);
 
 })
 
-*/
