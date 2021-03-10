@@ -11,6 +11,9 @@
 	<div class="row">
 		<div class="col-12 mb-4">
 			<h1 class="text-center">Instructions</h1>
+			<small><b>Please make sure that room is well lighted, otherwise your face will not be detected by the webcam</b></small><br>
+			<small><b>There will be a box around your face, when your face is detected by the webcam.</b></small>
+
 		</div>
 	</div>
 	<div class="row inner">
@@ -30,6 +33,7 @@
 	</div>
 
 </div>
+<script defer src="{% static 'quiz_app/face_detection/face-api.min.js' %}"></script>
 <script>
 	let quiz_id = `{{ quiz.quiz_id}}`;
 	let form = $("form");
@@ -83,13 +87,15 @@
 		}
 
 
-
-
+		// Load the model for the face detection api for the webcam validation
+		Promise.all([
+			faceapi.nets.tinyFaceDetector.loadFromUri('/static/quiz_app/face_detection/models')
+		]);
 
 
 		Swal.fire({
 			title: 'Webcam Validation',
-			html: `<video id="video" poster="{% static 'quiz_app/images/person_placeholder.png' %}" width="400px" height="300px" autoplay></video>`,
+			html: `<div id="video-outer" style="position:relative"><video id="video" poster="{% static 'quiz_app/images/person_placeholder.png' %}" width="400px" height="300px" autoplay></video></div>`,
 			showCancelButton: false,
 			confirmButtonText: 'Check Webcam',
 			showLoaderOnConfirm: true,
@@ -100,7 +106,41 @@
 					return navigator.mediaDevices.getUserMedia({ video: true })
 					.then((stream) => {
 						video.srcObject = stream;
+
 						video.onloadedmetadata = (e) => {
+
+							const canvas = faceapi.createCanvasFromMedia(video);
+							document.getElementById("video-outer").append(canvas);
+							const displaySize = { width: video.width, height: video.height};
+							faceapi.matchDimensions(canvas, displaySize);
+
+							canvas.style.position = "absolute";
+							canvas.style.left = "0";
+							canvas.style.right = "0";
+							canvas.style.margin = "0 auto";
+
+							setInterval(async () => {
+								const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+								const resizedDetections = faceapi.resizeResults(detections, displaySize);
+								canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+								faceapi.draw.drawDetections(canvas, resizedDetections);
+
+								canvas.style.position = "absolute";
+								canvas.style.left = "0";
+								canvas.style.right = "0";
+								canvas.style.margin = "0 auto";
+
+								console.log(detections);
+								if(detections.length > 1){
+									console.error("Multiple people detected");
+								}else if(detections.length == 1){
+									Swal.getConfirmButton().textContent = 'Continue'
+									console.log("User Found");
+								}else{
+									console.error("No User Found");
+								}
+							}, 1000);
+
 						Swal.getConfirmButton().textContent = 'Continue'
 							video.play();
 						}

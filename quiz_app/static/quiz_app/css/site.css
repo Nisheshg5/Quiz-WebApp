@@ -110,6 +110,15 @@ body {
     flex-direction: column;
     padding:15px 15px;
 }
+#quiz_instruction #outer-video canvas
+{
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    margin:0 auto;
+}
+
 .quiz_started .inner{
     align-items: center;
 }
