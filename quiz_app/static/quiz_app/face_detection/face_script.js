@@ -1,18 +1,19 @@
-const video = document.getElementById("video");
-
+let video = document.getElementById("video");
 
 // LOAD ALL MODELS ASYNCHRONOUSLY
 // timyFaceDetector - make it fast
 
+/*
 Promise.all([
-	faceapi.nets.tinyFaceDetector.loadFromUri('/models')
+	faceapi.nets.tinyFaceDetector.loadFromUri('/static/quiz_app/face_detection/models')
 ]).then(startVideo)
-
+*/
  
 function startVideo(){
 	navigator.mediaDevices.getUserMedia({ video: {}})
 		.then((stream) => {
 				// console the result
+				video = document.getElementById("video");
 				console.log("Camera Found");
 
 				// use the stream
@@ -24,6 +25,9 @@ function startVideo(){
 		})
 }
 
+startVideo();
+
+/*
 video.addEventListener('playing', () => {
 
 	console.log("Video Start playing");
@@ -48,3 +52,5 @@ video.addEventListener('playing', () => {
 	}, 1000);
 
 })
+
+*/

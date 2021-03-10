@@ -25,6 +25,7 @@ from .models import Quiz, QuizTakers, Response
 old_default = JSONEncoder.default
 
 
+
 def new_default(self, obj):
     if isinstance(obj, UUID):
         return str(obj)

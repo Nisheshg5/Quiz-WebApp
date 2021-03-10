@@ -17,6 +17,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.js"></script>
 
+	<script src="{% static 'quiz_app/face_detection/face-api.min.js' %}"></script>
 	<script src="{% static 'quiz_app/face_detection/face_script.js' %}"></script>
 </head>
 
@@ -94,6 +95,7 @@
 	{% endfor %}
 	{% endif %}
 
+	<!--
 	<script>
 	function max_suspicion_reached() {
 		$.ajax({
@@ -260,6 +262,7 @@
 	});
 	</script>
 
+-->
 </body>
 
 </html>

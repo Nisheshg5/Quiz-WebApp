@@ -155,6 +155,10 @@ body {
 {
     border:3px solid var(--nav);
 }
+#testPage #video
+{
+    width:100%;
+}
 
 #testPage .main-content 
 {
