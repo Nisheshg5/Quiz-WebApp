@@ -96,7 +96,7 @@
 	{% endfor %}
 	{% endif %}
 
-	<!--
+
 	<script>
 	function max_suspicion_reached() {
 		$.ajax({
@@ -243,7 +243,8 @@
 					title: 'warning',
 					text: 'The quiz need to be in full screen mode',
 					position: 'top',
-					timerProgressBar: true,
+					allowOutsideClick: false,
+					allowEscapeKey: false,
 				}).then((result) => {
 					if (result.isConfirmed) {
 						document.documentElement.requestFullscreen();
@@ -263,7 +264,7 @@
 	});
 	</script>
 
--->
+
 </body>
 
 </html>
