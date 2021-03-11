@@ -155,7 +155,24 @@ body {
 {
     border:3px solid var(--nav);
 }
-#testPage #video-outer p
+
+#video-outer
+{
+    vertical-align: middle;
+}
+
+@media(max-width:768px) {
+    #video-outer
+    {
+        padding:0;
+    }
+    #video-outer #video
+    {
+        width:45px;
+        height: auto;;
+    }
+}
+#video-outer p
 {
     width:250px;
     max-width: 100%;
@@ -166,18 +183,19 @@ body {
     cursor:pointer;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
+    display: none;
 }
-#testPage #video-inner
+#video-inner
 {
     position: relative;
     width: fit-content;
 }
-#testPage #video-inner #video
+#video-inner #video
 {
     max-width: 100%;
     /*position: relative;*/
 }
-#testPage #video-inner canvas{
+#video-inner canvas{
     position: absolute;
     left:0;
     top:0;
