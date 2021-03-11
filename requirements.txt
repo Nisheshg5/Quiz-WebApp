@@ -5,5 +5,4 @@ django-preventconcurrentlogins==0.8.2
 Django-Verify-Email==0.0.5
 gunicorn==20.0.4
 mysqlclient==2.0.3
-opencv-python==4.5.1.48
 XlsxWriter==1.3.7
