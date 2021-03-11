@@ -6,23 +6,31 @@ let video = document.getElementById("video");
 // tinyFaceDetector - make it fast
 Promise.all([
 	faceapi.nets.tinyFaceDetector.loadFromUri('/static/quiz_app/face_detection/models')
-]).then(startVideo)
+]).then(function() {
+	setInterval(checkVideo,1000);
+	startVideo();
+})
+let cameraAvailability = false;
 
- 
+
 // start the web camera
 function startVideo(){
 	navigator.mediaDevices.getUserMedia({ video: {}})
 		.then((stream) => {
 				// console the result
-				video = document.getElementById("video");
 				console.log("Camera Found");
 
+				cameraAvailability = true;
+
 				// use the stream
-				video.srcObject = stream;				
+				video.srcObject = stream;
 		})
 		.catch((err) => {
 			// handle the error
 				console.error(err.name + ": " + err.message);
+
+				cameraAvailability = false;
+
 				Swal.fire({
 					icon: 'error',
 					title: `Can't access the camera`,
@@ -32,6 +40,41 @@ function startVideo(){
 					allowOutsideClick: false,
 					allowEscapeKey: false,
 				});
+		})
+}
+
+
+function checkVideo(){
+	navigator.mediaDevices.getUserMedia({ video: {}})
+		.then((stream) => {
+				if((Swal.isVisible() && Swal.getTitle().textContent == "Can't access the camera")) {
+					// console the result
+					console.log("Camera Found");
+
+					cameraAvailability = true;
+
+					// use the stream
+					video.srcObject = stream;
+
+					Swal.close();
+				}
+		})
+		.catch((err) => {
+				console.error(err.name + ": " + err.message);
+
+				cameraAvailability = false;
+
+				if(!(Swal.isVisible() && Swal.getTitle().textContent == "Can't access the camera")) {
+					Swal.fire({
+						icon: 'error',
+						title: `Can't access the camera`,
+						html: `Error: ${err.message}<br>Please fix the problem and refresh the page.`,
+						position: 'center',
+						showConfirmButton: false,
+						allowOutsideClick: false,
+						allowEscapeKey: false,
+					});
+				}
 		})
 }
 
@@ -54,17 +97,19 @@ video.addEventListener('playing', () => {
 
 	// detect the faces at a specific interval
 	setInterval(async () => {
-		const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
-		const resizedDetections = faceapi.resizeResults(detections, displaySize);
-		canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
-		faceapi.draw.drawDetections(canvas, resizedDetections);
-		console.log(detections);
-		if(detections.length > 1){
-			console.error("Multiple people detected");
-		}else if(detections.length == 1){
-			console.log("User Found");
-		}else{
-			console.error("No User Found");
+		if (cameraAvailability) {
+			const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+			const resizedDetections = faceapi.resizeResults(detections, displaySize);
+			canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+			faceapi.draw.drawDetections(canvas, resizedDetections);
+			console.log(detections);
+			if(detections.length > 1){
+				console.error("Multiple people detected");
+			}else if(detections.length == 1){
+				console.log("User Found");
+			}else{
+				console.error("No User Found");
+			}
 		}
 	}, 1000);
 
