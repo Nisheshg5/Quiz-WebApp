@@ -9,13 +9,12 @@
 	<div class="row" id="testPage">
 		<div class="sidebar col-md-3">
 
-
-			<div id="video-outer" class="text-center">
+			<!-- <div id="video-outer" class="text-center">
 				<p data-toggle="collapse" data-target="#video-inner">Click Here To Hide/Show Video</p>
 				<div id="video-inner" class="mx-auto collapse show">
-					<video width="250" height="187" id="video" autoplay></video>
+					<video width="40" height="30" id="video" autoplay></video>
 				</div>
-			</div>
+			</div> -->
 			<ul class="circle-wrap" id="circle-wrap">
 				<li class="circle">1</li>
 				<li class="circle">2</li>
@@ -28,7 +27,7 @@
 				<li class="circle">1</li>
 				<li class="circle">1</li>
 				<li class="circle">1</li>
-				<li class="circle">1</li>
+				<li class="circle">1</li>	
 			</ul>
 			
 		</div>
@@ -102,6 +101,9 @@
 	
 	var attempted = $("#attemptedNo");
 
+
+	// Load the question
+	// take question no as input and load that question
 	function loadQuestion(questions, no){
 		{% if quiz.allow_backtracking %}
 			if(no == 0) {
@@ -138,6 +140,7 @@
 		$("input[name=que]").val([responses[activeQueNo]["answer"]]);
 	}
 
+	// load the options in the html
 	function loadOptions(question){
 		options.innerHTML = "";
 		question["options_array"].forEach(function(option,i) {
@@ -145,7 +148,7 @@
 		});
 	}
 
-
+	// Create the options for the questions in HTML
 	function createOption(choice, choiceNo){
 		let div = $(`<div />`, {
 			"class": "option"
@@ -175,6 +178,8 @@
 		div.appendTo("#q-options");
 	}
 
+	// shuffle the array
+	// used to shuffle the  questions or options of quesions
 	function shuffleArray(array) {
 		for (let i = array.length - 1; i > 0; i--) {
 			const j = Math.floor(Math.random() * (i + 1));
@@ -182,6 +187,7 @@
 		}
 	}
 
+	// take a question as input and shuffles all its options
 	function shuffleOptions(questions) {
 		questions.forEach(function(question) {
 			options_array = []
@@ -201,6 +207,8 @@
 		});
 	}
 
+	// add click listener to the prev button and call the loadQuestion function to load prev question
+	// by decrementing the value of activeQueNo by 1
 	function setupPrevBtn() {
 		prevQueBtn.addEventListener("click", function(e){
 			e.preventDefault();
@@ -264,7 +272,9 @@
 		});
 	}
 
-
+	// add click listener to the submit button
+	// get the selected answer and call the saveResponse Function with the selected answer and the corresponding queNo.
+	// It then load the next Question
 	function setupSubmitBtn(){
 		submitQueBtn.addEventListener("click", function(e){
 			e.preventDefault();
@@ -288,7 +298,8 @@
 		});
 	}
 
-
+	// add click listener to the next button and call the loadQuestion function to load next question
+	// by incrementing the value of activeQueNo by 1
 	function setupNextBtn() {
 		nextQueBtn.addEventListener("click", function(e){
 			e.preventDefault();
@@ -417,6 +428,9 @@
 		var timer_interval = setInterval(update_timer, 1000);
 	}
 
+	// load all the question numbers on the sidebar
+	// styles the qNo button for attempted or not or bookmarked
+	// add event listeners to the qNo buttons
 	function setupSidebarBtns(){
 		circleWrap.innerHTML = "";
 
@@ -472,6 +486,13 @@
 		});
 	}
 
+
+	// Initialize the basic setup like
+	// load the first question with options shuffled
+	// load the sidebar and the question numbers and add listener to them
+	// load the bookmark and add listener to it
+	// start the timer for the test
+	// setup the next, prev, submit buttons
 	function init()	{
 		questions = {{ questions|safe }};
 		responses = {{ responses|safe }};
@@ -491,6 +512,7 @@
 		setupNextBtn();
 		set_attempted();
 	}
+
 	init();
 
 </script>

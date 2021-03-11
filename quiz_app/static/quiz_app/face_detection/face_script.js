@@ -1,13 +1,15 @@
+//  Script file for the face detection
+
 let video = document.getElementById("video");
+
 // LOAD ALL MODELS ASYNCHRONOUSLY
-// timyFaceDetector - make it fast
-
-
+// tinyFaceDetector - make it fast
 Promise.all([
 	faceapi.nets.tinyFaceDetector.loadFromUri('/static/quiz_app/face_detection/models')
 ]).then(startVideo)
 
  
+// start the web camera
 function startVideo(){
 	navigator.mediaDevices.getUserMedia({ video: {}})
 		.then((stream) => {
@@ -24,9 +26,12 @@ function startVideo(){
 		})
 }
 
-// startVideo();
 
+// when the video starts playing create a canvas of same dimenstions as of video at a specific time interval
+// the canvas should exactly be above the video
+// creates a blue rectangle around the face of the user which means that the camera detected a face
 
+// get the no of people detected by the camera by the detections.length
 video.addEventListener('playing', () => {
 
 	console.log("Video Start playing");
@@ -37,6 +42,8 @@ video.addEventListener('playing', () => {
 	console.log(displaySize);
 	faceapi.matchDimensions(canvas, displaySize);
 
+
+	// detect the faces at a specific interval
 	setInterval(async () => {
 		const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
 		const resizedDetections = faceapi.resizeResults(detections, displaySize);

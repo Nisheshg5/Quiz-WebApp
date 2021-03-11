@@ -33,7 +33,7 @@
 		<div class="collapse navbar-collapse order-1" id="collapsibleNavbar">
 			<ul class="navbar-nav">
 				<li class="navbar-text mx-2 navbar-brand">
-					Quiz App
+					Quiz Masters
 				</li>
 				{% if user.is_authenticated %}
 				<li class="navbar-text mx-2">
@@ -52,11 +52,12 @@
 				<span id="timer"></span>
 			</li>
 			<button class="btn btn-finish mx-2" onclick="showResults()">Finish Test</button>
+			<div id="video-outer" class="text-center navbar-text">
+				<div id="video-inner" class="mx-auto">
+					<video width="80" height="60" id="video" autoplay></video>
+				</div>
+			</div>
 		</div>
-
-
-
-
 	</nav>
 
 
