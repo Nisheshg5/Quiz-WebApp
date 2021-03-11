@@ -6,10 +6,6 @@
 }
 
 .formBlock {
-    /* background: rgba(0, 0, 0, .39); */
-    /* -webkit-backdrop-filter: blur(15px); */
-    /* -moz-backdrop-filter: blur(15px); */
-    /* backdrop-filter: blur(15px); */
     padding: 40px 40px;
     border-radius: 8px;
     width: 450px;
@@ -20,12 +16,13 @@
 }
 
 a.form-link {
-    color: #fff;
+    color: #222;
+    text-decoration:none;
 }
 
 a.form-link:hover {
-    color: #eee;
-    border-color: #eee;
+    color: #000;
+    border-color: #000;
 }
 
 input[type=submit]:hover {

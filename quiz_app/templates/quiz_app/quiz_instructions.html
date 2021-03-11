@@ -17,14 +17,14 @@
 		</div>
 	</div>
 	<div class="row inner">
-		<div class="col-12 col-md-8 instructions">
+		<div class="col-12 col-md-9 instructions">
 			<ol class="">
 				{% for instruction in quiz.instructions.splitlines %}
 				<li>{{ instruction }}</li>
 				{% endfor %}
 			</ol>
 		</div>
-		<div class="col-12 col-md-4 my-5">
+		<div class="col-12 col-md-3 d-flex justify-content-center align-items-center">
 			<form method="POST">
 				{% csrf_token %}
 				<input id="start" type="submit" class="start_test btn" value="Start Test">
@@ -95,7 +95,7 @@
 
 		Swal.fire({
 			title: 'Webcam Validation',
-			html: `<div id="video-outer" style="position:relative"><video id="video" poster="{% static 'quiz_app/images/person_placeholder.png' %}" width="400px" height="300px" autoplay></video></div>`,
+			html: `<div id="video-outer" style="position:relative"><video id="video" poster="{% static 'quiz_app/images/person_placeholder.png' %}" width="260" height="195" autoplay></video></div>`,
 			showCancelButton: false,
 			confirmButtonText: 'Check Webcam',
 			showLoaderOnConfirm: true,
