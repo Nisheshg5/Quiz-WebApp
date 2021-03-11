@@ -25,7 +25,6 @@ from .models import Quiz, QuizTakers, Response
 old_default = JSONEncoder.default
 
 
-
 def new_default(self, obj):
     if isinstance(obj, UUID):
         return str(obj)
@@ -143,7 +142,7 @@ def quiz(request, quiz_id):
             responses.append(
                 model_to_dict(response, exclude=["id", "isCorrect", "marks"])
             )
-        Response.objects.bulk_create(responseList)
+        Response.objects.bulk_create(responseList, ignore_conflicts=True)
     shuffle = quiz.isShuffle
     context = {
         "quiz": quiz,
