@@ -287,6 +287,9 @@ def profile(request):
     current = []
     upcoming = []
     for quizTaker in quizTakers:
+        if quizTaker.was_missed:
+            past.append(quizTaker)
+            continue
         if quizTaker.has_ended:
             past.append(quizTaker)
             continue

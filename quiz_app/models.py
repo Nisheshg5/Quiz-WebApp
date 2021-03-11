@@ -286,9 +286,15 @@ class QuizTakers(models.Model):
 
     @property
     def has_passed(self):
-        total_marks = self.quiz.question_set.aggregate(Sum("marks"))["marks__sum"]
-        marks_obtained = self.response_set.aggregate(Sum("marks"))["marks__sum"]
+        total_marks = self.quiz.question_set.aggregate(Sum("marks"))["marks__sum"] or 0
+        marks_obtained = self.response_set.aggregate(Sum("marks"))["marks__sum"] or 0
         if 100 * marks_obtained / total_marks > 33:
+            return True
+        return False
+
+    @property
+    def was_missed(self):
+        if not self.started and self.quiz.end_date < timezone.now():
             return True
         return False
 

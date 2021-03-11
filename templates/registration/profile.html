@@ -70,10 +70,12 @@ Profile Page
 						- 	<small>{{ quizTaker.started|date }}</small>
 						{% if quizTaker.has_passed %}
 						<small style="color: #006100">(Pass)</small>
+						{% elif quizTaker.was_missed %}
+						<small style="color: #808080">(Missed)</small>
 						{% else %}
 						<small style="color: #9C0006">(Fail)</small>
 						{% endif %}
-						<a target="_blank" class="btn btn-primary float-right" href="{% url 'quiz_result' quizTaker.quiz.quiz_id %}"> View Result</a>
+						<a target="_blank" class="btn btn-primary float-right {% if quizTaker.was_missed %}disabled{% endif %}" href="{% url 'quiz_result' quizTaker.quiz.quiz_id %}"> View Result</a>
 					</li>
 					{% endfor %}
 				</ol>
