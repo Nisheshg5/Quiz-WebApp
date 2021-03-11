@@ -23,6 +23,15 @@ function startVideo(){
 		.catch((err) => {
 			// handle the error
 				console.error(err.name + ": " + err.message);
+				Swal.fire({
+					icon: 'error',
+					title: `Can't access the camera`,
+					html: `Error: ${err.message}<br>Please fix the problem and refresh the page.`,
+					position: 'center',
+					showConfirmButton: false,
+					allowOutsideClick: false,
+					allowEscapeKey: false,
+				});
 		})
 }
 
