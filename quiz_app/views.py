@@ -112,37 +112,40 @@ def quiz(request, quiz_id):
 
     questions = []
     responses = []
-
-    if quizTaker.started:
-        quizTaker.suspicion_count += 1
-        quizTaker.save()
-        messages.warning(
-            request, "Do not move away from the test or it will be marked suspicious."
-        )
-
-        queryset = (
-            quizTaker.response_set.select_related("question").all().order_by("pk")
-        )
-        for response in queryset:
-            questions.append(model_to_dict(response.question, exclude=["correct"]))
-            responses.append(
-                model_to_dict(response, exclude=["id", "isCorrect", "marks"])
+    if quizTaker.extra:
+        if quizTaker.started:
+            quizTaker.suspicion_count += 1
+            quizTaker.save()
+            messages.warning(
+                request,
+                "Do not move away from the test or it will be marked suspicious.",
             )
+
+            queryset = (
+                quizTaker.response_set.select_related("question").all().order_by("pk")
+            )
+            for response in queryset:
+                questions.append(model_to_dict(response.question, exclude=["correct"]))
+                responses.append(
+                    model_to_dict(response, exclude=["id", "isCorrect", "marks"])
+                )
+        else:
+            quizTaker.started = timezone.now()
+            quizTaker.save()
+            shuffledQuestions = quiz.question_set.all()[::1]
+            random.shuffle(shuffledQuestions)
+
+            responseList = []
+            for question in shuffledQuestions:
+                response = Response(quiztaker=quizTaker, question=question, answer="")
+                responseList.append(response)
+                questions.append(model_to_dict(question, exclude=["correct"]))
+                responses.append(
+                    model_to_dict(response, exclude=["id", "isCorrect", "marks"])
+                )
+            Response.objects.bulk_create(responseList, ignore_conflicts=True)
     else:
-        quizTaker.started = timezone.now()
-        quizTaker.save()
-        shuffledQuestions = quiz.question_set.all()[::1]
-        random.shuffle(shuffledQuestions)
-
-        responseList = []
-        for question in shuffledQuestions:
-            response = Response(quiztaker=quizTaker, question=question, answer="")
-            responseList.append(response)
-            questions.append(model_to_dict(question, exclude=["correct"]))
-            responses.append(
-                model_to_dict(response, exclude=["id", "isCorrect", "marks"])
-            )
-        Response.objects.bulk_create(responseList, ignore_conflicts=True)
+        return redirect("quiz_instructions", quiz_id=quiz_id)
     shuffle = quiz.isShuffle
     context = {
         "quiz": quiz,
