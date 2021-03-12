@@ -9,19 +9,9 @@
 	<div class="row" id="testPage">
 		<div class="sidebar col-md-3">
 
+			<!-- for the question numbers on the side bar (loaded by the javascript depending on the no of questions) -->
 			<ul class="circle-wrap" id="circle-wrap">
-				<li class="circle">1</li>
-				<li class="circle">2</li>
-				<li class="circle">3</li>
-				<li class="circle">4</li>
-				<li class="circle">5</li>
-				<li class="circle">1</li>
-				<li class="circle">1</li>
-				<li class="circle">1</li>
-				<li class="circle">1</li>
-				<li class="circle">1</li>
-				<li class="circle">1</li>
-				<li class="circle">1</li>	
+				
 			</ul>
 			
 		</div>
@@ -38,22 +28,7 @@
 				<form id="opForm">
 					{% csrf_token %}
 					<div class="options" id="q-options">
-						<div class="option">
-							<input type="radio" name="que" value="1" id="opt1">
-							<label for="opt1"><span>A. </span> <span id="o1"></span></label>
-						</div>
-						<div class="option">
-							<input type="radio" name="que" value="2" id="opt2">
-							<label for="opt2"><span>B. </span> <span></span></label>
-						</div>
-						<div class="option">
-							<input type="radio" name="que" value="3" id="opt3">
-							<label for="opt3"><span>C. </span> <span></span></label>
-						</div>
-						<div class="option">
-							<input type="radio" name="que" value="4" id="opt4">
-							<label for="opt4"><span>D. </span> <span></span></label>
-						</div>
+						
 					</div>
 					{% if quiz.allow_backtracking %}
 					<button class="btn btn-primary mt-3" id="btn-prev" type="submit">Prev</button>
