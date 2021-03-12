@@ -5,6 +5,12 @@ Login
 {% endblock %}
 
 {% block formBlock %}
+
+<!-- 
+    Login Page
+    CSS - static/form.css
+ -->
+
 <div class="formBlock my-md-4 shadow">
     <h2 class="text-center">Log In</h2>
     <form method="post">
@@ -19,11 +25,11 @@ Login
                 required="" />
         </div>
         {% endfor %}
-        <div class="form-check">
+        <!-- <div class="form-check">
             <label class="form-check-label">
                 <input type="checkbox" class="form-check-input" value="">Remember Me
             </label>
-        </div>
+        </div> -->
         <div class="form-group">
             <button type="submit" class="btn btn-block mt-4" id="login">Log In</button>
         </div>
@@ -33,6 +39,9 @@ Login
         </div>
     </form>
 </div>
+
+
+<!-- Show the errors messages -->
 
 {% for field, errors in form.errors.items %}
 {% for error in errors %}
