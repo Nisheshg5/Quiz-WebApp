@@ -5,6 +5,9 @@
 {% endblock %}
 
 {% block content %}
+
+<!-- CSS location - style.css -->
+
 <div id="quiz_result" class="container-fluid">
 	<div class="row mt-2">
 		<div class="container text-center shadow">
@@ -66,6 +69,7 @@
 		</div>
 	</div>
 
+	<!-- Table for the detailed view of questions -->
 	<div class="description container my-4 px-0 table-responsive-md collapse" id="report-table">
 		<table class="table">
 			<thead>
@@ -88,14 +92,7 @@
 				</tr>
 				{% endfor %}
 
-			</tbody>
-			<!-- {{ responses.0.question }}
-            {{ responses.0.question.title }}
-            {{ responses.0.question.correct }}
-            {{ responses.0.question.marks }}
-            {{ responses.0.question.choice_1 }}<br>
-            {{ responses.0.isCorrect }}<br>
-            {{ responses.0.marks }}<br> -->
+			</tbody>		
 
 		</table>
 	</div>
