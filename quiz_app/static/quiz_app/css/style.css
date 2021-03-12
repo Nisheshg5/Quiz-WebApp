@@ -11,24 +11,18 @@
 }
 
 body {
+    width: 100vw;
+    position: relative;
     background: rgb(210, 210, 210);
     background:#fff;
     overflow-x: hidden;
     color:#222;
 }
 
-.navbar {
-    /* background-color: #6b1c89; */
-    background-color: var(--nav);
-    font-size: 1em;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    color: white;
-    z-index: 1;
-    padding: 20px 100px 10px 100px;
-    position: sticky;
-    top:0;
-}
-
+/*
+setting the minimum height of the pages
+ minimum height of page content = height of screen - height of header - height of footer
+*/
 #home,
 .quiz_started,
 #quiz_result,
@@ -41,33 +35,61 @@ body {
     min-height: calc(100vh - 70px - 70px);
 }
 
+
+/*
+Custom Classes
+*/
 .shadow {
     box-shadow: 2px 5px 10px 10px rgba(0, 0, 0, 0.2);
 }
 
-.result-success
-{
-    background: #C6EFCE;
-    color:#006100;
+
+/*
+Navigation Bar CSS
+*/
+
+.navbar-dark .navbar-nav .nav-link {
+    color: #fff;
 }
 
-.result-danger
-{
-    background: #FFC7CE;
-    color:#9C0006;
+.navbar a {
+    text-decoration: none;
+    color: inherit;
 }
 
-.result-primary
-{
-    background: #b4daff;
-    color:#003171;
+.navbar-brand {
+    font-size: 1.2em;
+    font-weight: 600;
 }
+
+.navbar-item {
+    font-variant: small-caps;
+    margin-left: 30px;
+}
+
+.navbar {
+    background-color: var(--nav);
+    font-size: 1em;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: white;
+    z-index: 1;
+    padding: 20px 100px 10px 100px;
+    position: sticky;
+    top:0;
+}
+
+@media only screen and (max-width: 768px) {
+    .navbar {
+        padding: 20px 40px;
+    }
+}
+
 
 /* 
 Home Page CSS
 */
+
 #home {
-    /* background:url('https://source.unsplash.com/random/1600%C3%971600/?laptop'); */
     background: url('../images/bg1.jpeg');
     background-repeat: no-repeat;
     background-size: cover;
@@ -76,6 +98,33 @@ Home Page CSS
     align-items: center;
     justify-content: center;
 }
+
+#home .quiz_form{
+    color:#222;
+}
+
+#home .quiz_form .form-control:focus{
+    color:#222;
+}
+
+#home .quiz_form input{
+    margin-top: 50px;
+    margin-bottom: 30px;
+    width: 100%;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    background:#e8f0fe;
+}
+
+#home .quiz_form input::placeholder{
+    color:#222;
+}
+
+#home .quiz_form button{
+    background: var(--nav);
+    color:#fff;
+}
+
 
 .home_div {
     display: flex;
@@ -108,7 +157,8 @@ Home Page CSS
 }
 
 /* 
-Quiz Result CSS
+Quiz Result Page CSS
+File quiz_app/quiz_result.html
 */
 
 #quiz_result 
@@ -173,33 +223,24 @@ Quiz Result CSS
     color: inherit;
 }
 
-.footer 
-{
-    height: 70px;
-    background: var(--nav);
-    width: 100%;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index:2;
-}
+
 
 /* 
-Profile Page Styling
+Student Profile Page Styling
+File - templates/registration/profile.html
 */
 #profile
 {
     background: #fff;
     color:#222222
 }
-#profile main
-{
+
+#profile main{
     width:80%;
     margin:0 auto;
 }
-#profile .sidenav 
-{
+
+#profile .sidenav {
     height: 100%;
     width: 160px;
     position: fixed;
@@ -220,31 +261,60 @@ Profile Page Styling
     display: block;
 }
   
-#profile .sidenav a:hover 
-{
+#profile .sidenav a:hover {
     color: #222222;
 }
-#profile main 
-{
-    /* margin-left: 160px; */
+
+#profile main {
     font-size: 28px;
     padding: 0px 10px;
 }
-#profile main a.nav-link
-{
+
+#profile main a.nav-link{
     color: var(--nav);
 }
-#profile main a.nav-link.active
-{
+
+#profile main a.nav-link.active{
     color: #fff;
 }
+
 #profile main .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
     background-color: #2980B0;
     border-color: #2980b9;
     border-radius: 0;
     color: #fff;
 }
-#profile .tab-content .list-group
-{
+
+#profile .tab-content .list-group{
     margin-top: 10px;
+}
+
+.result-success{
+    background: #C6EFCE;
+    color:#006100;
+}
+
+.result-danger{
+    background: #FFC7CE;
+    color:#9C0006;
+}
+
+.result-primary{
+    background: #b4daff;
+    color:#003171;
+}
+
+
+/*
+Footer CSS
+*/
+.footer {
+    height: 70px;
+    background: var(--nav);
+    width: 100%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index:2;
 }
