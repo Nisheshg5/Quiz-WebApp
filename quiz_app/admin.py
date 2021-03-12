@@ -36,15 +36,17 @@ class AccountAdmin(UserAdmin):
 
     def get_action_choices(self, request):
         choices = super(AccountAdmin, self).get_action_choices(request)
-        choices.pop(0)
-        choices.reverse()
+        delete_choice = [(x, y) for x, y in choices if x == "delete_selected"]
+        if delete_choice:
+            del choices[choices.index(delete_choice[0])]
         try:
             quiz_id = request.GET.get("quizid", None)
             if not quiz_id:
                 raise Quiz.DoesNotExist()
             Quiz.objects.get(pk=quiz_id)
-        except (Quiz.DoesNotExist, ValidationError):
             choices.pop(0)
+        except (Quiz.DoesNotExist, ValidationError):
+            choices.pop(1)
         return choices
 
     def assign_users(self, request, queryset):
@@ -128,43 +130,42 @@ class AccountAdmin(UserAdmin):
     )
 
 
+class QuestionAdmin(admin.TabularInline):
+    model = Question
+    question_numbering = 0
+    fields = (
+        "question_number",
+        "quiz",
+        "title",
+        "choice_1",
+        "choice_2",
+        "choice_3",
+        "choice_4",
+        "choice_5",
+        "correct",
+        "marks",
+        "isShuffle",
+    )
+    readonly_fields = ("question_number",)
+
+    def question_number(self, obj):
+        self.question_numbering += 1
+        return f"{self.question_numbering:2}"
+
+    question_number.short_description = "#"
+
+    formfield_overrides = {
+        models.TextField: {"widget": Textarea(attrs={"rows": 4, "cols": 20})},
+    }
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        field = super(QuestionAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+        if db_field.name == "title":
+            field.widget.attrs["cols"] = 40
+        return field
+
+
 class QuizAdmin(admin.ModelAdmin):
-    class QuestionAdmin(admin.TabularInline):
-        model = Question
-        question_numbering = 0
-        fields = (
-            "question_number",
-            "quiz",
-            "title",
-            "choice_1",
-            "choice_2",
-            "choice_3",
-            "choice_4",
-            "choice_5",
-            "correct",
-            "marks",
-            "isShuffle",
-        )
-        readonly_fields = ("question_number",)
-
-        def question_number(self, obj):
-            self.question_numbering += 1
-            return f"{self.question_numbering:2}"
-
-        question_number.short_description = "#"
-
-        formfield_overrides = {
-            models.TextField: {"widget": Textarea(attrs={"rows": 4, "cols": 20})},
-        }
-
-        def formfield_for_dbfield(self, db_field, **kwargs):
-            field = super(QuizAdmin.QuestionAdmin, self).formfield_for_dbfield(
-                db_field, **kwargs
-            )
-            if db_field.name == "title":
-                field.widget.attrs["cols"] = 40
-            return field
-
     def get_urls(self):
         urls = super(QuizAdmin, self).get_urls()
         my_urls = [
