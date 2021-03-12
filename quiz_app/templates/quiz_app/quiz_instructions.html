@@ -239,38 +239,6 @@
 		{% endif %}
 	})
 
-
-	{% comment %} let testStartBtn = document.getElementById("test-start-btn");
-	testStartBtn.addEventListener("click", function(e){
-		e.preventDefault();
-		alertForFullScreen();
-		openFullScreen();
-		window.location.pathname=`/quiz/${quiz_id}`;
-	});
-
-	function alertForFullScreen(){
-		Swal.fire({
-			icon: 'info',
-			title: 'Full Screen',
-			html: 'You are required to enter in Full Screen',
-			position: 'top',
-			timerProgressBar: false,
-			showConfirmButton: true,
-			// timer: 1500
-		});
-	}
-
-	function openFullScreen(){
-		document.documentElement.requestFullscreen();
-		let elem = document.documentElement;
-		if (elem.requestFullscreen) {
-			elem.requestFullscreen();
-		} else if (elem.webkitRequestFullscreen) { /* Safari */
-			elem.webkitRequestFullscreen();
-		} else if (elem.msRequestFullscreen) { /* IE11 */
-			elem.msRequestFullscreen();
-		}
-	} {% endcomment %}
 </script>
 
 {% endblock %}
