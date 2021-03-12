@@ -4,12 +4,12 @@ let video = document.getElementById("video");
 
 // LOAD ALL MODELS ASYNCHRONOUSLY
 // tinyFaceDetector - make it fast
-Promise.all([
-	faceapi.nets.tinyFaceDetector.loadFromUri('/static/quiz_app/face_detection/models')
-]).then(function() {
-	setInterval(checkVideo,1000);
-	startVideo();
-})
+// Promise.all([
+// 	faceapi.nets.tinyFaceDetector.loadFromUri('/static/quiz_app/face_detection/models')
+// ]).then(function() {
+// 	setInterval(checkVideo,1000);
+// 	startVideo();
+// })
 let cameraAvailability = false;
 
 
