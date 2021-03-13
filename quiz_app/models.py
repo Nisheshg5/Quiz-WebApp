@@ -17,7 +17,23 @@ from verify_email.email_handler import _VerifyEmail
 
 
 class AccountManager(BaseUserManager):
+    """Account manager for custom user models."""
+
     def create_user(self, email, full_name, password=None):
+        """Overriding the default create_user method
+
+        Args:
+            email (str): The email of the user
+            full_name (str): The full name of the user
+            password (str): The password of the user
+
+        Raises:
+            ValueError: if email or full_name is None
+
+        Returns:
+            Account: the account object of the new user
+        """
+
         if not email:
             raise ValueError("User must have an email address")
         if not full_name:
@@ -29,6 +45,20 @@ class AccountManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, full_name, password=None):
+        """Overriding the default create_superuser method
+
+        Args:
+            email (str): The email of the user
+            full_name (str): The full name of the user
+            password (str): The password of the user
+
+        Raises:
+            ValueError: if email or full_name is None
+
+        Returns:
+            Account: the account object of the new user
+        """
+
         user = self.create_user(
             email=self.normalize_email(email), full_name=full_name, password=password,
         )
@@ -41,6 +71,8 @@ class AccountManager(BaseUserManager):
 
 
 class Account(AbstractBaseUser):
+    """Custom user model to replace the default django one."""
+
     full_name = models.CharField(max_length=30, unique=False)
     email = models.EmailField(verbose_name="email", max_length=254, unique=True)
     date_joined = models.DateTimeField(verbose_name="date joined", auto_now_add=True)
@@ -72,6 +104,8 @@ class Account(AbstractBaseUser):
         return True
 
     class VerifyEmail(_VerifyEmail):
+        """Overriding the default class to resend the verification email"""
+
         def send_verification_link(self, request, user):
             try:
                 useremail = user.email
@@ -103,6 +137,8 @@ class Account(AbstractBaseUser):
                     raise Exception(error)
 
     def verify_email(self, request):
+        """Resend the verification email"""
+
         return Account.VerifyEmail().send_verification_link(request, self)
 
     class Meta:
@@ -110,13 +146,15 @@ class Account(AbstractBaseUser):
 
 
 class Quiz(models.Model):
+    """The model for the quiz table"""
+
     def default_start_datetime():
         return datetime.utcnow() + timedelta(hours=3)
 
     def default_end_datetime():
         return datetime.utcnow() + timedelta(hours=6)
 
-    def random_code():
+    def random_code() -> str:
         return "".join(random.choices(string.ascii_uppercase + string.digits, k=6))
 
     def save(self, *args, **kwargs):
@@ -155,11 +193,11 @@ class Quiz(models.Model):
         return f"{self.title}"
 
     @property
-    def has_started(self):
+    def has_started(self) -> bool:
         return self.start_date < timezone.now()
 
     @property
-    def has_ended(self):
+    def has_ended(self) -> bool:
         return self.end_date < timezone.now()
 
     @property
@@ -176,6 +214,7 @@ class Quiz(models.Model):
 
 
 class Question_bank(models.Model):
+    """Model for the question bank table."""
 
     C = "C"
     CPLUSPLUS = "C++"
@@ -228,6 +267,8 @@ class Question_bank(models.Model):
 
 
 class Question(models.Model):
+    """Model for Question table."""
+
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     title = models.TextField()
     choice_1 = models.TextField()
@@ -254,6 +295,8 @@ class Question(models.Model):
 
 
 class QuizTakers(models.Model):
+    """Model for the quiztakers table."""
+
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
     extra = models.TextField(blank=True, null=True)
@@ -268,7 +311,7 @@ class QuizTakers(models.Model):
         ).total_seconds()
 
     @property
-    def has_ended(self):
+    def has_ended(self) -> bool:
         if self.completed:
             return True
         if not self.started:
@@ -280,7 +323,7 @@ class QuizTakers(models.Model):
         return time.total_seconds() <= 0
 
     @property
-    def has_passed(self):
+    def has_passed(self) -> bool:
         total_marks = self.quiz.question_set.aggregate(Sum("marks"))["marks__sum"] or 0
         marks_obtained = self.response_set.aggregate(Sum("marks"))["marks__sum"] or 0
         if 100 * marks_obtained / total_marks > 33:
@@ -288,7 +331,7 @@ class QuizTakers(models.Model):
         return False
 
     @property
-    def was_missed(self):
+    def was_missed(self) -> bool:
         if not self.started and self.quiz.end_date < timezone.now():
             return True
         return False
@@ -307,6 +350,8 @@ class QuizTakers(models.Model):
 
 
 class Response(models.Model):
+    """Model for the response table."""
+
     quiztaker = models.ForeignKey(QuizTakers, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     answer = models.TextField(blank=True, null=True)
