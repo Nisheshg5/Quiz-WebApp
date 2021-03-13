@@ -34,17 +34,16 @@ class AccountAdmin(UserAdmin):
 
     def get_action_choices(self, request):
         choices = super(AccountAdmin, self).get_action_choices(request)
-        delete_choice = [(x, y) for x, y in choices if x == "delete_selected"]
-        if delete_choice:
-            del choices[choices.index(delete_choice[0])]
         try:
             quiz_id = request.GET.get("quizid", None)
             if not quiz_id:
                 raise Quiz.DoesNotExist()
             Quiz.objects.get(pk=quiz_id)
-            choices.pop(0)
         except (Quiz.DoesNotExist, ValidationError):
-            choices.pop(1)
+            choices.pop()
+        if len(choices) > 1:
+            del choices[0]
+        choices.reverse()
         return choices
 
     def assign_users(self, request, queryset):
