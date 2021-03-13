@@ -9,6 +9,8 @@ from .models import Account, Question_bank, Quiz
 
 
 class StaffAdminSite(AdminSite):
+    """Add a new admin site for staff"""
+
     def home(*args, **kwargs):
         return HttpResponseRedirect(reverse("staff_admin:quiz_app_quiz_changelist"))
 
@@ -18,6 +20,8 @@ class StaffAdminSite(AdminSite):
 
 
 class AccountAdmin(AccountAdmin):
+    """Only allow staff to view the accounts"""
+
     def __init__(self, *args, **kwargs):
         super(AccountAdmin, self).__init__(*args, **kwargs)
         self.list_display_links = None
@@ -36,6 +40,8 @@ class AccountAdmin(AccountAdmin):
 
 
 class QuestionAdmin(QuestionAdmin):
+    """Allow the staff full access to questions"""
+
     def has_view_permission(self, request, obj=None):
         return request.user.is_staff
 
@@ -50,6 +56,8 @@ class QuestionAdmin(QuestionAdmin):
 
 
 class QuizAdmin(QuizAdmin):
+    """Allow the staff full access to only their quizzes"""
+
     def has_view_permission(self, request, obj=None):
         return request.user.is_staff and (
             (obj and obj.invigilator == request.user) or not obj
@@ -84,6 +92,8 @@ class QuizAdmin(QuizAdmin):
 
 
 class Question_bank_admin(Question_bank_admin):
+    """Allow the staff full access to question bank"""
+
     def __init__(self, *args, **kwargs):
         super(Question_bank_admin, self).__init__(*args, **kwargs)
         self.list_display_links = None

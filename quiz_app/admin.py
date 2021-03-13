@@ -25,7 +25,11 @@ from .models import Account, Question, Question_bank, Quiz, QuizTakers, Response
 
 
 class AccountAdmin(UserAdmin):
+    """Admin for the custom user model"""
+
     class EmptyQuizIDFilter(SimpleListFilter):
+        """An empty filter to get the quiz id for the assignment of quiz"""
+
         title = _("Empty Filter For Quiz")
         parameter_name = "quizid"
 
@@ -33,6 +37,8 @@ class AccountAdmin(UserAdmin):
             return ()
 
     def get_action_choices(self, request):
+        """Set actions based on whether a quiz is provided"""
+
         choices = super(AccountAdmin, self).get_action_choices(request)
         try:
             quiz_id = request.GET.get("quizid", None)
@@ -47,6 +53,8 @@ class AccountAdmin(UserAdmin):
         return choices
 
     def assign_users(self, request, queryset):
+        """Assign the selected users to the given quiz"""
+
         quiz_id = request.GET.get("quizid", "")
         if not quiz_id:
             messages.error(
@@ -128,6 +136,8 @@ class AccountAdmin(UserAdmin):
 
 
 class QuestionAdmin(admin.TabularInline):
+    """Admin for the question model"""
+
     model = Question
     question_numbering = 0
     fields = (
@@ -163,6 +173,8 @@ class QuestionAdmin(admin.TabularInline):
 
 
 class QuizAdmin(admin.ModelAdmin):
+    """Admin for the quiz model"""
+
     def get_urls(self):
         urls = super(QuizAdmin, self).get_urls()
         my_urls = [
@@ -246,7 +258,11 @@ class QuizAdmin(admin.ModelAdmin):
 
 
 class Question_bank_admin(ImportExportModelAdmin):
+    """Admin for the Question_bank model"""
+
     class Question_bank_resource(resources.ModelResource):
+        """Match the headers in the excel file to that of models for import """
+
         id = Field(attribute="id")
         title = Field(attribute="title", column_name="Question Statement")
         choice_1 = Field(attribute="choice_1", column_name="Option 1")
@@ -271,6 +287,8 @@ class Question_bank_admin(ImportExportModelAdmin):
             return ()
 
     def get_import_formats(self):
+        """Restrict import to only excel files"""
+
         formats = (
             base_formats.XLS,
             base_formats.XLSX,
@@ -363,6 +381,8 @@ class Question_bank_admin(ImportExportModelAdmin):
 
 
 class QuizTakersAdmin(admin.ModelAdmin):
+    """Admin for the QuizTakers model"""
+
     class ResponseAdmin(admin.TabularInline):
         def formfield_for_dbfield(self, db_field, **kwargs):
             field = super(QuizTakersAdmin.ResponseAdmin, self).formfield_for_dbfield(
