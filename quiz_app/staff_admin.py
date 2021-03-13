@@ -22,7 +22,7 @@ from import_export.fields import Field
 from import_export.formats import base_formats
 
 from .admin import AccountAdmin, Question_bank_admin, QuestionAdmin, QuizAdmin
-from .forms import QuizAddForm, QuizAddFormStaff, SignUpForm
+from .forms import QuizAddFormStaff, SignUpForm
 from .models import Account, Question, Question_bank, Quiz, QuizTakers
 
 

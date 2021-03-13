@@ -38,21 +38,10 @@ class QuizForm(forms.Form):
             }
         ),
     )
-    # class Meta:
-    #     model = Quiz
-    #     fields = [
-    #         'quiz_id'
-    #     ]
 
     class Meta:
         model = Quiz
         fields = ["key"]
-
-
-class QuizAddForm(forms.ModelForm):
-    class Meta:
-        model = Quiz
-        fields = "__all__"
 
 
 class QuizAddFormStaff(forms.ModelForm):

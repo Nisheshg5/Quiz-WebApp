@@ -22,7 +22,7 @@ from import_export.admin import ImportExportModelAdmin
 from import_export.fields import Field
 from import_export.formats import base_formats
 
-from .forms import QuizAddForm, SignUpForm
+from .forms import SignUpForm
 from .models import Account, Question, Question_bank, Quiz, QuizTakers, Response
 
 
@@ -245,7 +245,6 @@ class QuizAdmin(admin.ModelAdmin):
     inlines = [
         QuestionAdmin,
     ]
-    form = QuizAddForm
     change_form_template = "admin/quiz_change_form.html"
 
 
