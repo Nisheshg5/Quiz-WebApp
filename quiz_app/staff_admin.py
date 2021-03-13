@@ -1,29 +1,11 @@
-import json
-from collections import Counter
-
-from django.contrib import admin, messages
-from django.contrib.admin import AdminSite, SimpleListFilter
-from django.contrib.auth.admin import UserAdmin
-from django.core.exceptions import ValidationError
-from django.db import models
-from django.db.models import Count, F, Sum
-from django.forms import Textarea
-from django.forms.models import model_to_dict
+from django.contrib.admin import AdminSite
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, redirect, render
-from django.template import RequestContext
-from django.template.response import TemplateResponse
-from django.urls import path, reverse
-from django.utils.safestring import mark_safe
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from import_export import resources
-from import_export.admin import ImportExportModelAdmin
-from import_export.fields import Field
-from import_export.formats import base_formats
 
 from .admin import AccountAdmin, Question_bank_admin, QuestionAdmin, QuizAdmin
-from .forms import QuizAddFormStaff, SignUpForm
-from .models import Account, Question, Question_bank, Quiz, QuizTakers
+from .forms import QuizAddFormStaff
+from .models import Account, Question_bank, Quiz
 
 
 class StaffAdminSite(AdminSite):

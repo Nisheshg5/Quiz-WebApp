@@ -7,10 +7,7 @@ import pytz
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.core import serializers
-from django.db.models import F
 from django.forms.models import model_to_dict
-from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.timezone import datetime

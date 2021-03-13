@@ -1,19 +1,14 @@
-import json
-from smtplib import SMTPException
-
 from django.contrib import messages
 from django.contrib.auth import authenticate
-from django.core.mail import BadHeaderError, EmailMultiAlternatives, send_mail
+from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse
 from django.http.response import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.template.loader import render_to_string
 from django.utils import timezone
-from django.utils.html import strip_tags
-from verify_email.email_handler import _VerifyEmail
 
 from .excel import generate_result_as_excel
-from .models import Account, Question, Quiz, QuizTakers, Response
+from .models import Question, Quiz, QuizTakers, Response
 
 
 def saveResponse(request):

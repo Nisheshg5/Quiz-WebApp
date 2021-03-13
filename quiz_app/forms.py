@@ -1,8 +1,6 @@
 import pytz
 from django import forms
-from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
-from django.forms import fields
 from django.forms.models import ModelChoiceField
 
 from .models import Account, Quiz

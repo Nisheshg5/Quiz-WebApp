@@ -1,23 +1,18 @@
 import random
 import string
-from base64 import urlsafe_b64encode
 from datetime import datetime, timedelta
 from smtplib import SMTPException
 from uuid import uuid4
 
 import pytz
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.contrib.auth.tokens import default_token_generator
-from django.core.mail import BadHeaderError, EmailMultiAlternatives, send_mail
+from django.core.mail import BadHeaderError, send_mail
 from django.core.validators import MinLengthValidator
 from django.db import models
 from django.db.models.aggregates import Sum
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.html import strip_tags
-from verify_email.app_configurations import GetFieldFromSettings
 from verify_email.email_handler import _VerifyEmail
 
 

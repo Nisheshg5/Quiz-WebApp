@@ -7,12 +7,10 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import Count, F, Sum
+from django.db.models import Sum
 from django.forms import Textarea
 from django.forms.models import model_to_dict
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, redirect, render
-from django.template import RequestContext
+from django.shortcuts import redirect, render
 from django.template.response import TemplateResponse
 from django.urls import path
 from django.utils.safestring import mark_safe
