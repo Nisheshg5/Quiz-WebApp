@@ -91,10 +91,11 @@ class QuizAdmin(QuizAdmin):
         return qs.filter(invigilator=request.user)
 
     def save_model(self, request, obj, form, change):
-        if not change and not obj.invigilator:
+        if not change and not obj.invigilator_id:
             obj.invigilator = request.user
         super(QuizAdmin, self).save_model(request, obj, form, change)
 
+    form = QuizAddFormStaff
     inlines = [
         QuestionAdmin,
     ]
