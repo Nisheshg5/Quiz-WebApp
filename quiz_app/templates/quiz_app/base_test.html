@@ -99,6 +99,9 @@
 
 
 	<script>
+	var increase_suspicious_url = '{% url "increase_suspicious" %}';
+	var quiz_id = "{{ quiz.quiz_id }}";
+
 		// The test will be autosubmitted when the suspicion count reach to its max value
 	function max_suspicion_reached() {
 		$.ajax({

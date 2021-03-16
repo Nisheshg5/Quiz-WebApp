@@ -77,6 +77,38 @@ function checkVideo(){
 				}
 		})
 }
+var personAbsence = 0;
+
+
+function noPersonFound() {
+	console.log(increase_suspicious_url);
+	personAbsence++;
+	if(personAbsence >= 10) {
+		personAbsence = 0;
+		$.ajax({
+			type: "POST",
+			url: increase_suspicious_url,
+			data: {
+				quiz: quiz_id,
+				csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
+			},
+			success:function(success) {
+				if(success.max_reached) {
+					max_suspicion_reached();
+				}
+			}
+		});
+		Swal.fire({
+			icon: 'warning',
+			html: 'Please do not move away from the camera or else your test may be terminated.',
+			position: 'top-right',
+			toast: true,
+			showConfirmButton: false,
+			timer: 3000,
+			timerProgressBar: true
+		});
+	}
+}
 
 
 // when the video starts playing create a canvas of same dimenstions as of video at a specific time interval
@@ -102,13 +134,13 @@ video.addEventListener('playing', () => {
 			const resizedDetections = faceapi.resizeResults(detections, displaySize);
 			canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
 			faceapi.draw.drawDetections(canvas, resizedDetections);
-			console.log(detections);
+			// console.log(detections);
 			if(detections.length > 1){
-				console.error("Multiple people detected");
+				noPersonFound();
 			}else if(detections.length == 1){
-				console.log("User Found");
+				personAbsence = 0;
 			}else{
-				console.error("No User Found");
+				noPersonFound();
 			}
 		}
 	}, 1000);
